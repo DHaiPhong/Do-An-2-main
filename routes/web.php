@@ -38,11 +38,7 @@ Route::prefix('account')->group(function () {
     Route::get('/add_cart/{id}', [userController::class, 'addcart'])->name('users.cart1');
 
     Route::get('/cartshop', function () {
-        return view('users/modun-user/cartshop');
-    })->name('users.cartshop');
-
-    Route::get('/cartshop', function () {
-        return view('users/modun-user/cartshop');
+        return view('users/modun-user/cartshop', ['title' => 'Cart']);
     })->name('users.cartshop');
 
 
@@ -93,12 +89,7 @@ Route::prefix('admin')->middleware('level')->group(function () {
 
         Route::get('/modify/{id}', [AdminController::class, 'prd_modify'])->name('admin.prd_detail');
         Route::post('/edit/{id}', [AdminController::class, 'prd_edit'])->name('admin.prd_edit');
-
-
         //---------------add prd-----------
-
-
-
     });
 
     Route::get(
@@ -114,9 +105,6 @@ Route::prefix('admin')->middleware('level')->group(function () {
 
     Route::get('update-status/{id}/{value}', [AdminController::class, 'updateStatus'])->name('admin.updatestatus');
 
-
-
-
     Route::get('/productt/add', [AdminController::class, 'addprdform'])->name('admin.add');
     Route::post('/productt/add', [AdminController::class, 'prd_add'])->name('admin.prd_add');
 
@@ -126,13 +114,6 @@ Route::prefix('admin')->middleware('level')->group(function () {
     Route::post('/add/img', [AdminController::class, 'storeimg'])->name('storeimg');
 });
 
-
-
-// tr
-
-//tu
-
-// php artisan serve 1
 Auth::routes();
 
 Route::get('/home1', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

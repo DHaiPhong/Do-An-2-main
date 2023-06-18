@@ -66,8 +66,8 @@ class CheckoutController extends Controller
         $orderInfo = "Thanh toán qua MoMo";
         $amount = $_POST['total_momo'];
         $orderId = time() . "";
-        $redirectUrl = "http://127.0.0.1:8000/";
-        $ipnUrl = "http://127.0.0.1:8000/";
+        $redirectUrl = "http://127.0.0.1:8000/account/success";
+        $ipnUrl = "http://127.0.0.1:8000/account/success";
         $extraData = "";
 
 

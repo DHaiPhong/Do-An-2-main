@@ -30,9 +30,9 @@
                         <div class="col">
 
                             <!-- <div class="inputBox">
-                                                                                                                <span>cards accepted :</span>
-                                                                                                                <img src="img/card_img.png" alt="">
-                                                                                                            </div> -->
+                                                                                                                    <span>cards accepted :</span>
+                                                                                                                    <img src="img/card_img.png" alt="">
+                                                                                                                </div> -->
                             <div class="inputBox">
                                 <span>address :</span>
                                 <input name="address" type="text" value="{{ Auth::user()->address }}" placeholder="">
@@ -61,14 +61,15 @@
                             <button type="submit" class="submit-btn"> PAY</button>
                         </div>
                         <div class="col-md-6">
-                            <form action="{{ route('checkout.online') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="total_momo" value="{{ Cart::total() }}">
-                                <button type="submit" class="btn btn-default check_out" name="payUrl">Thanh toán qua
-                                    MOMO</button>
-                            </form>
+
                         </div>
                     </div>
+                </form>
+                <form action="{{ route('checkout.online') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="total_momo" value="{{ Cart::total() }}">
+                    <button type="submit" class="btn btn-default check_out" name="payUrl">Thanh toán qua
+                        MOMO</button>
                 </form>
 
             </div>

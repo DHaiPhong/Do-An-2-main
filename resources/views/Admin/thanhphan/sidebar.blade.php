@@ -40,28 +40,16 @@
 
                 </li> -->
                 <li class="nav-item">
-
                     <a class="nav-link  " href="{{ route('admin.dashboard') }}">
-
                         <i class="fa-solid fa-ballot-check"></i>
-
-
-
                         <p>
                             DASHBOARD
-
                         </p>
-
                     </a>
-
                 </li>
                 <li class="nav-item">
-
                     <a class="nav-link  " href="{{ route('admin.account') }}">
-
-
                         <i class="fas fa-fw fa-user "></i>
-
                         <p>
                             Users
                             <span class="badge badge-success right">
@@ -71,72 +59,46 @@
                                 echo $count; ?>
                             </span>
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-header ">
-
                     Manager
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="{{ route('admin.product') }}">
-
                         <i class="fas fa-fw fa-lock "></i>
-
-
-
                         <p>
                             Product
                             <span class="badge badge-success right">
                                 <?php $count = DB::table('products')->count();
                                 echo $count; ?>
                             </span>
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="{{ route('admin.order') }}">
-
                         <i class="fa-solid fa-ballot-check"></i>
-
-
-
                         <p>
                             Check Order
-
                         </p>
-
                     </a>
-
                 </li>
-
-
-
+                <li class="nav-item">
+                    <a class="nav-link  " href="{{ route('admin.order') }}">
+                        <i class="fa-solid fa-ballot-check"></i>
+                        <p>
+                            Blog
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
-
 </aside>
-
-
 <div class="content-wrapper ">
-
-
-
-
     <div class="content">
         <div class="container-fluid">
         </div>
     </div>
-
 </div>

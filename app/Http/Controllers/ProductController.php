@@ -8,50 +8,51 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    function prd_detail($id){
+    function prd_detail($id)
+    {
         $products = DB::table('product_details')
-        ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
-        ->where('product_details.prd_id',$id)
-        ->groupBy('product_details.prd_color') 
-        ->get();
+            ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
+            ->where('product_details.prd_id', $id)
+            ->groupBy('product_details.prd_color')
+            ->get();
 
         $prdsize = DB::table('product_details')
-        ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
-        ->where('product_details.prd_id',$id)
-        ->groupBy('product_details.prd_size')
-        ->get();
-        
-        
+            ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
+            ->where('product_details.prd_id', $id)
+            ->groupBy('product_details.prd_size')
+            ->get();
+
+
 
         $prdimg = DB::table('product_details')
-        ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
-        ->where('product_details.prd_id',$id)
-        ->groupBy('product_details.prd_image')
-        ->get();
+            ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
+            ->where('product_details.prd_id', $id)
+            ->groupBy('product_details.prd_image')
+            ->get();
 
-        return view ('users.modun-user.productdetail',compact('products','prdsize'));
+        return view('users.modun-user.productdetail', ['title' => 'Product Detail'], compact('products', 'prdsize'));
     }
 
-    function product(){
+    function product()
+    {
 
         $product = DB::table('products')
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
             ->groupByRaw('products.prd_id')
             ->paginate(9);
-            
-        return view('users.modun-user.product',['prds'=>$product]);
+
+        return view('users.modun-user.product', ['prds' => $product, 'title' => 'Product']);
     }
 
-    function prdbybrand($id){
+    function prdbybrand($id)
+    {
 
         $product = DB::table('products')
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
             ->groupByRaw('products.prd_id')
-            ->where('products.cat_id',$id)
+            ->where('products.cat_id', $id)
             ->paginate(9);
-            
-        return view('users.modun-user.product',['prds'=>$product]);
+
+        return view('users.modun-user.product', ['prds' => $product]);
     }
-    
-    
 }

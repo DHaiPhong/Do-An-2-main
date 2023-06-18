@@ -4,25 +4,43 @@
     <section class="producth" id="producth">
         <h1 class="heading"><span>TOP 5</span> Best seller</h1>
         <div class="box-container">
-            @foreach($sells as $sell)
-            <div class="box">
-                <div class="content">
-                    <a href="{{ route('users.productdetail', $sell->prd_id) }}"><img src="/anh/{{$sell->prd_image}}" width =" "alt=""></a>
-                    <h3>{{$sell->prd_name}}</h3>
-                    <div class="price">{{ number_format($sell->price)}} đ</div> 
-                    <div class="stars">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
+            @foreach ($sells as $sell)
+                <div class="box">
+                    <div class="content">
+                        <a href="{{ route('users.productdetail', $sell->prd_id) }}"><img src="/anh/{{ $sell->prd_image }}"
+                                width=" " alt=""></a>
+                        <h3>{{ \Illuminate\Support\Str::limit($sell->prd_name, '17') }}</h3>
+                        @if ($sell->prd_sale != 0)
+                            <div class="price" style="text-transform: none;">
+
+                                <div style="display:flex">
+                                    <p
+                                        style="text-decoration: line-through;font-size: 20px; color: red; text-align: left; text-transform: none; margin-right: 1rem">
+                                        {{ number_format($sell->price) }} đ</p>
+                                    <p style="text-align: left; text-transform: none; font-size: 20px">
+                                        {{ number_format($sell->price - ($sell->price * $sell->prd_sale) / 100) }} đ</p>
+                                    <p style="color: red; font-size: 1.2rem"> - {{ $sell->prd_sale }}%</p>
+                                </div>
+                                <p style="text-align: left; text-transform: none; font-size: 12px; color: red">
+                                    {{ $sell->prd_amount }}
+                                    products left</p>
+                            </div>
+                        @else
+                            <div class="price" style="text-transform: none;">
+                                <p style="text-transform: none; font-size: 20px; text-align: left">Price:
+                                    {{ number_format($sell->price - ($sell->price * $sell->prd_sale) / 100) }} đ</p>
+                                <p style="text-align: left; text-transform: none; font-size: 12px; color: red">
+                                    {{ $sell->prd_amount }}
+                                    products left</p>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
-            </div>
             @endforeach
-            
-           
-            
+
+
+
         </div>
     </section>
     <!--end product-->
@@ -42,13 +60,6 @@
             </div>
             <div class="content">
                 <h3>New Nike Alphafly 2</h3>
-                <div class="stars">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                </div>
                 <p>
                     Once you take a few strides in the Nike Alphafly 2, you'll never look at your favourite pair of old
                     racing shoes in the same way. These rocket ships are made to help shave precious time off your personal
@@ -56,16 +67,16 @@
                     support system brings comfort and speed together so you can enjoy our greatest energy return while you
                     chase your personal bests.
                 </p>
-                <div class="price">8.369.000VND <span></span></div>
-                <a href="{{route('users.productdetail',['id'=> 16])}}" class="btn">add to cart</a>
+                <div class="price"> Price: 8.369.000VND <span></span></div>
+                <a href="{{ route('users.productdetail', ['id' => 16]) }}" class="btn">add to cart</a>
             </div>
         </div>
 
         </div>
     </section>
     <!--end featured-->
-    
-  
+
+
     <!--end news-->
-    
+
 @stop

@@ -10,10 +10,32 @@
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                     aria-expanded="false">Shop</a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('users.product') }}">Product</a></li>
-                    <li><a class="dropdown-item" href="{{ url('/product/1') }}">NIKE</a></li>
-                    <li><a class="dropdown-item" href="{{ url('/product/2') }}">ADIDAS</a></li>
-                    <li><a class="dropdown-item" href="{{ url('/product/3') }}">PUMA</a></li>
+                    <li><a class="dropdown-item" style="width: 110px" href="{{ route('users.product') }}">Product</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/1') }}">NIKE</a></li>
+                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/2') }}">ADIDAS</a></li>
+                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/3') }}">PUMA</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                    aria-expanded="false">Blog</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" style="width: 110px" href="{{ route('users.product') }}">News</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/1') }}">Review</a></li>
+                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/2') }}">Beginners</a>
+                    </li>
+                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/3') }}">Shoe Care</a></li>
+                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/3') }}">History</a></li>
+
+                    {{-- https://shoegazing.com/topics/ --}}
                 </ul>
             </li>
             <a href="{{ route('users.product') }}">About</a>
@@ -31,22 +53,14 @@
                         @auth
                             <div class="col-sm" style="">
                                 <li class="nav-item dropdown">
-
-
                                     <button class="dropdown-toggle"
                                         style="font-size: 2rem;  background:none;    text-transform: uppercase;"
                                         type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         {{ Auth::user()->name }} <i class="fa fa-user"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-white">
-
-
                                         <li><a class="dropdown-item" style="margin-left:0"
-                                                href="{{ route('users.order') }}">Order</a></li>
-
-
-
-
+                                                href="{{ route('users.order') }}">Account</a></li>
                                         <form method="post" action="{{ route('logout') }}">
                                             @csrf
                                             <button type="submit"> <a class="dropdown-item"
@@ -65,21 +79,10 @@
                                 <a href="{{ route('register') }}" class="signup_btn" style="color: white; "> Signup </a>
                             </div>
                         @endguest
-
-
-
                     </div>
                 </div>
-
-
-
             </div>
-
-
-
-
         </div>
-
         </div>
     </header>
 </section>
