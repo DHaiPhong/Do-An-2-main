@@ -9,22 +9,30 @@
             <h1 class="heading">Product <span>Details</span></h1>
             <div class="row">
                 <div class="image-container">
+                    <div class="boxx" >
                     <div class="small-image">
-                        @foreach ($products as $product)
-                        <img src="/anh/{{ $product->prd_image }}" alt=""
-                            class="featured-image-1">
+                        
+                        @foreach ($prdimg as $primg)
+                        <img src="/anh/{{ $primg->img }}" alt=""
+                            class="featured-image-1" id = "pic">
                     @endforeach
+                   
                     </div>
+                     <button id="leftb" class="slide-left" onclick="next1()">&#8250;</button>
+                    <button id="rightb" class="slide-right" onclick="pre1()">&#8249;</button>
+                    </div>
+                    
+
                     <div class="big-image">
-                        <img src="/anh/{{ $product->prd_image }}" alt="" class="big-image-1">
+                        <img src="/anh/{{ $primg->img }}" alt="" class="big-image-1">
                     </div>
                 </div>
                 <div class="content">
                     
                         <!-- ------------------------------------ -->
                         <div class="right-col">
-                            <h1 itemprop="name">{{$product->prd_name}}</h1>
-                            <h4 style="width: 440px;    text-align: justify;">{{$product->prd_details}}</h4>
+                            <h1 itemprop="name">{{$prd->prd_name}}</h1>
+                            <h4 style="width: 440px;    text-align: justify;">{{$prd->prd_details}}</h4>
                             <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                                 <meta itemprop="priceCurrency" content="USD">
                                 <link itemprop="availability" href="http://schema.org/InStock">
@@ -33,23 +41,23 @@
                                     @csrf
                                 <div class="price-shipping">
                                     <div class="price" id="price-preview" quickbeam="price" quickbeam-price="800">
-                                        @if($product->prd_sale !=0)
+                                        @if($prd->prd_sale !=0)
                                         <div style="display:flex">
                                             <div>
                                                 <p style="font-size: 2.9rem;text-decoration: line-through;"> Price
-                                                    {{number_format($product->price)}} đ</p>
+                                                    {{number_format($prd->price)}} đ</p>
                                             </div>
                                             <div style="margin-left:10px">
                                                 <p style="font-size: 2.9rem; color: red">
-                                                    {{number_format($product->price / 100 * (100-$product->prd_sale))}}
+                                                    {{number_format($prd->price / 100 * (100-$prd->prd_sale))}}
                                                     đ</p>
                                             </div>
-                                            <input type="hidden" name="price" value="{{$product->price / 100 * (100-$product->prd_sale)}}">
+                                            <input type="hidden" name="price" value="{{$prd->price / 100 * (100-$prd->prd_sale)}}">
                                         </div>
 
                                         @else
-                                        <p style="font-size: 2.9rem;"> Giá {{number_format($product->price)}} đ</p>
-                                        <input type="hidden" name="price" value="{{$product->price}}">
+                                        <p style="font-size: 2.9rem;"> Giá {{number_format($prd->price)}} đ</p>
+                                        <input type="hidden" name="price" value="{{$prd->price}}">
 
                                         @endif
 
@@ -58,7 +66,7 @@
 
 
                                 
-                                    <input type="hidden" name="prd_id" value="{{$product->prd_id}}">
+                                    <input type="hidden" name="prd_id" value="{{$prd->prd_id}}">
 
 
                                     <div class="swatches">
@@ -122,7 +130,39 @@
     <!-- Quickbeam cart end -->
 </section>
 <script>
-js / detailprd / detailprd.js
+const imgPositon = document.querySelectorAll(".small-image img")
+    // console.log(imgPositon)
+    const imgContaine = document.querySelector(".small-image")
+    console.log(imgPositon)
+
+    let imgNb = imgPositon.length
+    let indexx = 0
+    
+
+    function next1(){
+        indexx++;
+        if (indexx >= imgNb - 5) {
+            indexx = 0
+        }
+        if(indexx < imgNb - 5 ){
+        slider(indexx)
+    }}
+    function pre1(){
+        indexx--;
+        if (indexx <= 0) {
+            indexx = imgNb - 5
+            
+        }
+        slider(indexx)
+    }
+    // nxt[index].addEventListener("click", function imgslide() {
+        
+    // } ) 
+    function slider(indexx) {
+        imgContaine.style.top = "-" + indexx * 20 + "%"
+        
+    }
+
 </script>
 @stop
 

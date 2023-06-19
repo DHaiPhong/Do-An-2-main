@@ -21,15 +21,17 @@ class ProductController extends Controller
         ->groupBy('product_details.prd_size')
         ->get();
         
-        
-
-        $prdimg = DB::table('product_details')
+        $prd = DB::table('product_details')
         ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
         ->where('product_details.prd_id',$id)
-        ->groupBy('product_details.prd_image')
-        ->get();
+        ->first();
 
-        return view ('users.modun-user.productdetail',compact('products','prdsize'));
+        $prdimg = DB::table('prd_img')
+        ->where('prd_id',$id)
+        ->get();
+        
+
+        return view ('users.modun-user.productdetail',compact('products','prdsize','prd','prdimg'));
     }
 
     function product(){

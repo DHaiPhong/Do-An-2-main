@@ -1145,9 +1145,21 @@ header{
   gap: 1.5rem;
   align-items: center;
   flex: 1 1 50rem;
+
+  position: relative;
+  overflow: hidden;
+
 }
 .featured .row .image-container .small-image{
-  width: 20%;
+  width: 100%;
+  display: flex;
+  height: wrap-content;
+  flex-wrap: wrap;
+}
+.featured .row .image-container .small-image img:nth-child(n+6)
+{
+    
+  
 }
 .featured .row .image-container .big-image{
   width: 80%;
@@ -1155,7 +1167,7 @@ header{
 }
 .featured .row .image-container .small-image img{
   width: 100%;
-  padding: 1rem;
+  padding: 0rem;
   border: .1rem solid rgba(0, 0, 0, .1);
   cursor: pointer;
 }
@@ -3489,36 +3501,55 @@ input.boxcolor{
   border: 0.2rem solid;
   display: unset;
 }
-<<<<<<< Updated upstream
-.addcart{
 
-=======
-.image-container{
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-  flex: 1 1 50rem;
+.small-image{
+  position: relative;
+  overflow: hidden;
 }
-.featured .row .image-container .small-image{
+.slide-right {
+  position: absolute;
+    z-index: 1;
+    top: -15px;
+    left: 36%;
+    background-color: rgb(215 215 215 / 40%);
+    border: none;
+    cursor: pointer;
+    font-size: 34px;
+    padding: 5px;
+    padding-bottom: 22px;
+    padding-top: 17px;
+    opacity: 1;
+    color: black;
+    transition: opacity 0.3s ease;
+    transform: rotate(90deg);
+
+}
+.slide-left {
+  position: absolute;
+    z-index: 1;
+    bottom: -15px;
+    left: 36%;
+    background-color: rgb(215 215 215 / 40%);
+    border: none;
+    cursor: pointer;
+    font-size: 34px;
+    padding: 5px;
+    padding-bottom: 22px;
+    padding-top: 17px;
+    opacity: 1;
+    color: black;
+    transition: opacity 0.3s ease;
+    transform: rotate(90deg);
+
+}
+
+.slide-left:hover,
+.slide-right:hover {
+  background-color: #33333393;
+}
+.boxx{
   width: 20%;
-}
-.featured .row .image-container .big-image{
-  width: 80%;
-  padding: 1rem;
-}
-.featured .row .image-container .small-image img{
-  width: 100%;
-  padding: 1rem;
-  border: .1rem solid rgba(0, 0, 0, .1);
-  cursor: pointer;
-}
-.featured .row .image-container .small-image img:hover{
-  background: #ccc;
-}
-.featured .row .image-container .big-image img{
-  width: 100%;
-}
-.featured .row .image-container .big-image img:hover{
-  transform: scale(1.05);
->>>>>>> Stashed changes
+  height: 316px;
+  position: relative;
+  
 }
