@@ -19,7 +19,8 @@
                                         {{ number_format($sell->price) }} đ</p>
                                     <p style="text-align: left; text-transform: none; font-size: 20px">
                                         {{ number_format($sell->price - ($sell->price * $sell->prd_sale) / 100) }} đ</p>
-                                    <p style="color: red; font-size: 1.2rem"> - {{ $sell->prd_sale }}%</p>
+                                    <p style="color: red; font-size: 1.2rem; margin-left: 0.8rem"> - {{ $sell->prd_sale }}%
+                                    </p>
                                 </div>
                                 <p style="text-align: left; text-transform: none; font-size: 12px; color: red">
                                     {{ $sell->prd_amount }}

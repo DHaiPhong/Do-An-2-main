@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\loginController;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Auth;
@@ -79,6 +80,15 @@ Route::prefix('admin')->middleware('level')->group(function () {
         Route::post('/img/{id}', [AdminController::class, 'image'])->name('account.image');
     });
 
+    // Blog
+    Route::prefix('blog')->group(function () {
+        Route::get('/', [BlogController::class, 'index'])->name('admin.blog');
+
+        Route::get('/category', [BlogController::class, 'category_index'])->name('admin.blog.category');
+        Route::get('/category/add', [BlogController::class, 'category_add'])->name('admin.blog.category.add');
+        Route::post('/category/store', [BlogController::class, 'category_store'])->name('admin.blog.category.store');
+    });
+
 
     //-----------------Product----------------
     Route::prefix('product')->group(function () {
@@ -91,7 +101,6 @@ Route::prefix('admin')->middleware('level')->group(function () {
         Route::post('/edit/{id}', [AdminController::class, 'prd_edit'])->name('admin.prd_edit');
         //---------------add prd-----------
     });
-
     Route::get(
         '/checkorder',
         [AdminController::class, 'order']

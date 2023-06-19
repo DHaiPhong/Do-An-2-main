@@ -85,7 +85,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link  " href="{{ route('admin.order') }}">
+                    <a class="nav-link  " href="{{ route('admin.blog.category') }}">
+                        <i class="fa-solid fa-ballot-check"></i>
+                        <p>
+                            Blog Category
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  " href="{{ route('admin.blog') }}">
                         <i class="fa-solid fa-ballot-check"></i>
                         <p>
                             Blog
