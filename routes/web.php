@@ -87,6 +87,9 @@ Route::prefix('admin')->middleware('level')->group(function () {
         Route::get('/category', [BlogController::class, 'category_index'])->name('admin.blog.category');
         Route::get('/category/add', [BlogController::class, 'category_add'])->name('admin.blog.category.add');
         Route::post('/category/store', [BlogController::class, 'category_store'])->name('admin.blog.category.store');
+        Route::get('/category/edit/{id}', [BlogController::class, 'category_edit'])->name('admin.blog.category.edit');
+        Route::put('/category/update/{id}', [BlogController::class, 'category_update'])->name('admin.blog.category.update');
+        Route::delete('/category/destroy/{id}', [BlogController::class, 'category_destroy'])->name('admin.blog.category.destroy');
     });
 
 

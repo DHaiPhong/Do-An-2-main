@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class CategoryBlog extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'title', 'description', 'slug', 'status'
+        'title', 'description', 'image', 'slug', 'status'
     ];
 }

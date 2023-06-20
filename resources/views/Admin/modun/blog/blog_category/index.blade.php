@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="col-lg-12 grid-margin stretch-card">
-        <div class="card" style="float: right; width: 80%">
+        <div class="card" style="float: right; width: 86%">
             <div class="card-body">
-                <h4 style="margin-bottom: 18px" class="card-title">Blog Category table</h4>
+                <h4 style="margin-bottom: 18px; margin-right: 20px" class="card-title">Blog Category Table</h4>
                 <a class="badge badge-success" style="float: right; font-size: 20px"
                     href="{{ route('admin.blog.category.add') }}">Add</a>
                 <select id="chon" onchange="myFunction()" class="form-select" aria-label="Default select example">
@@ -15,58 +15,65 @@
                     <option value="completed">Completed</option>
                     <option value="cancel">Canceled</option>
                 </select>
-                <table class="table table-bordered">
+                @if (session('message'))
+                    <div style="margin-top: 1rem;" class="alert alert-success">
+                        <span class="alert-text">{{ session('message') }}</span>
+                    </div>
+                @endif
+                <table class="table">
                     <thead>
-                        <tr>
-                            <th> Id </th>
-                            <th style="width: 16%"> Title </th>
-                            <th style=""> Slug </th>
-                            <th> Description </th>
-                            <th style="width: 25%"> Image </th>
-                            <th style="width: 5%"> Status </th>
-                            <th style=""> Manage </th>
+                        <tr style="align-items: center;">
+                            <th scope="col"> # </th>
+                            <th scope="col" style="width: 16%"> Title </th>
+                            <th scope="col" style=""> Slug </th>
+                            <th scope="col"> Description </th>
+                            <th scope="col" style="width: 25%"> Image </th>
+                            <th scope="col" style="width: 5%"> Status </th>
+                            <th scope="col" style=""> Manage </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($orders as $key => $order)
-                            <tr>
+                        @foreach ($category_blogs as $key => $category_blog)
+                            <tr scope="row">
                                 <td scope="row">{{ ++$key }}</td>
-                                <td> {{ $order->name }}</td>
-                                <input type="hidden" value="{{ $order->id }} ">
+                                <input type="hidden" value="{{ $category_blog->id }} ">
+                                <td> {{ $category_blog->title }} </td>
                                 <td>
-
-                                    @if ($order->status == 'pending')
-                                        <p class="statusbox" style="background-color: #f7c821;"> {{ $order->status }} </p>
-                                    @elseif($order->status == 'processing')
-                                        <p class="statusbox" style="background-color: #2eaef8;"> {{ $order->status }} </p>
-                                    @elseif($order->status == 'completed')
-                                        <p class="statusbox" style="background-color: #11e309;"> {{ $order->status }} </p>
-                                    @else
-                                        <p class="statusbox" style="background-color: #f05454;"> cancelled </p>
+                                    {{ $category_blog->slug }}
+                                </td>
+                                <td> {{ $category_blog->description }} </td>
+                                <td>
+                                    @if ($category_blog->image)
+                                        <img src="{{ asset('storage/images/' . $category_blog->image) }}"
+                                            alt="{{ $category_blog->title }}" width="auto" height="150" maxwidth="250">
                                     @endif
-
                                 </td>
-
-
-
-                                <td> {{ $order->grand_total }} </td>
-
                                 <td>
-                                    {{ $order->address }}
+                                    @if ($category_blog->status == '1')
+                                        <span class="badge bg-success" style="font-size: 1rem;">Active</span>
+                                    @elseif($category_blog->status == '0')
+                                        <span class="badge bg-danger">Inactive</span>
+                                    @endif
                                 </td>
-                                <td> {{ $order->phone_number }} </td>
-                                <td> {{ $order->item_count }} </td>
-                                <td style=""><a href="{{ route('admin.orderdetail', ['id' => $order->order_id]) }}">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true">
-                                        </i></td>
+                                <td>
+                                    <a href="{{ route('admin.blog.category.edit', $category_blog->id) }}"
+                                        class="btn btn-sm btn-primary">Edit</a>
+                                    <form action="{{ route('admin.blog.category.destroy', $category_blog->id) }}"
+                                        method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this category?')">Delete</button>
+                                    </form>
+                                </td>
 
                             </tr>
-                        @endforeach --}}
+                        @endforeach
 
 
                     </tbody>
                 </table>
-                {{-- {{ $orders->links() }} --}}
+                {{ $category_blogs->links() }}
             </div>
         </div>
     </div>

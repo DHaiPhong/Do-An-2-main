@@ -24,14 +24,19 @@ class CreateBlogCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|unique:category_blogs, title',
-            'description' => 'required|unique:category_blogs, description',
+            'title' => 'required|max:255',
+            'description' => 'required|',
+            'slug' => 'required|unique:category_blogs,slug',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
     public function messages()
     {
         return [
             'title.required' => 'Title cannot be blank ',
+            'title.max' => 'Title cannot more than 255 ',
+            'slug.required' => 'Slug cannot be blank ',
+            'slug.unique' => 'Slug unique ',
             'description.required' => 'Description cannot be blank ',
         ];
     }
