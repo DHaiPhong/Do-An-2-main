@@ -3553,3 +3553,55 @@ input.boxcolor{
   position: relative;
   
 }
+
+
+.product-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 0px 50px;
+}
+
+.product {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width : 20%;
+  position: relative;
+  
+}
+
+.product img {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.product a, .product p {
+  margin: 0;
+  text-align: center;
+}
+
+.product a {
+  font-size: 13px;
+  font-weight: bold;
+}
+.product a:hover{
+  text-decoration: underline;
+  color: #2a2a2a;
+}
+
+.product p {
+  font-size: 14px;
+  color: #ff0000;
+  position: absolute;
+  bottom: 8px;
+}
+
+.title-content {
+  text-align: center;
+  font-size: 25px;
+  font-weight: 700;
+  padding: 30px;
+  
+}

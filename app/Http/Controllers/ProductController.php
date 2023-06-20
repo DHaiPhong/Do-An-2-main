@@ -29,16 +29,21 @@ class ProductController extends Controller
         $prdimg = DB::table('prd_img')
         ->where('prd_id',$id)
         ->get();
+
+        $otherprd = DB::table('products')
+        ->where('prd_id', '!=', $id)
+        ->inRandomOrder(5)
+        ->limit(5)
+        ->get();
         
 
-        return view ('users.modun-user.productdetail',compact('products','prdsize','prd','prdimg'));
+        return view ('users.modun-user.productdetail',compact('products','prdsize','prd','prdimg','otherprd'));
     }
 
     function product(){
 
         $product = DB::table('products')
-            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-            ->groupByRaw('products.prd_id')
+            
             ->paginate(9);
             
         return view('users.modun-user.product',['prds'=>$product]);
