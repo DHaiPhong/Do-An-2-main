@@ -18,7 +18,7 @@ class CheckoutController extends Controller
 
     public function getCheckout()
     {
-        return view('users.modun-user.payment');
+        return view('users.modun-user.payment', ['title' => 'Payment']);
     }
 
     public function placeOrder(Request $request)
@@ -97,7 +97,17 @@ class CheckoutController extends Controller
         // dd($result);
         $jsonResult = json_decode($result, true);  // decode json
 
-        //Just a example, please check more in there
-        return redirect()->to($jsonResult['payUrl']);
+        $payUrl = $jsonResult['payUrl'];
+        // Thanh toán thành công, lưu đơn hàng vào CSDL
+        $orderData = [
+            'name' => auth()->user()->name,
+            'address' => auth()->user()->address,
+            'email' => auth()->user()->email,
+            'city' => 'Thành phố',
+            'phone' => auth()->user()->phone,
+        ];
+        $order = $this->orderRepository->storeOrderDetails($orderData);
+        return redirect()->route('cart.success');
+        // return redirect()->to($payUrl);
     }
 }

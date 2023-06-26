@@ -1,6 +1,6 @@
 @extends('users.masterUser')
 
-@section('productdetail')
+@section('content')
 
     <link href="{{ url('css/detailprdcss/detailprd.css') }}" rel="stylesheet" type="text/css">
     <section>

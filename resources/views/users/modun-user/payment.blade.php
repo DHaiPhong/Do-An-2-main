@@ -1,9 +1,6 @@
 @extends('users.masterUser')
-@section('payment')
-
-
+@section('content')
     <link href="{{ url('css/paymentcss/payment.css') }}" type="text/css" rel="stylesheet">
-
     <section>
         <div class="containerpm">
             <div class="col-md-6">
@@ -30,9 +27,9 @@
                         <div class="col">
 
                             <!-- <div class="inputBox">
-                                                                                                                    <span>cards accepted :</span>
-                                                                                                                    <img src="img/card_img.png" alt="">
-                                                                                                                </div> -->
+                                                                                                                            <span>cards accepted :</span>
+                                                                                                                            <img src="img/card_img.png" alt="">
+                                                                                                                        </div> -->
                             <div class="inputBox">
                                 <span>address :</span>
                                 <input name="address" type="text" value="{{ Auth::user()->address }}" placeholder="">

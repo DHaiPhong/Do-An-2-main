@@ -16,9 +16,15 @@ class BlogController extends Controller
         $this->blog_category = $blog_category;
     }
 
+    public function getBlogCategories()
+    {
+        $blog_categories = CategoryBlog::all();
+        return view('users.modn-user.headerUser', compact('blog_categories'));
+    }
+
     public function index()
     {
-        return view('Admin.modun.blog.index');
+        return view('users.blogs.index', ['title' => 'Blog']);
     }
 
     public function category_index()

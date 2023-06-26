@@ -24,17 +24,18 @@
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                     aria-expanded="false">Blog</a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" style="width: 110px" href="{{ route('users.product') }}">News</a>
+                    <li><a class="dropdown-item" style="width: 120px" href="{{ route('users.blogs') }}">News</a>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/1') }}">Review</a></li>
-                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/2') }}">Beginners</a>
-                    </li>
-                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/3') }}">Shoe Care</a></li>
-                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/3') }}">History</a></li>
-
+                    {{-- @foreach ($blog_categories as $category)
+                        <li>
+                            <a class="dropdown-item" style="width: 120px" href="{{ url('/blogs/' . $category->slug) }}">
+                                {{ $category->title }}
+                            </a>
+                        </li>
+                    @endforeach --}}
                     {{-- https://shoegazing.com/topics/ --}}
                 </ul>
             </li>

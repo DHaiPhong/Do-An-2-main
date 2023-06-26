@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\CategoryBlog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -89,7 +89,9 @@ class userController extends Controller
 
             ->paginate(5);
 
-        return view('users.modun-user.index', ['sells' => $sells, 'title' => 'Home']);
+        $blog_categories = CategoryBlog::all();
+
+        return view('users.modun-user.index', ['sells' => $sells, 'title' => 'Home'], compact('blog_categories'));
     }
 
     function searchproduct(Request $request)

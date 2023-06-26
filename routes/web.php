@@ -27,6 +27,11 @@ Route::get(
 Route::get('/product', [ProductController::class, 'product'])->name('users.product');
 Route::get('/product/{id}', [ProductController::class, 'prdbybrand'])->name('product.brand');
 
+//------------------------------Blog----------------------------
+Route::prefix('blog')->group(function () {
+    Route::get('/', [BlogController::class, 'index'])->name('users.blogs');
+    Route::get('/{id}/{slug}', [BlogController::class, 'showBlogByCategory'])->name('users.blogs.category');
+});
 //------------------------Cart---------------
 Route::prefix('account')->group(function () {
     Route::get('/cart', function () {
@@ -63,6 +68,7 @@ Route::post('/admin/product/edit/{id}', [AdminController::class, 'prd_edit'])->n
 Route::get('/checkout', [CheckoutController::class, 'getCheckout'])->name('checkout.index');
 Route::post('/checkout/order', [CheckoutController::class, 'placeOrder'])->name('checkout.place.order');
 Route::post('/checkout/online', [CheckoutController::class, 'online'])->name('checkout.online');
+Route::get('/momo/callback', [CheckoutController::class, 'handlePaymentResult'])->name('momo.callback');
 
 
 //-------------------ADMIN------------------------

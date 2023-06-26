@@ -90,7 +90,7 @@
 
 @stop
 
-@section('order')
+@section('content')
 
     <div style="margin-bottom: 180px;">
         <div class="container-fluid pt-5">

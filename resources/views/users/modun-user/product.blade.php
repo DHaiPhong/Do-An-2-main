@@ -1,6 +1,6 @@
 @extends('users.masterUser')
 
-@section('product')
+@section('content')
 
     <section style="margin-top: 5rem; font-size: 1.5rem">
         <h1 style="    text-align: center"> Sneakers</h1>

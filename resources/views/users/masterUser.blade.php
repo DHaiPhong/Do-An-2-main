@@ -10,11 +10,10 @@
     <link href="{{ url('css/style_home.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ url('font-awesome/css/font-awesome.css') }}" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/041cb6b55e.js" crossorigin="anonymous"></script>
-
-
     <link href="{{ url('css/productcss/prd.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="{{ url('css/sidebarcss/sd.css') }}" rel="stylesheet"type="text/css">
+
     @yield('css')
     <!-- CSS only -->
     <title>{{ $title }}</title>
@@ -23,20 +22,7 @@
 <body>
 
     @include('users.modun-user.headerUser')
-    @yield('home')
-    @yield('productdetail')
-    @yield('product')
-    @yield('search')
-    @yield('success')
-    @yield('product1')
-    @yield('order')
-    @yield('orderdetail')
-
-    @yield('payment')
-
-    @yield('pay')
-
-
+    @yield('content')
     @include('users.modun-user.footerUser')
 
 

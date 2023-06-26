@@ -1,6 +1,6 @@
 @extends('users.masterUser')
 @include('users.modun-user.banner')
-@section('home')
+@section('content')
     <section class="producth" id="producth">
         <h1 class="heading"><span>TOP 5</span> Best seller</h1>
         <div class="box-container">
