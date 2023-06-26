@@ -30,13 +30,7 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    {{-- @foreach ($blog_categories as $category)
-                        <li>
-                            <a class="dropdown-item" style="width: 120px" href="{{ url('/blogs/' . $category->slug) }}">
-                                {{ $category->title }}
-                            </a>
-                        </li>
-                    @endforeach --}}
+                    
                     {{-- https://shoegazing.com/topics/ --}}
                 </ul>
             </li>

@@ -6,7 +6,7 @@
 
 @stop
 
-@section('add')
+@section('content')
 
 <div class="card" style="float: right; width: 72%; margin-right: 7%">
     <div class="card-body">

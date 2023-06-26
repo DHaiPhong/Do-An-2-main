@@ -42,7 +42,7 @@ class ProductController extends Controller
         ->get();
         
 
-        return view ('users.modun-user.productdetail',compact('products','prdsize','prd','prdimg','otherprd'));
+        return view ('users.modun-user.productdetail',compact(['products','prdsize','prd','prdimg','otherprd','title' => 'Product']));
 
     }
 
@@ -58,7 +58,7 @@ class ProductController extends Controller
         $cate = DB::table('category')
         ->get();
             
-        return view('users.modun-user.product',['prds'=>$product,'cate'=>$cate]);
+        return view('users.modun-user.product',['prds'=>$product,'cate'=>$cate,'title' => 'Product']);
     }
 
     function prdbybrand($id){
@@ -71,7 +71,7 @@ class ProductController extends Controller
             ->where('products.cat_id',$id)
             ->paginate(12);
             
-        return view('users.modun-user.product',['prds'=>$product,'cate'=>$cate]);
+        return view('users.modun-user.product',['prds'=>$product,'cate'=>$cate,'title' => 'Product']);
 
     }
 }

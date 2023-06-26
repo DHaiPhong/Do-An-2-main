@@ -89,9 +89,7 @@ class userController extends Controller
 
             ->paginate(5);
 
-        $blog_categories = CategoryBlog::all();
-
-        return view('users.modun-user.index', ['sells' => $sells, 'title' => 'Home'], compact('blog_categories'));
+        return view('users.modun-user.index', ['sells' => $sells, 'title' => 'Home']);
     }
 
     function searchproduct(Request $request)
