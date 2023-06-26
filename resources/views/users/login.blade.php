@@ -32,10 +32,10 @@
                 <img src="{{ asset('img/pnglogoSneaker.png') }}" height ="50" width = "auto">
                 </div> -->
 
-                 
-
+                
                 <h4>LOGIN</h4>
                 <h6 class="font-weight-light">Sign in to continue.</h6>
+                
                 <form method="post" action=""class="pt-3">
                   @csrf
       

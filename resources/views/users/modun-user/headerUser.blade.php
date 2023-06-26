@@ -4,20 +4,25 @@
         <a href="{{ url('') }}" class="logo">
             <img src="{{ asset('img/pnglogoSneaker.png') }}" height="77px" width="auto">
         </a>
-        <nav class="navbar">
-            <a href="{{ url('') }}">Home</a>
+        <nav style="flex:3 ;justify-content: space-around;" class="navbar">
+            <a href="{{ url('') }}">HOME</a>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                    aria-expanded="false">Shop</a>
+                    aria-expanded="false">SHOP</a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('users.product') }}">Product</a></li>
+                    <li><a class="dropdown-item" href="{{ route('users.product') }}">PRODUCT</a></li>
                     <li><a class="dropdown-item" href="{{ url('/product/1') }}">NIKE</a></li>
                     <li><a class="dropdown-item" href="{{ url('/product/2') }}">ADIDAS</a></li>
                     <li><a class="dropdown-item" href="{{ url('/product/3') }}">PUMA</a></li>
                 </ul>
             </li>
-            <a href="{{ route('users.product') }}">About</a>
+            <a href="{{ route('users.product') }}">ABOUT</a>
+            <a href="{{ route('users.product') }}">BLOG</a>
         </nav>
+        <div style="flex:2" class="search-container">
+  <input type="text" placeholder="Search...">
+  <button type="submit"><i class="fa fa-search"></i></button>
+</div>
         <div class="icons">
             <div>
                 <div class="container">

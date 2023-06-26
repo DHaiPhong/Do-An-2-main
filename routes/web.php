@@ -92,10 +92,13 @@ Route::prefix('admin')->middleware('level')->group(function () {
 
         Route::get('/modify/{id}', [AdminController::class, 'prd_modify'])->name('admin.prd_detail');
         Route::post('/edit/{id}', [AdminController::class, 'prd_edit'])->name('admin.prd_edit');
+        Route::get('/removeImage/{image}', [AdminController::class, 'removeImage'])->name('product.removeImage');
+        Route::get('/delete/{id}', [AdminController::class, 'delete_prd'])->name('product.delete');
+
 
 
         //---------------add prd-----------
-
+        
 
 
     });
@@ -116,7 +119,7 @@ Route::prefix('admin')->middleware('level')->group(function () {
 
 
 
-    Route::get('/productt/add', [AdminController::class, 'addprdform'])->name('admin.add');
+    Route::get('/productt/add', [AdminController::class, 'addprdform'])->name('admin.add_prd');
     Route::post('/productt/add', [AdminController::class, 'prd_add'])->name('admin.prd_add');
 
     Route::get('/add/img', function () {

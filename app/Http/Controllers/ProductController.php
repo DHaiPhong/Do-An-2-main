@@ -12,7 +12,7 @@ class ProductController extends Controller
         $products = DB::table('product_details')
         ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
         ->where('product_details.prd_id',$id)
-        ->groupBy('product_details.prd_color') 
+        
         ->get();
 
         $prdsize = DB::table('product_details')
@@ -31,7 +31,10 @@ class ProductController extends Controller
         ->get();
 
         $otherprd = DB::table('products')
-        ->where('prd_id', '!=', $id)
+        
+        ->join('prd_img','products.prd_id', '=','prd_img.prd_id')
+        ->groupBy('products.prd_id')
+        ->where('products.prd_id', '!=', $id)
         ->inRandomOrder(5)
         ->limit(5)
         ->get();
@@ -43,21 +46,27 @@ class ProductController extends Controller
     function product(){
 
         $product = DB::table('products')
+        ->join('prd_img','products.prd_id', '=', 'prd_img.prd_id')
+        ->groupBy('products.prd_id')
             
-            ->paginate(9);
+            ->paginate(12);
+        $cate = DB::table('category')
+        ->get();
             
-        return view('users.modun-user.product',['prds'=>$product]);
+        return view('users.modun-user.product',['prds'=>$product,'cate'=>$cate]);
     }
 
     function prdbybrand($id){
-
+        $cate = DB::table('category')
+        ->get();
         $product = DB::table('products')
-            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-            ->groupByRaw('products.prd_id')
-            ->where('products.cat_id',$id)
-            ->paginate(9);
             
-        return view('users.modun-user.product',['prds'=>$product]);
+            ->join('prd_img','products.prd_id', '=', 'prd_img.prd_id')
+            ->groupBy('products.prd_id')
+            ->where('products.cat_id',$id)
+            ->paginate(12);
+            
+        return view('users.modun-user.product',['prds'=>$product,'cate'=>$cate]);
     }
     
     

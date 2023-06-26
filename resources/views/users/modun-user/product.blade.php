@@ -1,6 +1,9 @@
 @extends('users.masterUser')
 
 @include('users.modun-user.banner')
+@section('css')
+<link  href="{{ url('css/productcss/prd.css') }}"  rel="stylesheet" type="text/css">
+@stop
 @section('product')
 
 <section style="margin-top: -5%; font-size: 1.5rem">
@@ -25,7 +28,14 @@
                     <strong>SNEAKERS</strong>
                 </a>
             </li>
+            @foreach($cate as $cat)
+            <li>
+                <a href="http://127.0.0.1:8000/product/{{$cat->id}}">
 
+                    <strong>{{$cat->brand}}</strong>
+                </a>
+            </li>
+            @endforeach
             <li>
                 <a href="{{url('/product/1')}}">
 
@@ -57,21 +67,21 @@
         <table>
             <tbody>
                 @foreach($prds as $prd)
-                <div class='product' style=" width:25em;   height: 360px; position: relative;">
+                <div class='product' style="  width: 14em; min-width:14em;   height: 360px; position: relative;">
 
                     <div class='product_inner'>
                     @if($prd->prd_sale !=0)
                     <div>
-                        <img src="/anh/sale-tag-icon.png" style="width: 33px;position: absolute;right: 30px;">
+                        <img src="/anh/sale-tag-icon.png" style="width: 33px;position: absolute;right: 18px;">
                         
-                        <p style="position: absolute;right: 55px;color:red;padding-top:15px;">-{{$prd->prd_sale}}%</p>
+                        <p style="position: absolute; font-weight:600;right: 40px;color:red;padding-top:17px;">-{{$prd->prd_sale}}%</p>
 </div>
                     @endif    
                         <a style="border:none" href="{{route('users.productdetail',['id'=> $prd->prd_id])}}">
-                            <img src='/anh/{{$prd->prd_image}}'>
+                            <img style="width:200px" src='/anh/{{$prd->prd_image}}'>
                         </a>
 
-                        <p style="">{{$prd->prd_name}}</p>
+                        <p style="text-transform: uppercase;font-weight:600; padding-top:5px;">{{$prd->prd_name}}</p>
                     
                     </div>
                     <div

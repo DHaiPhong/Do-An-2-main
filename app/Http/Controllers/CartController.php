@@ -17,6 +17,7 @@ class CartController extends Controller
     
         $product = DB::table('products')
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->join('prd_img','products.prd_id','=','prd_img.prd_id')
             ->where('product_details.prd_id', $request->prd_id)
             ->where('product_details.prd_size', $request->prd_size)
             ->where('product_details.prd_color', $request->prd_color)
