@@ -75,15 +75,15 @@ class userController extends Controller
                 ->where('id', $id)
                 ->update(['status' => 'cancel']);
         }
+    return back();
+}
+   
+   function index(){
+    $sells = DB::table('products')
+    ->join('prd_img','products.prd_id', '=', 'prd_img.prd_id')
 
-
-        return back();
-    }
-
-    function index()
-    {
-        $sells = DB::table('products')
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->groupBy('products.prd_id')
 
             ->orderBy('sold', 'desc')
 

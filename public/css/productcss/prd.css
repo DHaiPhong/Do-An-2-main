@@ -33,12 +33,12 @@
   width: 19em;
   height: auto;
   border-radius: 3px;
-  padding: 2em;
+  padding: 1em;
   margin: 1em;
   overflow: hidden;
   position: relative;
   flex: auto;
-  max-width: 19em;
+  max-width: 14em;
 }
 
 .product img, .product--blue img, .product--orange img, .product--red img, .product--green img, .product--yellow img, .product--pink img {
