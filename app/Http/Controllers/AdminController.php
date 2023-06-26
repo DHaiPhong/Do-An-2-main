@@ -14,25 +14,28 @@ use PhpParser\Node\Stmt\Function_;
 class AdminController extends Controller
 {
     //dashboard
-    function dashboard(){
+    function dashboard()
+    {
         $sold = DB::table('orders')
-        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-        ->whereIn('status',['pending','completed','processing'])
-        ->sum('quantity');
-        
+            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->whereIn('status', ['pending', 'completed', 'processing'])
+            ->sum('quantity');
+
         $revenue = DB::table('orders')
-        
-        ->where('status','completed')
-        ->sum('grand_total');
-        
+
+            ->where('status', 'completed')
+            ->sum('grand_total');
 
         $orders = DB::table('orders')
+
         ->whereIn('status',['pending','completed','processing'])
         ->count();
         
 
+
         $sells = DB::table('products') 
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             
             ->select('product_details.sold','prd_img.prd_image','products.prd_name',DB::raw('SUM(product_details.sold) as t_sold'))
@@ -44,18 +47,21 @@ class AdminController extends Controller
             
             ->orderBy('sold','desc')
             
+
             ->paginate(5);
-        
-        return view('Admin/modun/dashboard',['sold'=>$sold,'revenue'=>$revenue,'orders'=>$orders,'sells'=>$sells]);
+
+        return view('Admin/modun/dashboard', ['sold' => $sold, 'revenue' => $revenue, 'orders' => $orders, 'sells' => $sells]);
     }
 
 
 
-    function chart(Request $request) {
+    function chart(Request $request)
+    {
         $entries = Order::select([
             DB::raw('MONTH(created_at) as month'),
-//            DB::raw('YEAR(created_at) as year'),
+            //            DB::raw('YEAR(created_at) as year'),
             DB::raw('SUM(grand_total) as grand_total'),
+
         ])
         ->whereYear('created_at', 2023)
         ->where('status','completed')
@@ -75,12 +81,13 @@ class AdminController extends Controller
 //            }
         }
         foreach ($labels as $month => $name){
+
             if (!array_key_exists($month, $grand_total)) {
                 $grand_total[$month] = 0;
             }
         }
         ksort($grand_total);
-    
+
         return [
             'labels' => array_values($labels),
             'datasets' => [
@@ -88,6 +95,8 @@ class AdminController extends Controller
                     'label' => 'Revenue(vnd)',
                     'borderWidth' => 1,
                     'data' => array_values($grand_total),
+
+
                 ],
             ]
         ];
@@ -96,10 +105,12 @@ class AdminController extends Controller
     //---End Dashboard
 
     //---cac trang---
-    function account(){
+    function account()
+    {
         $users = DB::table('users')->get();
-        return view('Admin.modun.account',['user1'=>$users]);
+        return view('Admin.modun.account', ['user1' => $users]);
     }
+
     function product(){
         $temp = DB::table('products')
         ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
@@ -119,55 +130,59 @@ class AdminController extends Controller
         ->paginate(8);
         
         return view('Admin.modun.product',['products'=>$products]);
+
     }
-    function productorderby($id){
-        if($id == 'amount'){
-        $products = DB::table('products')
-        ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-        ->join('category', 'products.cat_id', '=', 'category.id')
-        ->orderBy('product_details.prd_amount','desc')
-        ->paginate(8);
+    function productorderby($id)
+    {
+        if ($id == 'amount') {
+            $products = DB::table('products')
+                ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+                ->join('category', 'products.cat_id', '=', 'category.id')
+                ->orderBy('product_details.prd_amount', 'desc')
+                ->paginate(8);
         } elseif ($id == 'id') {
             $products = DB::table('products')
                 ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
                 ->join('category', 'products.cat_id', '=', 'category.id')
                 ->orderBy('product_details.prd_detail_id', 'asc')
                 ->paginate(8);
-        }elseif($id == 0){
+        } elseif ($id == 0) {
             $products = DB::table('products')
                 ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
                 ->join('category', 'products.cat_id', '=', 'category.id')
-                ->where('product_details.prd_amount',0)
+                ->where('product_details.prd_amount', 0)
+                ->paginate(8);
+        } else {
+            $products = DB::table('products')
+                ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+                ->join('category', 'products.cat_id', '=', 'category.id')
+                ->orderBy('product_details.sold', 'desc')
                 ->paginate(8);
         }
-        else{
-        $products = DB::table('products')
-        ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-        ->join('category', 'products.cat_id', '=', 'category.id')
-        ->orderBy('product_details.sold','desc')
-        ->paginate(8);
-        }
-        return view('Admin.modun.product',['products'=>$products]);
+        return view('Admin.modun.product', ['products' => $products]);
     }
 
     //---sua account---
-    function modify($id){
-        $user = DB::table('users')->where('id',$id)->first();
-        return view ('Admin.modun.detail', compact('user'));
+    function modify($id)
+    {
+        $user = DB::table('users')->where('id', $id)->first();
+        return view('Admin.modun.detail', compact('user'));
     }
 
-    function delete(Request $request, $id){
+    function delete(Request $request, $id)
+    {
         $data = [
             'status' => 1
         ];
         DB::table('users')->where('id', $request->id)
             ->update($data);
-        return redirect()-> route('admin.account');
+        return redirect()->route('admin.account');
     }
 
-    function edit(Request $request, $id){
+    function edit(Request $request, $id)
+    {
         $data = [
-            
+
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
@@ -177,12 +192,14 @@ class AdminController extends Controller
         ];
         DB::table('users')->where('id', $request->id)
             ->update($data);
-        return redirect()-> route('admin.account');
+        return redirect()->route('admin.account');
     }
     //---
     //---Sua product---
-    function prd_modify($id){
+    function prd_modify($id)
+    {
         $product = DB::table('products')
+
         ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
         ->join('category', 'products.cat_id', '=', 'category.id')
         ->where('product_details.prd_detail_id',$id)
@@ -198,11 +215,13 @@ class AdminController extends Controller
         ->get();
         
         return view ('Admin.modun.prd_detail', compact(['product','images','cate']));
+
     }
     function removeImage($image){
         DB::table('prd_img')
         ->where('id',$image)
         ->delete();
+
 
         return back();
     }
@@ -293,11 +312,11 @@ class AdminController extends Controller
         ->where('prd_detail_id',$id)
         ->delete();
         return redirect()->back();;
-
     }
 
 
     //---------------add prd---------------
+
     function prd_add(Request $request){
         if($request->newprd == null){
             $check=DB::table('products')
@@ -412,115 +431,115 @@ class AdminController extends Controller
             
             'prd_amount' => $request->prd_amount,
             'prd_size' => $request->prd_size
+
             ];
-                 
         }
 
-        
+
         DB::table('product_details')
-        ->insert($prddetail);
-        return redirect()-> route('admin.product');
+            ->insert($prddetail);
+        return redirect()->route('admin.product');
     }
 
-    function addprdform() {
+    function addprdform()
+    {
         $products = DB::table('products')
             ->get();
+
         $category = DB::table('category')
         ->get();    
         return view('Admin/modun/addprd',compact(['products','category']));
+
     }
 
     //--------------End add prd
-    function order(){
+    function order()
+    {
         $orders = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->groupBy('orders.id')
             ->orderByDesc('orders.id')
             ->paginate(6);
-        return view ('Admin.modun.order', compact('orders'));
+        return view('Admin.modun.order', compact('orders'));
     }
 
-    function orderdetail($id){
+    function orderdetail($id)
+    {
         $orders = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+
             ->join('product_details','order_items.product_id','=','product_details.prd_detail_id')
             ->join('products','products.prd_id','=','product_details.prd_id')
             ->join('prd_img','products.prd_id','=','prd_img.prd_id')
             ->groupBy('products.prd_id')
             ->where('orders.id',$id)
+
             ->get();
-       
-        return view ('Admin.modun.orderdetail', compact('orders'));
+
+        return view('Admin.modun.orderdetail', compact('orders'));
     }
 
-    function updateStatus($id,$value)
+    function updateStatus($id, $value)
     {
         $order = DB::table('orders')
-        ->where('id',$id)
-        ->first();
-        
-        
-        if($order->status == 'cancel'){
-            
-        }else if($value == "processing"){
-            $order=DB::table('orders')
-            ->where('id',$id)
-            ->update(['status' => 'processing']);
-            
+            ->where('id', $id)
+            ->first();
+
+
+        if ($order->status == 'cancel') {
+        } else if ($value == "processing") {
+            $order = DB::table('orders')
+                ->where('id', $id)
+                ->update(['status' => 'processing']);
+        } else if ($value == "completed") {
+            $order = DB::table('orders')
+                ->where('id', $id)
+                ->update(['status' => 'completed']);
         }
-        else if($value == "completed"){
-            $order=DB::table('orders')
-            ->where('id',$id)
-            ->update(['status' => 'completed']);
-            
-        }
-    
-        return redirect()-> route('admin.order');
+
+        return redirect()->route('admin.order');
     }
 
-    function orderorderby($id){
-        if($id == 'pending'){
+    function orderorderby($id)
+    {
+        if ($id == 'pending') {
             $orders = DB::table('orders')
-            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->groupBy('orders.id')
-            ->where('orders.status',$id)
-            ->orderByDesc('orders.id')
-            ->paginate(5);
-
+                ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+                ->groupBy('orders.id')
+                ->where('orders.status', $id)
+                ->orderByDesc('orders.id')
+                ->paginate(5);
+        } else if ($id == 'completed') {
+            $orders = DB::table('orders')
+                ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+                ->groupBy('orders.id')
+                ->where('orders.status', $id)
+                ->orderByDesc('orders.id')
+                ->paginate(6);
+        } else if ($id  == 'processing') {
+            $orders = DB::table('orders')
+                ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+                ->groupBy('orders.id')
+                ->where('orders.status', $id)
+                ->orderByDesc('orders.id')
+                ->paginate(6);
+        } else if ($id == 'cancel') {
+            $orders = DB::table('orders')
+                ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+                ->groupBy('orders.id')
+                ->where('orders.status', $id)
+                ->orderByDesc('orders.id')
+                ->paginate(6);
+        } else {
+            $orders = DB::table('orders')
+                ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+                ->groupBy('orders.id')
+                ->orderByDesc('orders.id')
+                ->paginate(6);
         }
-        else if( $id == 'completed'){
-            $orders = DB::table('orders')
-            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->groupBy('orders.id')
-            ->where('orders.status',$id)
-            ->orderByDesc('orders.id')
-            ->paginate(6);
-
-        }else if( $id  == 'processing'){
-            $orders = DB::table('orders')
-            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->groupBy('orders.id')
-            ->where('orders.status',$id)
-            ->orderByDesc('orders.id')
-            ->paginate(6);
-
-        }else if( $id == 'cancel' ){
-            $orders = DB::table('orders')
-            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->groupBy('orders.id')
-            ->where('orders.status',$id)
-            ->orderByDesc('orders.id')
-            ->paginate(6);
-
-        }else{
-            $orders = DB::table('orders')
-            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->groupBy('orders.id')
-            ->orderByDesc('orders.id')
-            ->paginate(6);
-        }
-        return view ('Admin.modun.order', compact('orders'));   
+        return view('Admin.modun.order', compact('orders'));
     }
+
 
 //------------------Add img------------------
 function storeimg(Request $request){
@@ -550,7 +569,5 @@ function storeimg(Request $request){
 
     }
     return back();
-
-}
-
+    }
 }

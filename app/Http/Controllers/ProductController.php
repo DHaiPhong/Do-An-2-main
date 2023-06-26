@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    function prd_detail($id){
+    function prd_detail($id)
+    {
         $products = DB::table('product_details')
+
         ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
         ->where('product_details.prd_id',$id)
         
@@ -41,11 +43,14 @@ class ProductController extends Controller
         
 
         return view ('users.modun-user.productdetail',compact('products','prdsize','prd','prdimg','otherprd'));
+
     }
 
-    function product(){
+    function product()
+    {
 
         $product = DB::table('products')
+
         ->join('prd_img','products.prd_id', '=', 'prd_img.prd_id')
         ->groupBy('products.prd_id')
             
@@ -67,7 +72,6 @@ class ProductController extends Controller
             ->paginate(12);
             
         return view('users.modun-user.product',['prds'=>$product,'cate'=>$cate]);
+
     }
-    
-    
 }

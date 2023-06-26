@@ -1,6 +1,6 @@
 @extends('users.masterUser')
 
-@section('productdetail')
+@section('content')
 
 <link href="{{ url('css/detailprdcss/detailprd.css') }}" rel="stylesheet" type="text/css">
 <section>
@@ -12,6 +12,7 @@
                 <div class="boxx">
                     <div class="small-image">
 
+
                         @foreach ($prdimg as $primg)
                         <img src="/anh/{{ $primg->prd_image }}" alt="" style="width:90px" class="featured-image-1" id="pic">
                         @endforeach
@@ -20,6 +21,7 @@
                     <button id="leftb" class="slide-left" onclick="next1()">&#8250;</button>
                     <button id="rightb" class="slide-right" onclick="pre1()">&#8249;</button>
                 </div>
+
 
 
                 <div class="big-image">
@@ -36,6 +38,7 @@
                         <meta itemprop="priceCurrency" content="USD">
                         <link itemprop="availability" href="http://schema.org/InStock">
                         <form method="post" action="{{route('cart.add')}}">
+
 
                             @csrf
                             <div class="price-shipping">
@@ -54,6 +57,7 @@
                                         <input type="hidden" name="price"
                                             value="{{$prd->price / 100 * (100-$prd->prd_sale)}}">
                                     </div>
+
 
                                     @else
                                     <p style="color:black;font-size: 2.9rem;"> Giá {{number_format($prd->price)}} VND</p>
@@ -108,6 +112,7 @@
                         </form>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -198,6 +203,7 @@
 
 
 
+
 <!-- Quickbeam cart-->
 
 
@@ -266,3 +272,4 @@ function checkStock(size) {
 }
 </script>
 @stop
+

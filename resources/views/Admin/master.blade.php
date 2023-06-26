@@ -30,39 +30,23 @@
             padding-top: 3%;
         }
     </style>
-
     <link href="{{ url('css/admincss/account.css') }}" rel="stylesheet" type="text/css">
 </head>
 
 <body class="sidebar-mini">
     <div class="wrapper">
-
-
-
         @include('Admin.thanhphan.header')
         @yield('content')
-        @yield('content-account')
+        {{-- @yield('content-account')
         @yield('detail')
         @yield('add')
         @yield('order')
         @yield('orderdetail')
-
         @yield('product')
-        @yield('prd_detail')
+        @yield('prd_detail') --}}
         @include('Admin.thanhphan.sidebar')
-
-
-
+        @include('Admin.thanhphan.javascript')
     </div>
-
-
-    <script src="{{ asset('/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('/vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
-
-    <script src="https://kit.fontawesome.com/041cb6b55e.js" crossorigin="anonymous"></script>
-    @yield('js')
-    <script src="{{ asset('/vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
 </body>
 
 </html>

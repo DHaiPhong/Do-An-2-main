@@ -1,10 +1,11 @@
 @extends('Admin.master')
 
 @section('css')
-<link href="{{ url('css/addprdcss/addprd.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url('css/addprdcss/addprd.css') }}" rel="stylesheet" type="text/css">
 
 
 @stop
+
 @section('add')
 
 <div class="card" style="float: right; width: 72%; margin-right: 7%">
@@ -121,15 +122,14 @@
                     <div class="">
                         <button type="submit" class="btn btn-light" style="background-color: #c4f0c4; color: black"
                             href="">Next</button>
+
                     </div>
                 </div>
-
-
-            </div>
+        </div>
+        </form>
     </div>
-    </form>
-</div>
-</div>
+    </div>
+
 
 <script src="{{url('js/addprdjs/jquery-latest.min.js')}}"></script>
 <script>
@@ -164,3 +164,4 @@ function toggleTextInput() {
 }
 </script>
 @stop
+

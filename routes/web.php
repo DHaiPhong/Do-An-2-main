@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\loginController;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,11 @@ Route::get(
 Route::get('/product', [ProductController::class, 'product'])->name('users.product');
 Route::get('/product/{id}', [ProductController::class, 'prdbybrand'])->name('product.brand');
 
+//------------------------------Blog----------------------------
+Route::prefix('blog')->group(function () {
+    Route::get('/', [BlogController::class, 'index'])->name('users.blogs');
+    Route::get('/{id}/{slug}', [BlogController::class, 'showBlogByCategory'])->name('users.blogs.category');
+});
 //------------------------Cart---------------
 Route::prefix('account')->group(function () {
     Route::get('/cart', function () {
@@ -38,11 +44,7 @@ Route::prefix('account')->group(function () {
     Route::get('/add_cart/{id}', [userController::class, 'addcart'])->name('users.cart1');
 
     Route::get('/cartshop', function () {
-        return view('users/modun-user/cartshop');
-    })->name('users.cartshop');
-
-    Route::get('/cartshop', function () {
-        return view('users/modun-user/cartshop');
+        return view('users/modun-user/cartshop', ['title' => 'Cart']);
     })->name('users.cartshop');
 
 
@@ -65,6 +67,8 @@ Route::post('/admin/product/edit/{id}', [AdminController::class, 'prd_edit'])->n
 
 Route::get('/checkout', [CheckoutController::class, 'getCheckout'])->name('checkout.index');
 Route::post('/checkout/order', [CheckoutController::class, 'placeOrder'])->name('checkout.place.order');
+Route::post('/checkout/online', [CheckoutController::class, 'online'])->name('checkout.online');
+Route::get('/momo/callback', [CheckoutController::class, 'handlePaymentResult'])->name('momo.callback');
 
 
 //-------------------ADMIN------------------------
@@ -82,6 +86,18 @@ Route::prefix('admin')->middleware('level')->group(function () {
         Route::post('/img/{id}', [AdminController::class, 'image'])->name('account.image');
     });
 
+    // Blog
+    Route::prefix('blog')->group(function () {
+        Route::get('/', [BlogController::class, 'index'])->name('admin.blog');
+
+        Route::get('/category', [BlogController::class, 'category_index'])->name('admin.blog.category');
+        Route::get('/category/add', [BlogController::class, 'category_add'])->name('admin.blog.category.add');
+        Route::post('/category/store', [BlogController::class, 'category_store'])->name('admin.blog.category.store');
+        Route::get('/category/edit/{id}', [BlogController::class, 'category_edit'])->name('admin.blog.category.edit');
+        Route::put('/category/update/{id}', [BlogController::class, 'category_update'])->name('admin.blog.category.update');
+        Route::delete('/category/destroy/{id}', [BlogController::class, 'category_destroy'])->name('admin.blog.category.destroy');
+    });
+
 
     //-----------------Product----------------
     Route::prefix('product')->group(function () {
@@ -92,17 +108,13 @@ Route::prefix('admin')->middleware('level')->group(function () {
 
         Route::get('/modify/{id}', [AdminController::class, 'prd_modify'])->name('admin.prd_detail');
         Route::post('/edit/{id}', [AdminController::class, 'prd_edit'])->name('admin.prd_edit');
+
         Route::get('/removeImage/{image}', [AdminController::class, 'removeImage'])->name('product.removeImage');
         Route::get('/delete/{id}', [AdminController::class, 'delete_prd'])->name('product.delete');
 
-
-
         //---------------add prd-----------
-        
-
 
     });
-
     Route::get(
         '/checkorder',
         [AdminController::class, 'order']
@@ -119,7 +131,9 @@ Route::prefix('admin')->middleware('level')->group(function () {
 
 
 
+
     Route::get('/productt/add', [AdminController::class, 'addprdform'])->name('admin.add_prd');
+
     Route::post('/productt/add', [AdminController::class, 'prd_add'])->name('admin.prd_add');
 
     Route::get('/add/img', function () {
@@ -128,13 +142,6 @@ Route::prefix('admin')->middleware('level')->group(function () {
     Route::post('/add/img', [AdminController::class, 'storeimg'])->name('storeimg');
 });
 
-
-
-// tr
-
-//tu
-
-// php artisan serve 1
 Auth::routes();
 
 Route::get('/home1', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

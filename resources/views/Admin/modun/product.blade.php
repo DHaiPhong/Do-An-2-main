@@ -1,5 +1,6 @@
 @extends('Admin.master')
 
+
 @section('product')
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card" style="float: right; width: 80%">
@@ -52,24 +53,25 @@
                                 <i class="fa fa-pencil-square-o" aria-hidden="true">
                                 </i></td>
 
-                    </tr>
-                    @endforeach
+
+                            </tr>
+                        @endforeach
 
 
-                </tbody>
+                    </tbody>
 
-            </table>{{ $products->links() }}
+                </table>{{ $products->links() }}
+            </div>
         </div>
     </div>
-</div>
-<script>
-function myFunction() {
-    var x = document.getElementById("chon").value;
+    <script>
+        function myFunction() {
+            var x = document.getElementById("chon").value;
 
-    var url = "{{ route('admin.productorderby', ':id') }}";
-    url = url.replace(':id', x);
+            var url = "{{ route('admin.productorderby', ':id') }}";
+            url = url.replace(':id', x);
 
-    location.href = url;
-}
-</script>
+            location.href = url;
+        }
+    </script>
 @stop

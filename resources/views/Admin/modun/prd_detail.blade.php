@@ -1,6 +1,7 @@
 @extends('Admin.master')
 
-@section('prd_detail')
+@section('content')
+
 
 <div class="card" style="float: right; width: 72%; margin-right: 7%">
     <div class="card-body">
@@ -44,8 +45,8 @@
                             <option value="{{++$key}}" @if($product->cat_id == $cat->id) selected @endif>{{$cat->brand}}</option>
                             @endforeach
 
-                        </select>
-                    </div>
+                            </select>
+                        </div>
 
                     
                     <div class="form-group">
@@ -69,7 +70,14 @@
                         <label for="">Detail</label>
                         <textarea type="text" name="prd_details" class="form-control" id="" value=""
                             style="height: 10rem ;">{{ $product-> prd_details}} </textarea>
+
                     </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Detail</label>
+                            <textarea type="text" name="prd_details" class="form-control" id="" value="" style="height: 10rem ;">{{ $product->prd_details }} </textarea>
+                        </div>
+
 
 
                     <div class="form-group">
@@ -78,7 +86,20 @@
                             placeholder="">
                     </div>
 
+
+                        </div>
+                        <div class="form-group">
+                            <label for="">prd_sale</label>
+                            <input type="number" name="prd_sale" class="form-control" id=""
+                                value="{{ $product->prd_sale }}" placeholder="">
+                        </div>
+                        <button type="submit" href="" class="btn btn-light"
+                            style="background-color: #c4f0c4; color: black">Edit</button>
+                        <a href="" class="btn btn-light" style="background-color: #f85766; color: black">Delete</a>
+
+                    </div>
                 </div>
+
             </div>
                 <div class="width: 1000px">
                     <label>Thêm ảnh sản phẩm (Ảnh làm Bìa chọn cuối)</label>
@@ -163,3 +184,4 @@ function toggleTextInput() {
 
 </script>
 @stop
+

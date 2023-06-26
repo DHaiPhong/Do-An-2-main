@@ -4,7 +4,7 @@
 @section('css')
 <link  href="{{ url('css/productcss/prd.css') }}"  rel="stylesheet" type="text/css">
 @stop
-@section('product')
+@section('content')
 
 <section style="margin-top: -5%; font-size: 1.5rem">
     <h1 style="    text-align: center"> Sneakers</h1>
@@ -99,33 +99,34 @@
                                                     {{number_format($prd->price / 100 * (100-$prd->prd_sale))}}đ</p>
                                             </div>
                                         </div>
+                                        <div style="margin-left:10px">
+                                            <p style=" color: red">
+                                                {{ number_format(($prd->price / 100) * (100 - $prd->prd_sale)) }}đ</p>
+                                        </div>
+                                    </div>
+                                @else
+                                    <p style="color:red;margin-bottom: 0;">{{ number_format($prd->price) }} đ</p>
+                                @endif
 
-                                        @else
-                                        <p style="color:red;margin-bottom: 0;">{{ number_format($prd->price) }} đ</p>
-
-
-                                        @endif
-                        
-                            <br>
-
-
-                            <a class="btn" type="button" style="margin-top:-14px;"
-                                href="{{route('users.productdetail',['id'=> $prd->prd_id])}}">Detail</a>
-                        </p>
-                    </div>
+                                <br>
 
 
-                </div>
-                @endforeach
-            </tbody>
-        </table>
+                                <a class="btn" type="button" style="margin-top:-14px;"
+                                    href="{{ route('users.productdetail', ['id' => $prd->prd_id]) }}">Detail</a>
+                                </p>
+                            </div>
 
-    </div>
-    <section>
-        <div class='rowprd'>
-            {{ $prds->links() }}
+
+                        </div>
+                    @endforeach
+                </tbody>
+            </table>
 
         </div>
+        <section>
+            <div class='rowprd'>
+                {{ $prds->links() }}
+            </div>
+        </section>
     </section>
-</section>
 @stop

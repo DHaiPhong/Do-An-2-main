@@ -1,16 +1,12 @@
 @extends('Admin.master')
 
-
-
 @section('css')
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-@stop
+@endsection
 
-@section('content-account')
-
+@section('content')
     <div class="main-panel">
-        <div class="content-wrapper" style="float: right;
-  width: 80%;">
+        <div class="content-wrapper" style="float: right; width: 80%;">
             <div class="page-header">
                 <h3 class="page-title">
                     <span class="page-title-icon bg-gradient-primary text-white me-2">
@@ -87,7 +83,6 @@
                                         <thead>
                                             <tr>
                                                 <th> # </th>
-
                                                 <th> Name </th>
                                                 <th> Image </th>
                                                 <th> Sold </th>
@@ -99,13 +94,14 @@
                                                     <td> {{ ++$key }} </td>
                                                     <td> {{ $sell->prd_name }} </td>
                                                     <td>
-                                                        <image src="/anh/{{ $sell->prd_image }}" width="110px ">
+                                                        <img src="/anh/{{ $sell->prd_image }}" width="110px ">
                                                     </td>
+
                                                     <td>{{ $sell->t_sold }} </td>
+
 
                                                 </tr>
                                             @endforeach
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -114,17 +110,14 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-@stop
+@endsection
 @section('js')
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script>
         const ctx = document.getElementById('myChart');
         fetch("{{ route('chart') }}")
@@ -146,4 +139,4 @@
                 });
             })
     </script>
-@stop
+@endsection
