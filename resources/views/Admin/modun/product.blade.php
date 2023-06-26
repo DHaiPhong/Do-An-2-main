@@ -1,7 +1,7 @@
 @extends('Admin.master')
 
 
-@section('product')
+@section('content')
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card" style="float: right; width: 80%">
         <div class="card-body">

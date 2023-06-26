@@ -262,7 +262,6 @@ class AdminController extends Controller
             'products.cat_id' => $request->cat_id,
             'products.price' => $request->prd_price,
             'product_details.prd_amount' => $request->prd_amount,
-            'product_details.prd_size' => $request->prd_size,
             'products.prd_details' => $request->prd_details,
             'products.prd_sale' => $request->prd_sale
             

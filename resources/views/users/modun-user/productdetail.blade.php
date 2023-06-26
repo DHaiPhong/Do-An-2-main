@@ -38,8 +38,6 @@
                         <meta itemprop="priceCurrency" content="USD">
                         <link itemprop="availability" href="http://schema.org/InStock">
                         <form method="post" action="{{route('cart.add')}}">
-
-
                             @csrf
                             <div class="price-shipping">
                                 <div class="price" id="price-preview" quickbeam="price" quickbeam-price="800">
