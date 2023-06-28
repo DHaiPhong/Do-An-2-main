@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -146,4 +147,8 @@ Auth::routes();
 
 Route::get('/home1', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [userController::class, 'index'])->name('home1');
-Route::get('search', [userController::class, 'searchproduct'])->name('search');
+Route::get('search', [userController::class, 'searchproduct']);
+
+Route::get('/search', [SearchController::class,'search'])->name('search');
+Route::get('/suggestions', [SearchController::class,'suggestions']);
+

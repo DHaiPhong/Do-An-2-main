@@ -38,8 +38,11 @@
             <a href="{{ route('users.product') }}">BLOG</a>
         </nav>
         <div style="flex:2" class="search-container">
-  <input type="text" placeholder="Search...">
+        <form action="{{ route('search') }}" method="GET">
+  <input id="searchInput" type="text" name="query" placeholder="Search...">
   <button type="submit"><i class="fa fa-search"></i></button>
+</form>
+<ul id="suggestionList" class="suggestion-list"></ul>
 </div>
         <div class="icons">
             <div>
@@ -87,3 +90,50 @@
         </div>
     </header>
 </section>
+<script>
+   document.getElementById('searchInput').addEventListener('input', function () {
+        let query = this.value;
+        console.log(query);
+        if (query.length > 2) {
+            fetch('/suggestions?query=' + query)
+                .then(response => response.json())
+                .then(data => {
+                    let suggestionList = document.getElementById('suggestionList');
+                    suggestionList.innerHTML = '';
+
+                    data.forEach(item => {
+                        let suggestionItem = document.createElement('li');
+                        suggestionItem.classList.add('suggestion-item');
+
+                        let prdImage = document.createElement('img');
+                        prdImage.classList.add('suggestion-img');
+                        prdImage.src = 'anh/'+ item.prd_image;
+                        suggestionItem.appendChild(prdImage);
+
+                        let prdName = document.createElement('p');
+                        prdName.textContent = item.prd_name;
+                        suggestionItem.appendChild(prdName);
+
+                        let prdPrice = document.createElement('span');
+                        prdPrice.textContent = '$' + item.price;
+                        prdPrice.textContent = formatPrice(item.price) +'VND';
+                        suggestionItem.appendChild(prdPrice);
+
+                        suggestionItem.addEventListener('click', function () {
+                            document.getElementById('searchInput').value = item.prd_name;
+                            suggestionList.style.display = 'none';
+                        });
+
+                        suggestionList.appendChild(suggestionItem);
+                    });
+
+                    suggestionList.style.display = 'block';
+                });
+        } else {
+ document.getElementById('suggestionList').style.display = 'none';
+        }
+    });
+    function formatPrice(price) {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+    </script>
