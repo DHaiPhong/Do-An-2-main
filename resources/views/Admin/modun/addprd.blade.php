@@ -26,17 +26,16 @@
                             <div class="passport-box">
                                 <input type="text" name="newprd" id="myText" placeholder="Enter Passport Number"
                                     class="form-control">
-
                                 <div class="form-group">
-                                    <label for="exampleFormControlSelect2">Example multiple select</label>
-                                    <select class="form-control" id="example FormControlSelect2" name="cat_id">
-                                        <option value="1">Adidas</option>
-                                        <option value="2">Nike</option>
-                                        <option value="3">Puma</option>
-                                        <option value="4">Yeezy</option>
-
+                                    <label for="exampleFormControlSelect2">Select Category</label>
+                                    <select name="category_id" id="category" class="form-control">
+                                        <option value="0">Select</option>
+                                        @foreach ($categories as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Price</label>
                                     <input type="number" name="prd_price" class="form-control" id="exampleInputEmail1"

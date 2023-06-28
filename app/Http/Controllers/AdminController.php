@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Order;
 use Encore\Admin\Grid\Filter\Where;
 use Illuminate\Support\Facades\DB;
@@ -114,7 +115,7 @@ class AdminController extends Controller
         $products = DB::table('products')
 
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-            ->join('category', 'products.cat_id', '=', 'category.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
             ->orderBy('product_details.prd_id')
             ->paginate(8);
         return view('Admin.modun.product', ['products' => $products]);
@@ -124,25 +125,25 @@ class AdminController extends Controller
         if ($id == 'amount') {
             $products = DB::table('products')
                 ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                ->join('category', 'products.cat_id', '=', 'category.id')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
                 ->orderBy('product_details.prd_amount', 'desc')
                 ->paginate(8);
         } elseif ($id == 'id') {
             $products = DB::table('products')
                 ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                ->join('category', 'products.cat_id', '=', 'category.id')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
                 ->orderBy('product_details.prd_detail_id', 'asc')
                 ->paginate(8);
         } elseif ($id == 0) {
             $products = DB::table('products')
                 ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                ->join('category', 'products.cat_id', '=', 'category.id')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
                 ->where('product_details.prd_amount', 0)
                 ->paginate(8);
         } else {
             $products = DB::table('products')
                 ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                ->join('category', 'products.cat_id', '=', 'category.id')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
                 ->orderBy('product_details.sold', 'desc')
                 ->paginate(8);
         }
@@ -233,46 +234,31 @@ class AdminController extends Controller
 
 
     //---------------add prd---------------
-    function prd_add(Request $request)
+    public function prd_add(Request $request)
     {
-        if ($request->newprd == null) {
-        } else {
-
+        if ($request->newprd != null) {
             $prd = [
-
                 'prd_name' => $request->newprd,
-                'cat_id' => $request->cat_id,
+                'category_id' => $request->category_id,
                 'price' => $request->prd_price,
                 'prd_details' => $request->prd_details,
                 'prd_sale' => $request->prd_sale
             ];
 
-            DB::table('products')
-                ->insert($prd);
-        }
+            DB::table('products')->insert($prd);
 
-        if ($request->newprd == null) {
+            $prd_id = DB::table('products')->max('prd_id');
+
             $prddetail = [
-                'prd_id' => $request->prd_id,
+                'prd_id' => $prd_id,
                 'prd_color' => $request->prd_color,
                 'prd_amount' => $request->prd_amount,
                 'prd_size' => $request->prd_size
             ];
-        } else {
-            $temp = DB::table('products')
-                ->max('prd_id');
 
-            $prddetail = [
-                'prd_id' => $temp,
-                'prd_color' => $request->prd_color,
-                'prd_amount' => $request->prd_amount,
-                'prd_size' => $request->prd_size
-            ];
+            DB::table('product_details')->insert($prddetail);
         }
 
-
-        DB::table('product_details')
-            ->insert($prddetail);
         return redirect()->route('admin.product');
     }
 
@@ -280,7 +266,8 @@ class AdminController extends Controller
     {
         $products = DB::table('products')
             ->get();
-        return view('Admin/modun/addprd', compact('products'));
+        $categories = Category::all();
+        return view('Admin/modun/addprd', compact('products', 'categories'));
     }
 
     //--------------End add prd
