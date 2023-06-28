@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Order;
 use Encore\Admin\Grid\Filter\Where;
 use Illuminate\Database\Query\JoinClause;
@@ -28,25 +29,25 @@ class AdminController extends Controller
 
         $orders = DB::table('orders')
 
-        ->whereIn('status',['pending','completed','processing'])
-        ->count();
-        
+            ->whereIn('status', ['pending', 'completed', 'processing'])
+            ->count();
 
 
-        $sells = DB::table('products') 
+
+        $sells = DB::table('products')
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
 
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
-            
-            ->select('product_details.sold','prd_img.prd_image','products.prd_name',DB::raw('SUM(product_details.sold) as t_sold'))
-            
+
+            ->select('product_details.sold', 'prd_img.prd_image', 'products.prd_name', DB::raw('SUM(product_details.sold) as t_sold'))
+
             ->where('product_details.sold', '!=', 0)
-            
+
             ->groupBy('products.prd_id')
-            
-            
-            ->orderBy('sold','desc')
-            
+
+
+            ->orderBy('sold', 'desc')
+
 
             ->paginate(5);
 
@@ -63,24 +64,24 @@ class AdminController extends Controller
             DB::raw('SUM(grand_total) as grand_total'),
 
         ])
-        ->whereYear('created_at', 2023)
-        ->where('status','completed')
-        ->groupBy([
-            'month'
-        ])
-        ->orderBy('month')
-        ->get();
+            ->whereYear('created_at', 2023)
+            ->where('status', 'completed')
+            ->groupBy([
+                'month'
+            ])
+            ->orderBy('month')
+            ->get();
         $labels = [
             1 => 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
         ];
-//        $dataset = [];
+        //        $dataset = [];
         $grand_total = [];
-        foreach ($entries as $entry){
-//            if ($entry->status == 'Gửi Thành Công') {
-                $grand_total[$entry->month] = $entry->grand_total; 
-//            }
+        foreach ($entries as $entry) {
+            //            if ($entry->status == 'Gửi Thành Công') {
+            $grand_total[$entry->month] = $entry->grand_total;
+            //            }
         }
-        foreach ($labels as $month => $name){
+        foreach ($labels as $month => $name) {
 
             if (!array_key_exists($month, $grand_total)) {
                 $grand_total[$month] = 0;
@@ -111,52 +112,41 @@ class AdminController extends Controller
         return view('Admin.modun.account', ['user1' => $users]);
     }
 
-    function product(){
+    function product()
+    {
         $temp = DB::table('products')
-        ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
-        ->select('products.prd_id','prd_img.prd_image')
-        ->groupBy('products.prd_id')
-        ;
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->select('products.prd_id', 'prd_img.prd_image')
+            ->groupBy('products.prd_id');
         $products = DB::table('products')
-        ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-        ->join('category', 'products.cat_id', '=', 'category.id')
-        ->joinSub($temp,'temp',function (JoinClause $join) {
-            $join->on('products.prd_id', '=', 'temp.prd_id');
-        })
-        
-        
-        
-        ->orderBy('product_details.prd_id')
-        ->paginate(8);
-        
-        return view('Admin.modun.product',['products'=>$products]);
 
+            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->orderBy('product_details.prd_id')
+            ->paginate(8);
+        return view('Admin.modun.product', ['products' => $products]);
     }
     function productorderby($id)
     {
         if ($id == 'amount') {
             $products = DB::table('products')
                 ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                ->join('category', 'products.cat_id', '=', 'category.id')
-                ->orderBy('product_details.prd_amount', 'desc')
+                ->join('categories', 'products.category_id', '=', 'categories.id')->orderBy('product_details.prd_amount', 'desc')
                 ->paginate(8);
         } elseif ($id == 'id') {
             $products = DB::table('products')
                 ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                ->join('category', 'products.cat_id', '=', 'category.id')
-                ->orderBy('product_details.prd_detail_id', 'asc')
+                ->join('categories', 'products.category_id', '=', 'categories.id')->orderBy('product_details.prd_detail_id', 'asc')
                 ->paginate(8);
         } elseif ($id == 0) {
             $products = DB::table('products')
                 ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                ->join('category', 'products.cat_id', '=', 'category.id')
-                ->where('product_details.prd_amount', 0)
+                ->join('categories', 'products.category_id', '=', 'categories.id')->where('product_details.prd_amount', 0)
                 ->paginate(8);
         } else {
             $products = DB::table('products')
                 ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                ->join('category', 'products.cat_id', '=', 'category.id')
-                ->orderBy('product_details.sold', 'desc')
+                ->join('categories', 'products.category_id', '=', 'categories.id')->orderBy('product_details.sold', 'desc')
                 ->paginate(8);
         }
         return view('Admin.modun.product', ['products' => $products]);
@@ -200,243 +190,148 @@ class AdminController extends Controller
     {
         $product = DB::table('products')
 
-        ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-        ->join('category', 'products.cat_id', '=', 'category.id')
-        ->where('product_details.prd_detail_id',$id)
-        ->groupBy('products.prd_id')
-        ->first();
+            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->join('category', 'products.cat_id', '=', 'category.id')
+            ->where('product_details.prd_detail_id', $id)
+            ->groupBy('products.prd_id')
+            ->first();
         $cate = DB::table('category')
-        ->get();
+            ->get();
         $images = DB::table('products')
-        ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
-        ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-        ->where('product_details.prd_detail_id',$id)
-        
-        ->get();
-        
-        return view ('Admin.modun.prd_detail', compact(['product','images','cate']));
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->where('product_details.prd_detail_id', $id)
 
+            ->get();
+
+        return view('Admin.modun.prd_detail', compact(['product', 'images', 'cate']));
     }
-    function removeImage($image){
+    function removeImage($image)
+    {
         DB::table('prd_img')
-        ->where('id',$image)
-        ->delete();
+            ->where('id', $image)
+            ->delete();
 
 
         return back();
     }
 
-    function prd_edit(Request $request, $id){
-        
-        if($request->images != null){
-            
+    function prd_edit(Request $request, $id)
+    {
+
+        if ($request->images != null) {
+
             $this->validate($request, [
-                        'images' => 'required',
-                        'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-                    ]);
-                    $input=$request->all();
-                    $images=array();
-                    if($files=$request->file('images')){
-                        foreach($files as $file){
-                            $name=$file->getClientOriginalName();
-                            $file->move('anh',$name);
-                            $images[]=$name;
-                        }
-                    }
-                    
-                        
-                    /*Insert your data*/
-                    foreach($images as $image){
-                        DB::table('prd_img') 
-                        ->insert( [
-                        'prd_image'=>  $image,
+                'images' => 'required',
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            ]);
+            $input = $request->all();
+            $images = array();
+            if ($files = $request->file('images')) {
+                foreach ($files as $file) {
+                    $name = $file->getClientOriginalName();
+                    $file->move('anh', $name);
+                    $images[] = $name;
+                }
+            }
+
+
+            /*Insert your data*/
+            foreach ($images as $image) {
+                DB::table('prd_img')
+                    ->insert([
+                        'prd_image' =>  $image,
                         'prd_id' => $id,
-                        
-                        ]);
-                    }
+
+                    ]);
+            }
         }
-        if($request->newbrand == null){
+        if ($request->newbrand == null) {
             $data = [
 
-            'products.prd_name' => $request->prd_name,
-            'products.cat_id' => $request->cat_id,
-            'products.price' => $request->prd_price,
-            'product_details.prd_amount' => $request->prd_amount,
-            'products.prd_details' => $request->prd_details,
-            'products.prd_sale' => $request->prd_sale
-            
-        ];
-        }else{
+                'products.prd_name' => $request->prd_name,
+                'products.cat_id' => $request->cat_id,
+                'products.price' => $request->prd_price,
+                'product_details.prd_amount' => $request->prd_amount,
+                'products.prd_details' => $request->prd_details,
+                'products.prd_sale' => $request->prd_sale
+
+            ];
+        } else {
             DB::table('category')
-            ->insert(['brand'=>$request->newbrand]);
+                ->insert(['brand' => $request->newbrand]);
             $temp1 = DB::table('category')
-            ->max('id');
+                ->max('id');
             $data = [
-            'products.prd_name' => $request->prd_name,
-            'products.cat_id' => $temp1,
-            'products.price' => $request->prd_price,
-            'product_details.prd_amount' => $request->prd_amount,
-            
-            'products.prd_details' => $request->prd_details,
-            'products.prd_sale' => $request->prd_sale
-        ];
+                'products.prd_name' => $request->prd_name,
+                'products.cat_id' => $temp1,
+                'products.price' => $request->prd_price,
+                'product_details.prd_amount' => $request->prd_amount,
+
+                'products.prd_details' => $request->prd_details,
+                'products.prd_sale' => $request->prd_sale
+            ];
         }
-        
-            
+
+
         DB::table('products')
-        ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-        ->where('prd_detail_id', $request->prd_detail_id)
-        ->update($data);
-        
+            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->where('prd_detail_id', $request->prd_detail_id)
+            ->update($data);
+
 
         return back();
     }
-    function delete_prd($id){
-        
+    function delete_prd($id)
+    {
+
         DB::table('product_details')
-        ->where('prd_id',$id)
-        ->delete();
+            ->where('prd_id', $id)
+            ->delete();
         DB::table('prd_img')
-        ->where('prd_id',$id)
-        ->delete();
+            ->where('prd_id', $id)
+            ->delete();
         DB::table('products')
-        ->where('prd_id',$id)
-        ->delete();
+            ->where('prd_id', $id)
+            ->delete();
 
-        return redirect()-> route('admin.product') ;
-
+        return redirect()->route('admin.product');
     }
-    function delete_prd_img($id){
+    function delete_prd_img($id)
+    {
         DB::table('product_details')
-        ->where('prd_detail_id',$id)
-        ->delete();
+            ->where('prd_detail_id', $id)
+            ->delete();
         return redirect()->back();;
     }
 
 
     //---------------add prd---------------
-
-    function prd_add(Request $request){
-        if($request->newprd == null){
-            $check=DB::table('products')
-            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-            ->where('product_details.prd_size', $request->prd_size)
-            ->where('products.prd_id',$request->prd_id)
-            ->get();
-            
-            if($check -> isEmpty()){
-                
-            }else{
-                return back()->with('loi','This product already has this Size. Please double check before entering');
-            }
-            
-        }elseif($request-> newbrand == null){
-
-                    // thêm ảnh
-                    $this->validate($request, [
-                        'images' => 'required',
-                        'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-                    ]);
-            
-           $prd = [
-                    
+    public function prd_add(Request $request)
+    {
+        if ($request->newprd != null) {
+            $prd = [
                 'prd_name' => $request->newprd,
-                'cat_id' => $request->cat_id,
-                'price' => $request->prd_price, 
-                 
-                'prd_sale' => $request->prd_sale,
-                
-                ];
-            DB::table('products')
-            ->insert($prd);
-            $temp = DB::table('products')
-                    ->max('prd_id');
-            
-                    $input=$request->all();
-                    $images=array();
-                    if($files=$request->file('images')){
-                        foreach($files as $file){
-                            $name=$file->getClientOriginalName();
-                            $file->move('anh',$name);
-                            $images[]=$name;
-                        }
-                    }
-            foreach($images as $image){
-                DB::table('prd_img') 
-                ->insert( [
-                'prd_image'=>  $image,
-                'prd_id' => $temp,
-                        
-                ]);
-            }
-        }else{
-            $this->validate($request, [
-                'images' => 'required',
-                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-            ]);
-            DB::table('category')
-            ->insert(['brand'=>$request->newbrand]);
-            $temp1 = DB::table('category')
-            ->max('id');
-            
-    
-   $prd = [
-            
-        'prd_name' => $request->newprd,
-        'cat_id' => $temp1,
-        'price' => $request->prd_price, 
-         
-        'prd_sale' => $request->prd_sale,
-        
-        ];
-    DB::table('products')
-    ->insert($prd);
-    $temp = DB::table('products')
-            ->max('prd_id');
-    
-            $input=$request->all();
-            $images=array();
-            if($files=$request->file('images')){
-                foreach($files as $file){
-                    $name=$file->getClientOriginalName();
-                    $file->move('anh',$name);
-                    $images[]=$name;
-                }
-            }
-    foreach($images as $image){
-        DB::table('prd_img') 
-        ->insert( [
-        'prd_image'=>  $image,
-        'prd_id' => $temp,
-                
-        ]);
-    }
-        }   
-            
-        if ($request->newprd == null) {
-            $prddetail = [
-            'prd_id' => $request->prd_id,
-            
-            'prd_amount' => $request->prd_amount,
-            'prd_size' => $request->prd_size
+                'category_id' => $request->category_id,
+                'price' => $request->prd_price,
+                'prd_details' => $request->prd_details,
+                'prd_sale' => $request->prd_sale
             ];
-            
-            
-        }else{
-            
-            
-           $prddetail = [
-            'prd_id' => $temp,
-            
-            'prd_amount' => $request->prd_amount,
-            'prd_size' => $request->prd_size
 
+            DB::table('products')->insert($prd);
+
+            $prd_id = DB::table('products')->max('prd_id');
+
+            $prddetail = [
+                'prd_id' => $prd_id,
+                'prd_color' => $request->prd_color,
+                'prd_amount' => $request->prd_amount,
+                'prd_size' => $request->prd_size
             ];
+
+            DB::table('product_details')->insert($prddetail);
         }
 
-
-        DB::table('product_details')
-            ->insert($prddetail);
         return redirect()->route('admin.product');
     }
 
@@ -444,11 +339,7 @@ class AdminController extends Controller
     {
         $products = DB::table('products')
             ->get();
-
-        $category = DB::table('category')
-        ->get();    
-        return view('Admin/modun/addprd',compact(['products','category']));
-
+        return view('Admin/modun/addprd', compact('products'));
     }
 
     //--------------End add prd
@@ -467,11 +358,11 @@ class AdminController extends Controller
         $orders = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
 
-            ->join('product_details','order_items.product_id','=','product_details.prd_detail_id')
-            ->join('products','products.prd_id','=','product_details.prd_id')
-            ->join('prd_img','products.prd_id','=','prd_img.prd_id')
+            ->join('product_details', 'order_items.product_id', '=', 'product_details.prd_detail_id')
+            ->join('products', 'products.prd_id', '=', 'product_details.prd_id')
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->groupBy('products.prd_id')
-            ->where('orders.id',$id)
+            ->where('orders.id', $id)
 
             ->get();
 
@@ -540,33 +431,33 @@ class AdminController extends Controller
     }
 
 
-//------------------Add img------------------
-function storeimg(Request $request){
-    $this->validate($request, [
-        'images' => 'required',
-        'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-    ]);
-    $input=$request->all();
-    $images=array();
-    if($files=$request->file('images')){
-        foreach($files as $file){
-            $name=$file->getClientOriginalName();
-            $file->move('anh',$name);
-            $images[]=$name;
+    //------------------Add img------------------
+    function storeimg(Request $request)
+    {
+        $this->validate($request, [
+            'images' => 'required',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+        $input = $request->all();
+        $images = array();
+        if ($files = $request->file('images')) {
+            foreach ($files as $file) {
+                $name = $file->getClientOriginalName();
+                $file->move('anh', $name);
+                $images[] = $name;
+            }
         }
-    }
-    dd($files);
-        
-    /*Insert your data*/
-    foreach($images as $image){
-        DB::table('prd_img') 
-        ->insert( [
-        'img'=>  $image,
-        'prd_id' => 1,
-        
-    ]);
+        dd($files);
 
-    }
-    return back();
+        /*Insert your data*/
+        foreach ($images as $image) {
+            DB::table('prd_img')
+                ->insert([
+                    'img' =>  $image,
+                    'prd_id' => 1,
+
+                ]);
+        }
+        return back();
     }
 }

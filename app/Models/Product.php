@@ -17,4 +17,8 @@ class Product extends Model
         'cat_id', 'prd_name', 'prd_details', 'price', 'prd_sale',
     ];
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

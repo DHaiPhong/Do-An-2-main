@@ -100,6 +100,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link  " href="{{ route('categories.index') }}">
+                        <i class="fa-solid fa-ballot-check"></i>
+                        <p>
+                            Category
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
