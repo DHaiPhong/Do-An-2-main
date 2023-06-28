@@ -5,6 +5,7 @@
 
 
 @stop
+
 @section('content')
     <div class="card" style="float: right; width: 72%; margin-right: 7%">
         <div class="card-body">
@@ -26,6 +27,7 @@
                             <div class="passport-box">
                                 <input type="text" name="newprd" id="myText" placeholder="Enter Passport Number"
                                     class="form-control">
+
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect2">Select Category</label>
                                     <select name="category_id" id="category" class="form-control">
@@ -35,7 +37,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Price</label>
                                     <input type="number" name="prd_price" class="form-control" id="exampleInputEmail1"
@@ -51,10 +52,11 @@
                                     <textarea type="text" name="prd_details" class="form-control" id="" value="" style="height: 10rem ;"> </textarea>
                                 </div>
 
+
                                 <div class="form-group">
-                                    <label>Ảnh sản phẩm</label>
-                                    <input type="file" name="prd_image" onchange="preview();">
-                                    <img id="prd_image" width="auto" height="170px" src="/anh/noimg.jpg">
+                                    <label>Ảnh sản phẩm </label>
+                                    <input type="file" class="" name="images[]" placeholder="anh" multiple>
+
 
 
                                 </div>
@@ -69,35 +71,47 @@
 
                             </div>
                         </div>
+
+
+
+
+
                     </div>
                     <div class="col">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Color</label>
-                            <input type="text" name="prd_color" class="form-control" id="exampleInputEmail1"
-                                value=" " placeholder="">
-                        </div>
+
 
                         <div class="form-group">
                             <label for="exampleInputPassword1">Amount</label>
-                            <input type="number" name="prd_amount" class="form-control" id="exampleInputPassword1"
-                                value="" placeholder="">
+                            <input type="number" name="prd_amount" min="0" oninput="validity.valid||(value='');"
+                                class="form-control" id="exampleInputPassword1" value="0" placeholder="">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Size</label>
-                            <input type="number" name="prd_size" class="form-control" id="exampleInputPassword1"
-                                value="">
+
+                            <select class="form-control" id="example FormControlSelect2" name="prd_size">
+                                <option value="38">38</option>
+                                <option value="39">39</option>
+                                <option value="40">40</option>
+                                <option value="41">41</option>
+                                <option value="42">42</option>
+                                <option value="43">43</option>
+
+                            </select>
                         </div>
-                        <button type="submit" href="" class="btn btn-light"
-                            style="background-color: #c4f0c4; color: black">Edit</button>
+
+
+
                         <div class="">
-                            <button type="submit" class="btn" href="">Next</button>
+                            <button type="submit" class="btn btn-light" style="background-color: #c4f0c4; color: black"
+                                href="">Next</button>
+
                         </div>
                     </div>
                 </div>
+            </form>
         </div>
-        </form>
     </div>
-    </div>
+
 
     <script src="{{ url('js/addprdjs/jquery-latest.min.js') }}"></script>
     <script>
@@ -108,15 +122,27 @@
                     $(this).parents(".checkbox-card").find('.passport-box').show();
                     $(this).parents(".checkbox-card").find('.apply-box').hide();
                     document.getElementById("myText").value = ""
-                    document.getElementById("myText").value = ""
-                    document.getElementById("myText").value = ""
-                    document.getElementById("myText").value = ""
-                    document.getElementById("myText").value = ""
+
                 } else {
                     $(this).parents(".checkbox-card").find('.passport-box').hide();
                     $(this).parents(".checkbox-card").find('.apply-box').show();
                 }
             });
         })
+
+        function toggleTextInput() {
+            var checkBox = document.getElementById("toggleInput");
+            var textInput = document.getElementById("textInput");
+            var cate = document.getElementById("cate");
+
+            if (checkBox.checked) {
+                textInput.style.display = "block";
+                cate.style.display = "none";
+            } else {
+                document.getElementById("textInput").value = ""
+                textInput.style.display = "none";
+                cate.style.display = "block";
+            }
+        }
     </script>
 @stop

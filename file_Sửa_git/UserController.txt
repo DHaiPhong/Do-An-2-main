@@ -75,13 +75,23 @@ class userController extends Controller
                 ->where('id', $id)
                 ->update(['status' => 'cancel']);
         }
+
+<<<<<<< tu
     return back();
 }
    
    function index(){
     $sells = DB::table('products')
     ->join('prd_img','products.prd_id', '=', 'prd_img.prd_id')
+=======
 
+        return back();
+    }
+
+    function index()
+    {
+        $sells = DB::table('products')
+>>>>>>> main
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
             ->groupBy('products.prd_id')
 
@@ -89,7 +99,9 @@ class userController extends Controller
 
             ->paginate(5);
 
-        return view('users.modun-user.index', ['sells' => $sells, 'title' => 'Home']);
+        $blog_categories = CategoryBlog::all();
+
+        return view('users.modun-user.index', ['sells' => $sells, 'title' => 'Home'], compact('blog_categories'));
     }
 
     function searchproduct(Request $request)

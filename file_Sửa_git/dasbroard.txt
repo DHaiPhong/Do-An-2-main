@@ -96,10 +96,12 @@
                                                     <td>
                                                         <img src="/anh/{{ $sell->prd_image }}" width="110px ">
                                                     </td>
-
+<<<<<<< tu
                                                     <td>{{ $sell->t_sold }} </td>
 
-
+=======
+                                                    <td>{{ $sell->sold }} </td>
+>>>>>>> main
                                                 </tr>
                                             @endforeach
                                         </tbody>
