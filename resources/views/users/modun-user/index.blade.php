@@ -6,10 +6,11 @@
         <div class="box-container">
             @foreach ($sells as $sell)
                 <div class="box">
-                    <div class="content">
+                    <div class="content" style="position:relative">
                         <a href="{{ route('users.productdetail', $sell->prd_id) }}"><img src="/anh/{{ $sell->prd_image }}"
                                 width=" " alt=""></a>
-                        <h3>{{ \Illuminate\Support\Str::limit($sell->prd_name, '17') }}</h3>
+                        <h3>{{ \Illuminate\Support\Str::limit($sell->prd_name, '43')  }}</h3>
+                        <div style="height: 80px"></div>
                         @if ($sell->prd_sale != 0)
                             <div class="price" style="text-transform: none;">
 
@@ -28,7 +29,7 @@
                             </div>
                         @else
                             <div class="price" style="text-transform: none;">
-                                <p style="text-transform: none; font-size: 20px; text-align: left">Price:
+                                <p style="text-transform: none; font-size: 20px; text-align: left">
                                     {{ number_format($sell->price - ($sell->price * $sell->prd_sale) / 100) }} đ</p>
                                 <p style="text-align: left; text-transform: none; font-size: 12px; color: red">
                                     {{ $sell->prd_amount }}
