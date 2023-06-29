@@ -82,10 +82,8 @@ class userController extends Controller
     {
         $sells = DB::table('products')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
-
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
             ->groupBy('products.prd_id')
-
             ->orderBy('sold', 'desc')
 
             ->paginate(5);

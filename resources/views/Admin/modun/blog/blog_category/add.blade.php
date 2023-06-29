@@ -73,8 +73,13 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
     <script>
+        function removeAccents(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
         function generateSlug() {
             var title = document.getElementById("slug-source").value;
+            title = removeAccents(title); // Remove accents
 
             // Convert the title to lowercase and remove symbols and spaces
             var slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');

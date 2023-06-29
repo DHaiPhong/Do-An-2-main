@@ -11,7 +11,7 @@
 
 
 .rowprd {
-  width: 75%;
+  /* width: 75%; */
   display: flex;
   float: right;
   flex-flow: row wrap;

@@ -26,7 +26,7 @@
                             <th scope="col"> # </th>
                             <th scope="col" style="width: 16%"> Name </th>
                             <th scope="col" style=""> Parent </th>
-                            <th scope="col"> Description </th>
+                            <th scope="col"> Slug </th>
                             <th scope="col" style=""> Manage </th>
                         </tr>
                     </thead>
@@ -36,8 +36,12 @@
                                 <td scope="row">{{ ++$key }}</td>
                                 <input type="hidden" value="{{ $category->id }} ">
                                 <td>{{ $category->name }}</td>
-                                <td>{{ $category->parent_id && $category->parent ? $category->parent->name : '' }}</td>
-                                <td>{{ $category->description }}</td>
+                                @if ($category->parent_id == null)
+                                    <td>Null</td>
+                                @else
+                                    <td>{{ $category->parent_id && $category->parent ? $category->parent->name : '' }}</td>
+                                @endif
+                                <td>{{ $category->slug }}</td>
                                 <td>
                                     <a href="{{ route('categories.edit', $category->id) }}"
                                         class="btn btn-sm btn-primary">Edit</a>

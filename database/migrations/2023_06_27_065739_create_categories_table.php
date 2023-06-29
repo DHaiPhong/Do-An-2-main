@@ -17,7 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('name');
-            $table->text('description')->nullable();
+            $table->string('slug')->unique();
             $table->timestamps();
 
             // Khóa ngoại cho parent_id

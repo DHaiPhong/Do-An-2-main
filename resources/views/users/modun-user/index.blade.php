@@ -9,7 +9,7 @@
                     <div class="content" style="position:relative">
                         <a href="{{ route('users.productdetail', $sell->prd_id) }}"><img src="/anh/{{ $sell->prd_image }}"
                                 width=" " alt=""></a>
-                        <h3>{{ \Illuminate\Support\Str::limit($sell->prd_name, '43')  }}</h3>
+                        <h3>{{ \Illuminate\Support\Str::limit($sell->prd_name, '43') }}</h3>
                         <div style="height: 80px"></div>
                         @if ($sell->prd_sale != 0)
                             <div class="price" style="text-transform: none;">
@@ -23,7 +23,7 @@
                                     <p style="color: red; font-size: 1.2rem; margin-left: 0.8rem"> - {{ $sell->prd_sale }}%
                                     </p>
                                 </div>
-                                <p style="text-align: left; text-transform: none; font-size: 12px; color: red">
+                                <p style="text-align: left, bottom; text-transform: none; font-size: 12px; color: red">
                                     {{ $sell->prd_amount }}
                                     products left</p>
                             </div>

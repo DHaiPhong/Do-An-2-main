@@ -27,7 +27,7 @@ Route::get(
     [ProductController::class, 'prd_detail']
 )->name('users.productdetail');
 Route::get('/product', [ProductController::class, 'product'])->name('users.product');
-Route::get('/product/{id}', [ProductController::class, 'prdbybrand'])->name('product.brand');
+Route::get('/product/{slug}', [ProductController::class, 'prdbyCategory'])->name('product.category');
 
 //------------------------------Blog----------------------------
 Route::prefix('blog')->group(function () {

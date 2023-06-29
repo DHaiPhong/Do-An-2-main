@@ -14,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::orderBy('parent_id', 'asc')->latest()->paginate(5);
+        $categories = Category::orderBy('parent_id', 'asc')->latest()->paginate(9);
         return view('Admin.modun.categories.index', ['title' => 'Category'], compact('categories'));
     }
 
@@ -46,7 +46,7 @@ class CategoryController extends Controller
         $category = new Category;
         $category->name = $request->input('name');
         $category->parent_id = $request->input('parent_id');
-        $category->description = $request->input('description');
+        $category->slug = $request->input('slug');
         $category->save();
 
         return redirect()->route('categories.index')->with('success', 'Category created successfully');

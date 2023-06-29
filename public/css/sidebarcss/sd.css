@@ -294,10 +294,11 @@ body {
     display: block;
     opacity: 1;
     visibility: visible;
-    /*top: 100px;*/
+    top: 100%;
+    /* float: left; */
   
     /* == */
-    left: 250px;
+    left: 0;
     /* == */
   }
   /*.mcd-menu li ul li {
@@ -424,8 +425,14 @@ body {
       padding: 8px 10px 9px 10px;
     }
     .mcd-menu li > ul {
-      min-width: 180px;
+      transition: visibility 0s, opacity 0.5s linear;
+      /* min-width: 180px; */
     }
+
+    .mcd-menu li ul li > ul {
+      transition: visibility 0s, opacity 0.5s linear;
+    }
+
     .mcd-menu li:hover > ul {
       min-width: 180px;
       left: 200px;

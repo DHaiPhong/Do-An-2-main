@@ -15,7 +15,7 @@
             <form method="post" action="{{ route('categories.store') }}" class="forms-sample">
                 @csrf
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label for="slug-source">Name</label>
                             <input type="text" name="name" class="form-control" id="slug-source" value=""
@@ -25,6 +25,10 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="slug-target">Slug</label>
+                            <input type="text" name="slug" class="form-control" id="slug-target">
+                        </div>
+                        <div class="form-group">
                             <label>Parent</label>
                             <select class="form-control" name="parent_id" id="parent_id">
                                 <option value="">-- Sellect Category Parent --</option>
@@ -32,10 +36,6 @@
                                     <option value="{{ $id }}">{{ $name }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Description</label>
-                            <textarea type="text" name="description" class="form-control" id="" value="" style="height: 10rem ;"> </textarea>
                         </div>
                     </div>
                     <button type="submit" href="" class="btn btn-light"
@@ -53,8 +53,13 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
     <script>
+        function removeAccents(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
         function generateSlug() {
             var title = document.getElementById("slug-source").value;
+            title = removeAccents(title); // Remove accents
 
             // Convert the title to lowercase and remove symbols and spaces
             var slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
