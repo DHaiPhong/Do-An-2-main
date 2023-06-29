@@ -24,7 +24,7 @@
                 <div class="col">
                     @csrf
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Product name</label>
+                        <label for="exampleInputUsername1">Product name {{$product->prd_id}}</label>
                         <input type="hidden" name="prd_detail_id" value="{{$product->prd_detail_id}}">
                         <input type="text" name="prd_name" class="form-control" id="exampleInputUsername1"
                             value="{{ $product-> prd_name}}" placeholder="name">
@@ -32,19 +32,15 @@
 
                     </div>
                     <!-- -- -->
-                    <label for="toggleInput">New Brand</label>
-                    <input type="checkbox" id="toggleInput" onclick="toggleTextInput()">
+                    
 
-                    <br>
-                    <input class="form-control" type="text" id="textInput" name="newbrand"
-                        placeholder="Enter Name New Brand" style="display:none;">
                     <div id="cate" class="form-group">
                         <!-- -- -->
 
                         <label for="exampleFormControlSelect2">Brand</label>
-                        <select class="form-control" id="example FormControlSelect2" name="cat_id">
+                        <select class="form-control" id="example FormControlSelect2" name="category_id">
                             @foreach($cate as $key => $cat )
-                            <option value="{{++$key}}" @if($product->cat_id == $cat->id) selected @endif>{{$cat->brand}}
+                            <option value="{{++$key}}" @if($product->category_id == $cat->id) selected @endif> {{$cat->name}}
                             </option>
                             @endforeach
 
@@ -55,7 +51,7 @@
                     <div class="form-group">
                         <label for="exampleInputEmail1">Price</label>
                         <input type="number" name="prd_price" class="form-control" id="exampleInputEmail1"
-                            value="{{ $product-> price}}" step="1000" placeholder="" oninput="addCommas(this)">
+                            value="{{ $product-> price}}" step="1000" placeholder="" >
                     </div>
                     <div class="form-group">
                     
@@ -102,7 +98,7 @@
                         style="display: flex;flex-basis: 20%; padding: 30px; padding-bottom:10px;margin:10px; flex-direction: column; border: 1px solid #00000026; border-radius: 10px;">
                         <img id="prd_image" width="100%" height="auto" src="/anh/{{ $image-> prd_image }}">
 
-                        <a style="text-align: center; color:red;" type="button"> Remove</a>
+                        <a style="text-align: center; color:red;" onclick="myalert({{$image->id}}) " type="button"> Remove</a>
 
                     </div>
                     @endforeach
@@ -142,7 +138,7 @@ function myalert2(id) {
         console.log('Yes');
         const x = id;
 
-        window.location.href = "http://127.0.0.1:8000/admin/product/delete/" + x;
+        window.location.href = "http://127.0.0.1:8000/admin/product/deleteSize/" + x;
     } else {
 
 

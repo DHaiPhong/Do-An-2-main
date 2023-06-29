@@ -1,0 +1,24 @@
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+      }
+      60% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+}
+
+#myDiv {
+    
+    animation: fadeout 5s linear;
+    animation-delay: 3s;
+    animation-fill-mode: forwards;
+}
+ /* :before{
+    
+        font-family: "Font Name", sans-serif;
+        content: "sửa";
+      
+} */
