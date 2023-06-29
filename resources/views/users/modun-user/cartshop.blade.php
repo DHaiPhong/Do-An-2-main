@@ -17,7 +17,7 @@
                         <th>price</th>
 
                         <th>Quantity</th>
-                        <th>color</th>
+                        
                         <th>size</th>
                         <th>Subtotal</th>
 
@@ -44,7 +44,7 @@
                                     style="padding-left: 6px;padding-right: 5px;"><i
                                         class="fa-solid fa-circle-plus"></i></a>
                             </td>
-                            <td>{{ $item->options->color }}</td>
+                            
                             <td>{{ $item->options->size }}</td>
                             <td>{{ number_format($item->total) }} đ</td>
                         </tr>

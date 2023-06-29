@@ -25,7 +25,7 @@
                             <th style="width: 25%"> address </th>
                             <th style="width: 5%"> phone </th>
                             <th style="width: 5%"> Amount </th>
-
+                            <th> Order Date </th>
                             <th style=""> Chi tiet </th>
                         </tr>
                     </thead>
@@ -58,6 +58,8 @@
                                 </td>
                                 <td> {{ $order->phone_number }} </td>
                                 <td> {{ $order->item_count }} </td>
+                                <td> {{$order->created_at }}</td>
+                                            </td>
                                 <td style=""><a href="{{ route('admin.orderdetail', ['id' => $order->order_id]) }}">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true">
                                         </i></td>
