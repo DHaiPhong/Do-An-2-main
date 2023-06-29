@@ -147,6 +147,5 @@ Route::get('/home1', [App\Http\Controllers\HomeController::class, 'index'])->nam
 Route::get('/', [userController::class, 'index'])->name('home1');
 Route::get('search', [userController::class, 'searchproduct']);
 
-Route::get('/search', [SearchController::class,'search'])->name('search');
-Route::get('/suggestions', [SearchController::class,'suggestions']);
-
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::get('/suggestions', [SearchController::class, 'suggestions']);
