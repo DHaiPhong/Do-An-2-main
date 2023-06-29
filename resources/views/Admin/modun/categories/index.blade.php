@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="col-lg-12 grid-margin stretch-card">
-        <div class="card" style="float: right; width: 86%">
+        <div class="card" style="float: right; width: 82%">
             <div class="card-body">
                 <h4 style="margin-bottom: 18px; margin-right: 20px" class="card-title">Blog Category Table</h4>
                 <a class="badge badge-success" style="float: right; font-size: 20px"

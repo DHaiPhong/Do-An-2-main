@@ -9,11 +9,27 @@
 @section('content')
     <div class="card" style="float: right; width: 72%; margin-right: 7%">
         <div class="card-body">
+        @if(session('loi'))
+    <div class="alert alert-danger">
+        <ul>
+            <li>{{ session('loi') }}</li>
+        </ul>
+    </div>
+@endif
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
             <div style="box-sizing: border-box;">
                 <h4 class="card-title">Add Product</h4>
                 <br>
             </div>
-            <form method="post" action="{{ route('admin.prd_add') }}" class="forms-sample">
+            <form method="post" action="{{ route('admin.prd_add') }}" class="forms-sample" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col">
                         @csrf
@@ -25,15 +41,17 @@
                                 </label>
                             </div>
                             <div class="passport-box">
-                                <input type="text" name="newprd" id="myText" placeholder="Enter Passport Number"
+                                <input type="text" name="newprd" id="myText" placeholder="New Product"
                                     class="form-control">
 
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect2">Select Category</label>
                                     <select name="category_id" id="category" class="form-control">
-                                        <option value="0">Select</option>
+                                        <option style="display:none" value="0">Select</option>
                                         @foreach ($categories as $item)
+                                        
                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        
                                         @endforeach
                                     </select>
                                 </div>
@@ -44,7 +62,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">prd_sale</label>
-                                    <input type="number" name="prd_sale" class="form-control" id="" value=""
+                                    <input type="number" name="prd_sale" class="form-control" id="" value="0"
                                         placeholder="">
                                 </div>
                                 <div class="form-group">
@@ -71,10 +89,6 @@
 
                             </div>
                         </div>
-
-
-
-
 
                     </div>
                     <div class="col">

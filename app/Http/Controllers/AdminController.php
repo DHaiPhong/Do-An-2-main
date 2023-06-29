@@ -119,7 +119,9 @@ class AdminController extends Controller
             ->select('products.prd_id', 'prd_img.prd_image')
             ->groupBy('products.prd_id');
         $products = DB::table('products')
-
+            ->joinSub($temp,'temp',function (JoinClause $join) {
+                $join->on('products.prd_id', '=', 'temp.prd_id');
+            })
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
             ->join('categories', 'products.category_id', '=', 'categories.id')
             ->orderBy('product_details.prd_id')
@@ -191,11 +193,12 @@ class AdminController extends Controller
         $product = DB::table('products')
 
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-            ->join('category', 'products.cat_id', '=', 'category.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
             ->where('product_details.prd_detail_id', $id)
             ->groupBy('products.prd_id')
             ->first();
-        $cate = DB::table('category')
+            
+        $cate = DB::table('categories')
             ->get();
         $images = DB::table('products')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
@@ -246,32 +249,18 @@ class AdminController extends Controller
                     ]);
             }
         }
-        if ($request->newbrand == null) {
+        
             $data = [
 
                 'products.prd_name' => $request->prd_name,
-                'products.cat_id' => $request->cat_id,
+                'products.category_id' => $request->category_id,
                 'products.price' => $request->prd_price,
                 'product_details.prd_amount' => $request->prd_amount,
                 'products.prd_details' => $request->prd_details,
                 'products.prd_sale' => $request->prd_sale
 
             ];
-        } else {
-            DB::table('category')
-                ->insert(['brand' => $request->newbrand]);
-            $temp1 = DB::table('category')
-                ->max('id');
-            $data = [
-                'products.prd_name' => $request->prd_name,
-                'products.cat_id' => $temp1,
-                'products.price' => $request->prd_price,
-                'product_details.prd_amount' => $request->prd_amount,
-
-                'products.prd_details' => $request->prd_details,
-                'products.prd_sale' => $request->prd_sale
-            ];
-        }
+        
 
 
         DB::table('products')
@@ -295,7 +284,38 @@ class AdminController extends Controller
             ->where('prd_id', $id)
             ->delete();
 
-        return redirect()->route('admin.product');
+        
+        return redirect()->route('admin.product')->with('Notification','This product has been removed');
+    }
+    function delete_size($id)
+    {
+
+
+        $prd_id = DB::table('product_details')
+            ->where('prd_detail_id', $id)
+            ->value('prd_id');
+
+        DB::table('product_details')
+            ->where('prd_detail_id', $id)
+            ->delete();
+        $check = DB::table('products')
+            ->where('prd_id',$prd_id)
+            ->get();    
+
+        if($check == null){    
+        DB::table('product_details')
+            ->where('prd_id', $prd_id)
+            ->delete();
+        DB::table('prd_img')
+            ->where('prd_id', $prd_id)
+            ->delete();
+        DB::table('products')
+            ->where('prd_id', $prd_id)
+            ->delete();
+        return redirect()->route('admin.product')->with('Notification','Product has been removed');
+        }
+
+        return redirect()->route('admin.product')->with('Notification','Product size has been removed');
     }
     function delete_prd_img($id)
     {
@@ -307,39 +327,91 @@ class AdminController extends Controller
 
 
     //---------------add prd---------------
-    public function prd_add(Request $request)
-    {
-        if ($request->newprd != null) {
+    
+    function prd_add(Request $request){
+        if($request->newprd == null){
+            $check=DB::table('products')
+            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->where('product_details.prd_size', $request->prd_size)
+            ->where('products.prd_id',$request->prd_id)
+            ->get();
+            
+            if($check -> isEmpty()){
+                
+            }else{
+                return back()->with('loi','This product already has this Size. Please double check before entering');
+            }
+            
+        }else{
+            
+            $this->validate($request, [
+                'images' => 'required',
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            ]);
             $prd = [
-                'prd_name' => $request->newprd,
-                'category_id' => $request->category_id,
-                'price' => $request->prd_price,
-                'prd_details' => $request->prd_details,
-                'prd_sale' => $request->prd_sale
-            ];
+                        
+                    'prd_name' => $request->newprd,
+                    'category_id' => $request->category_id,
+                    'price' => $request->prd_price, 
+                    'prd_sale' => $request->prd_sale,
+                    
+                    ];
+                DB::table('products')
+                ->insert($prd);
 
-            DB::table('products')->insert($prd);
-
-            $prd_id = DB::table('products')->max('prd_id');
-
+                $temp = DB::table('products')
+                        ->max('prd_id');
+                
+                        $input=$request->all();
+                        $images=array();
+                        if($files=$request->file('images')){
+                            foreach($files as $file){
+                                $name=$file->getClientOriginalName();
+                                $file->move('anh',$name);
+                                $images[]=$name;
+                            }
+                        }
+                foreach($images as $image){
+                    DB::table('prd_img') 
+                    ->insert( [
+                    'prd_image'=>  $image,
+                    'prd_id' => $temp,
+                            
+                    ]);
+                }
+        }   
+            
+        if ($request->newprd == null) {
             $prddetail = [
-                'prd_id' => $prd_id,
-                'prd_color' => $request->prd_color,
-                'prd_amount' => $request->prd_amount,
-                'prd_size' => $request->prd_size
+            'prd_id' => $request->prd_id,
+            'prd_amount' => $request->prd_amount,
+            'prd_size' => $request->prd_size,
+                
             ];
+            
+            
+        }else{
+           $prddetail = [
+            'prd_id' => $temp,
+            'prd_amount' => $request->prd_amount,
+            'prd_size' => $request->prd_size
 
-            DB::table('product_details')->insert($prddetail);
+            ];
+            
         }
-
-        return redirect()->route('admin.product');
+        DB::table('product_details')
+            ->insert($prddetail);
+        return redirect()->route('admin.product')->with('success','successfully added new product');
     }
 
     function addprdform()
     {
         $products = DB::table('products')
-            ->get();
-        return view('Admin/modun/addprd', compact('products'));
+        ->get();
+        $categories = DB::table('categories')
+        ->get();
+        
+        return view('Admin/modun/addprd', compact(['products','categories']));
     }
 
     //--------------End add prd
@@ -443,6 +515,7 @@ class AdminController extends Controller
         if ($files = $request->file('images')) {
             foreach ($files as $file) {
                 $name = $file->getClientOriginalName();
+                
                 $file->move('anh', $name);
                 $images[] = $name;
             }
