@@ -14,7 +14,7 @@
                         <th>#</th>
                         <th>image</th>
                         <th>Product</th>
-                        <th>Color</th>
+                        
                         <th>Size</th>
                         <th>Quantity</th>
                         <th>total</th>
@@ -26,7 +26,7 @@
                             <td>{{ $item->id }}</td>
                             <td> <img src='/anh/{{ $item->prd_image }}' width="120px" height="auto"></td>
                             <td>{{ $item->prd_name }}</td>
-                            <td>{{ $item->prd_color }}</td>
+                            
                             <td>{{ $item->prd_size }}</td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ number_format($item->price) }} đ</td>

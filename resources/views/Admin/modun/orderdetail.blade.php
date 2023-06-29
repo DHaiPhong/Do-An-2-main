@@ -15,7 +15,7 @@
                             <th style=""> amount </th>
                             <th> Price </th>
                             <th style=""> size </th>
-                            <th style=""> color </th>
+                            
 
 
 
@@ -35,7 +35,7 @@
 
                                 <td> {{ $order->price }} </td>
                                 <td> {{ $order->prd_size }} </td>
-                                <td> {{ $order->prd_color }}</td>
+                                
 
 
 
