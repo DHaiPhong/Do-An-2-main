@@ -37,8 +37,6 @@ class AdminController extends Controller
         $sells = DB::table('products')
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
 
-            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
-
             ->select('product_details.sold', 'prd_img.prd_image', 'products.prd_name', DB::raw('SUM(product_details.sold) as t_sold'))
 
             ->where('product_details.sold', '!=', 0)
