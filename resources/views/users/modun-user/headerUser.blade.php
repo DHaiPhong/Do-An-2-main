@@ -30,7 +30,7 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    
+
                     {{-- https://shoegazing.com/topics/ --}}
                 </ul>
             </li>
@@ -38,12 +38,12 @@
             <a href="{{ route('users.product') }}">BLOG</a>
         </nav>
         <div style="flex:2" class="search-container">
-        <form action="{{ route('search') }}" method="GET">
-  <input id="searchInput" type="text" name="query" placeholder="Search...">
-  <button type="submit"><i class="fa fa-search"></i></button>
-</form>
-<ul id="suggestionList" class="suggestion-list"></ul>
-</div>
+            <form action="{{ route('search') }}" method="GET">
+                <input id="searchInput" type="text" name="query" placeholder="Search...">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+            <ul id="suggestionList" class="suggestion-list"></ul>
+        </div>
         <div class="icons">
             <div>
                 <div class="container">
@@ -91,7 +91,7 @@
     </header>
 </section>
 <script>
-   document.getElementById('searchInput').addEventListener('input', function () {
+    document.getElementById('searchInput').addEventListener('input', function() {
         let query = this.value;
         console.log(query);
         if (query.length > 2) {
@@ -107,7 +107,7 @@
 
                         let prdImage = document.createElement('img');
                         prdImage.classList.add('suggestion-img');
-                        prdImage.src = 'anh/'+ item.prd_image;
+                        prdImage.src = 'anh/' + item.prd_image;
                         suggestionItem.appendChild(prdImage);
 
                         let prdName = document.createElement('p');
@@ -116,10 +116,10 @@
 
                         let prdPrice = document.createElement('span');
                         prdPrice.textContent = '$' + item.price;
-                        prdPrice.textContent = formatPrice(item.price) +'VND';
+                        prdPrice.textContent = formatPrice(item.price) + 'VND';
                         suggestionItem.appendChild(prdPrice);
 
-                        suggestionItem.addEventListener('click', function () {
+                        suggestionItem.addEventListener('click', function() {
                             document.getElementById('searchInput').value = item.prd_name;
                             suggestionList.style.display = 'none';
                         });
@@ -130,10 +130,11 @@
                     suggestionList.style.display = 'block';
                 });
         } else {
- document.getElementById('suggestionList').style.display = 'none';
+            document.getElementById('suggestionList').style.display = 'none';
         }
     });
+
     function formatPrice(price) {
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-    </script>
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+</script>

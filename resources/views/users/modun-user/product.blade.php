@@ -1,29 +1,14 @@
 @extends('users.masterUser')
-
-@include('users.modun-user.banner')
 @section('css')
     <link href="{{ url('css/productcss/prd.css') }}" rel="stylesheet" type="text/css">
 @stop
 @section('content')
-
-    <section style="margin-top: -5%; font-size: 1.5rem">
+    <section style="margin-top: 5%; font-size: 1.5rem">
         <h1 style="    text-align: center"> Sneakers</h1>
         <div class="row">
             <div class="col-md-4">
                 <div class='rowprd' style="margin-right: 10rem">
                     <ul class="mcd-menu">
-                        <li class="float">
-                            <a class="search">
-                                <form method="get" role="search" action="{{ url('search') }}">
-                                    @csrf
-                                    <input type="search" name="search" value="" placeholder="Search">
-                                    <button type="submit"><i class="fa fa-search"></i></button>
-                                </form>
-                            </a>
-                            <a href="" class="search-mobile">
-                                <i class="fa fa-search"></i>
-                            </a>
-                        </li>
                         @if (isset($categories))
                             @foreach ($categories as $category)
                                 <li>
@@ -130,3 +115,49 @@
         </section>
     </section>
 @stop
+@section('js')
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let query = this.value;
+            console.log(query);
+            if (query.length > 2) {
+                fetch('/suggestions?query=' + query)
+                    .then(response => response.json())
+                    .then(data => {
+                        let suggestionList = document.getElementById('suggestionList');
+                        suggestionList.innerHTML = '';
+
+                        data.forEach(item => {
+                            let suggestionItem = document.createElement('li');
+                            suggestionItem.classList.add('suggestion-item');
+
+                            let prdImage = document.createElement('img');
+                            prdImage.classList.add('suggestion-img');
+                            prdImage.src = 'anh/' + item.prd_image;
+                            suggestionItem.appendChild(prdImage);
+
+                            let prdName = document.createElement('p');
+                            prdName.textContent = item.prd_name;
+                            suggestionItem.appendChild(prdName);
+
+                            let prdPrice = document.createElement('span');
+                            prdPrice.textContent = '$' + item.price;
+                            prdPrice.textContent = formatPrice(item.price) + 'VND';
+                            suggestionItem.appendChild(prdPrice);
+
+                            suggestionItem.addEventListener('click', function() {
+                                document.getElementById('searchInput').value = item.prd_name;
+                                suggestionList.style.display = 'none';
+                            });
+
+                            suggestionList.appendChild(suggestionItem);
+                        });
+
+                        suggestionList.style.display = 'block';
+                    });
+            } else {
+                document.getElementById('suggestionList').style.display = 'none';
+            }
+        });
+    </script>
+@endsection

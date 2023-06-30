@@ -102,7 +102,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link  " href="{{ route('categories.index') }}">
-                        <i class="fa-solid fa-ballot-check"></i>
+                        <i class="fas fa-fw fa-lock "></i>
                         <p>
                             Category
                         </p>

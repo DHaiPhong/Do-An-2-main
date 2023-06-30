@@ -242,7 +242,7 @@ class AdminController extends Controller
             $data = [
 
                 'products.prd_name' => $request->prd_name,
-                'products.cat_id' => $request->cat_id,
+                'products.category_id' => $request->category_id,
                 'products.price' => $request->prd_price,
                 'product_details.prd_amount' => $request->prd_amount,
                 'products.prd_details' => $request->prd_details,

@@ -326,20 +326,19 @@ body {
     border-left: 4px solid #e67e22;
   }
   .mcd-menu li ul li ul:before {
-    content: "";
-    position: absolute;
-    top: 15px;
-    /*left: -14px;*/
-    /* == */
-    left: -9px;
-    /* == */
-    border-right: 5px solid #e67e22;
-    border-bottom: 5px solid transparent;
-    border-top: 5px solid transparent;
+      content: "";
+      position: absolute;
+      top: -9px; /* changed from 15px to -9px */
+      left: 15px; /* changed from -9px to 15px */ 
+      border-top: 5px solid #e67e22; /* use border-top instead of border-right */
+      border-left: 5px solid transparent; /* use border-left instead of border-bottom */
+      border-right: 5px solid transparent; /* use border-right instead of border-top */
   }
+
   .mcd-menu li ul li:hover > ul {
-    top: 0px;
-    left: 200px;
+      top: 0px;
+      left: 200px;
+      transform: rotate(-90deg); /* add rotation */
   }
   
   /*.mcd-menu li.float {
@@ -416,7 +415,7 @@ body {
     }
     .mcd-menu li a small {
       font-size: 10px;
-    }
+    } 
     .mcd-menu li a.search input {
       width: 120px;
       font-size: 12px;
