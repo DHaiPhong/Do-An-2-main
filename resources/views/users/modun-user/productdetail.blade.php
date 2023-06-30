@@ -58,7 +58,7 @@
 
 
                                     @else
-                                    <p style="color:black;font-size: 2.9rem;"> Giá {{number_format($prd->price)}} VND</p>
+                                    <p style="color:red;font-size: 2.9rem;"> Giá {{number_format($prd->price)}} VND</p>
                                     <input type="hidden" name="price" value="{{$prd->price}}">
 
                                     @endif
@@ -79,11 +79,13 @@
                                         <h3>Chọn Size:</h3>
                                         <div class="sizes">
                                             @foreach($prdsize as $prdsize)
-                                            <div class="size" data-size="{{$prdsize->prd_size}}"
-                                                data-quantity="{{$prdsize->prd_amount}}" onclick="checkStock(this)">
+                                            <div class="size" data-size="{{$prdsize->prd_size}}" 
+                                                data-quantity="{{$prdsize->prd_amount}}"  onclick="checkStock(this)">
                                                 {{$prdsize->prd_size}}
                                             </div>
+                                            
                                             @endforeach
+                                            <input type="hidden" id="slsize" name="prd_size" value="" >
                                         </div>
                                     </div>
 
@@ -251,11 +253,11 @@ function slider(indexx) {
 }
 
 function checkStock(size) {
+    
     const sizes = document.getElementsByClassName("size");
     var x = sizes.length
-    console.log(x)
+    
     for (let i = 0; i <= length + x - 1; i++) {
-
 
         sizes[i].classList.remove("selected");
     }
@@ -266,6 +268,10 @@ function checkStock(size) {
     document.getElementById("stock_message").style.display = quantity === 0 ? "block" : "none";
     document.getElementById("boxo").style.border = quantity === 0 ? "2px solid red" : "none";
     document.getElementById("order_button").disabled = quantity === 0;
+    
+    const slsize = parseInt(size.getAttribute("data-size"))
+    document.getElementById("slsize").value = slsize;
+    
 
 }
 </script>

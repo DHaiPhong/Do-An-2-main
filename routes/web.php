@@ -115,6 +115,7 @@ Route::prefix('admin')->middleware('level')->group(function () {
 
         Route::get('/removeImage/{image}', [AdminController::class, 'removeImage'])->name('product.removeImage');
         Route::get('/delete/{id}', [AdminController::class, 'delete_prd'])->name('product.delete');
+        Route::get('/deleteSize/{id}', [AdminController::class, 'delete_size'])->name('product.deleteSize');
 
         //---------------add prd-----------
 

@@ -42,7 +42,7 @@ class ProductController extends Controller
             ->get();
 
 
-        return view('users.modun-user.productdetail', compact(['products', 'prdsize', 'prd', 'prdimg', 'otherprd', 'title' => 'Product']));
+        return view('users.modun-user.productdetail', [ 'products' => $products, 'prdsize' => $prdsize,'prd' => $prd,'prdimg' => $prdimg,'otherprd'  => $otherprd, 'title' => 'Product']);
     }
 
     function product()

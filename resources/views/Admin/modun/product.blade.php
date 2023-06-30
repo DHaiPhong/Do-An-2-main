@@ -1,6 +1,9 @@
 @extends('Admin.master')
 
 
+@section('css')
+<link href="{{ asset('css/admincss/arlert.css') }}" rel="stylesheet" type="text/css">
+@stop
 @section('content')
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card" style="float: right; width: 80%">
@@ -9,7 +12,20 @@
             <p class="card-description"> Add class
             </p>
             <a class="badge badge-success" style=" font-size: 20px" href="{{route('admin.add_prd')}}">Them</a>
-            
+        @if(session('Notification'))
+    <div  style="position: fixed;right: 20px;top: 70px; "id="myDiv" class="alert alert-danger">
+        
+            {{ session('Notification') }}
+        
+    </div>
+@endif
+        @if(session('success'))
+    <div  style="position: fixed;right: 20px;top: 70px; "id="myDiv" class="alert alert-success">
+        
+            {{ session('success') }}
+        
+    </div>
+@endif
             <select id="chon" onchange="myFunction()" class="form-select" aria-label="Default select example">
                 <option  >Order By</option>
                 <option  >id</option>
