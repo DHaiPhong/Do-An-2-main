@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class='rowprd' style="margin-right: 10rem">
-                    <ul class="mcd-menu">
+                    <ul class="parent-list">
                         <li class="float">
                             <a class="search">
                                 <form method="get" role="search" action="{{ url('search') }}">
@@ -26,14 +26,14 @@
                         </li>
                         @if (isset($categories))
                             @foreach ($categories as $category)
-                                <li>
+                                <li class="list-item">
                                     <a href="{{ route('product.category', $category->slug) }}">
                                         <strong>{{ $category->name }}</strong>
                                     </a>
                                     @if ($category->subCategories->isNotEmpty())
-                                        <ul>
+                                        <ul class="child-list">
                                             @foreach ($category->subCategories as $sub)
-                                                <li>
+                                                <li class="child-item" >
                                                     <a href="{{ route('product.category', $sub->slug) }}">
                                                         <strong>{{ $sub->name }}</strong>
                                                     </a>
