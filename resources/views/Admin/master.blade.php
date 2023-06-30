@@ -14,9 +14,9 @@
     <link rel="stylesheet" href="{{ asset('/vendor/adminlte/dist/css/adminlte.min.css') }}">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    <script type="text/javascript"
+    {{-- <script type="text/javascript"
         src="http://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=EwAWSSWG_Mf00rU0IisELu-egk13OlOkEG_N9ykHzzv9QL4qOQ_Sl5QJx2f-QCuw"
-        charset="UTF-8"></script>
+        charset="UTF-8"></script> --}}
     @yield('css')
     <style>
         .statusbox {
@@ -30,9 +30,9 @@
             padding-top: 3%;
         }
     </style>
-    <link href="{{ url('css/admincss/account.css') }}" rel="stylesheet" type="text/css">
-    
-    
+    {{-- <link href="{{ url('css/admincss/account.css') }}" rel="stylesheet" type="text/css"> --}}
+
+
 </head>
 
 <body class="sidebar-mini">
