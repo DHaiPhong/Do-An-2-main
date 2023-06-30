@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\DB;
 class SearchController extends Controller
 {
     public function search(Request $request)
-{
-    $search = $request->input('query');
-    $product = Product::where('prd_name', 'LIKE', "%{$search}%")
-   
+    {
+        $search = $request->input('query');
+        $product = Product::where('prd_name', 'LIKE', "%{$search}%")
 
-        ->join('prd_img','products.prd_id', '=', 'prd_img.prd_id')
-        ->groupBy('products.prd_id')
-            
+
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->groupBy('products.prd_id')
+
             ->paginate(12);
             $categories = $this->getCategoriesWithSub();
 
@@ -59,4 +59,5 @@ public function suggestions(Request $request)
     
     return response()->json($results);
 }
+
 }

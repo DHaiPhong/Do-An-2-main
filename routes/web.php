@@ -70,7 +70,7 @@ Route::post('/admin/product/edit/{id}', [AdminController::class, 'prd_edit'])->n
 Route::get('/checkout', [CheckoutController::class, 'getCheckout'])->name('checkout.index');
 Route::post('/checkout/order', [CheckoutController::class, 'placeOrder'])->name('checkout.place.order');
 Route::post('/checkout/online', [CheckoutController::class, 'online'])->name('checkout.online');
-Route::get('/momo/callback', [CheckoutController::class, 'handlePaymentResult'])->name('momo.callback');
+Route::get('/momo/success', [CheckoutController::class, 'momoSuccess'])->name('momo.success');
 
 
 //-------------------ADMIN------------------------

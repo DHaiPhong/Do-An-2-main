@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AddCartRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -11,13 +12,12 @@ use Illuminate\Notifications\Notifiable;
 
 class CartController extends Controller
 {
-    function addcart(Request $request)
+    function addcart(AddCartRequest $request)
     {
-        
 
         $product = DB::table('products')
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-            ->join('prd_img','products.prd_id','=','prd_img.prd_id')
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->where('product_details.prd_id', $request->prd_id)
             ->where('product_details.prd_size', $request->prd_size)
             ->first();

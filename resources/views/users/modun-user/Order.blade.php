@@ -186,13 +186,15 @@
                                                         @elseif($item->status == 'pending')
                                                             <div class="row">
                                                                 <div class="col-sm">
-                                                                    <p style="margin-top: 5%;margin-bottom: 5%;">
+                                                                    <p
+                                                                        style="margin-top: 5%;margin-bottom: 5%; text-transform: capitalize  ">
                                                                         {{ $item->status }} </p>
                                                                 </div>
                                                                 <div class="col-sm">
                                                                     <a class="btn btn-danger btn-fw"
                                                                         style="  background-color: #ff375f; border-color: #ff375f; float: right; margin-top: 2px;width: 90px;padding: 0;margin-right: 10px;"
-                                                                        href="{{ route('users.ordercancel', $item->order_id) }}">cancel</a>
+                                                                        href="{{ route('users.ordercancel', $item->order_id) }}"
+                                                                        onclick="return confirm('Are you sure you want to delete this order?')">Cancel</a>
                                                                 </div>
                                                             </div>
                                                         @else

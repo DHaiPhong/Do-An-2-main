@@ -70,7 +70,7 @@
                     chase your personal bests.
                 </p>
                 <div class="price"> Price: 8.369.000VND <span></span></div>
-                <a href="{{ route('users.productdetail', ['id' => 16]) }}" class="btn">add to cart</a>
+                <a href="{{ route('users.productdetail', ['id' => 16]) }}" class="btn">Add To Cart</a>
             </div>
         </div>
 

@@ -66,8 +66,8 @@ class CheckoutController extends Controller
         $orderInfo = "Thanh toán qua MoMo";
         $amount = $_POST['total_momo'];
         $orderId = time() . "";
-        $redirectUrl = "http://127.0.0.1:8000/account/success";
-        $ipnUrl = "http://127.0.0.1:8000/account/success";
+        $redirectUrl = "http://127.0.0.1:8000/momo/success";
+        $ipnUrl = "http://127.0.0.1:8000/momo/success";
         $extraData = "";
 
 
@@ -98,16 +98,25 @@ class CheckoutController extends Controller
         $jsonResult = json_decode($result, true);  // decode json
 
         $payUrl = $jsonResult['payUrl'];
-        // Thanh toán thành công, lưu đơn hàng vào CSDL
-        $orderData = [
-            'name' => auth()->user()->name,
-            'address' => auth()->user()->address,
-            'email' => auth()->user()->email,
-            'city' => 'Thành phố',
-            'phone' => auth()->user()->phone,
-        ];
-        $order = $this->orderRepository->storeOrderDetails($orderData);
+        // return redirect()->route('cart.success');
+        return redirect()->to($payUrl);
+    }
+
+    public function momoSuccess(Request $request)
+    {
+        // kiểm tra xem thanh toán có thành công hay không bằng cách kiểm tra statusCode từ MOMO
+        if ($request->get('errorCode') == 0) { // nếu errorCode = 0, thanh toán thành công 
+            // Thanh toán thành công, lưu đơn hàng vào CSDL
+            $orderData = [
+                'name' => auth()->user()->name,
+                'address' => auth()->user()->address,
+                'email' => auth()->user()->email,
+                'city' => 'Thành phố',
+                'phone' => auth()->user()->phone,
+                'amount' => $request->get('amount')
+            ];
+            $order = $this->orderRepository->storeOrderDetails($orderData);
+        }
         return redirect()->route('cart.success');
-        // return redirect()->to($payUrl);
     }
 }

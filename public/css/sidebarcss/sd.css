@@ -286,6 +286,7 @@ body {
     border: 0;
     border-left: 4px solid #e67e22;
   }
+
   
   
   
@@ -365,6 +366,7 @@ body {
       font-size: 10px;
     }
     .parent-list li a.search input {
+
       width: 120px;
       font-size: 12px;
     }

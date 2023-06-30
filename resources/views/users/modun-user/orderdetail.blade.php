@@ -14,19 +14,18 @@
                         <th>#</th>
                         <th>image</th>
                         <th>Product</th>
-                        
                         <th>Size</th>
                         <th>Quantity</th>
                         <th>total</th>
                     </tr>
-                </thead>
+                </thead>`
                 <tbody>
                     @foreach ($orders as $item)
                         <tr>
                             <td>{{ $item->id }}</td>
                             <td> <img src='/anh/{{ $item->prd_image }}' width="120px" height="auto"></td>
                             <td>{{ $item->prd_name }}</td>
-                            
+
                             <td>{{ $item->prd_size }}</td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ number_format($item->price) }} đ</td>
