@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PaymentRequest;
 use Illuminate\Http\Request;
 use App\Contracts\OrderContract;
 use Cart;
@@ -21,10 +22,11 @@ class CheckoutController extends Controller
         return view('users.modun-user.payment', ['title' => 'Payment']);
     }
 
-    public function placeOrder(Request $request)
+    public function placeOrder(PaymentRequest $request)
     {
         // Before storing the order we should implement the
         // request validation which I leave it to you
+
         $order = $this->orderRepository->storeOrderDetails($request->all());
 
 

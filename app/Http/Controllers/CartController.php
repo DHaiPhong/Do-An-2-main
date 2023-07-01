@@ -72,6 +72,10 @@ class CartController extends Controller
         if (Auth::user() == null) {
             return redirect()->route('login');
         }
+        $data = Cart::count();
+        if ( $data == 0  ){
+            return redirect()->route('home1');
+        }
 
         return view('users.modun-user.payment', ['title' => 'Payment']);
     }

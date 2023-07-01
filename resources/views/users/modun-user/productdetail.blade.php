@@ -58,8 +58,7 @@
                                         @if ($prd->prd_sale != 0)
                                             <div style="display:flex">
                                                 <div>
-                                                    <p style="font-size: 2.9rem;text-decoration: line-through;"> Price
-                                                        {{ number_format($prd->price) }} đ</p>
+                                                    <p style="font-size: 2.9rem;color:black"> Giá: <span style="font-size: 2.9rem;text-decoration: line-through; color:gray"> {{ number_format($prd->price) }} VND <span></p>
                                                 </div>
                                                 <div style="margin-left:10px">
                                                     <p style="font-size: 2.9rem; color: red">
@@ -70,8 +69,8 @@
                                                     value="{{ ($prd->price / 100) * (100 - $prd->prd_sale) }}">
                                             </div>
                                         @else
-                                            <p style="color:red;font-size: 2.9rem;"> Giá {{ number_format($prd->price) }}
-                                                VND</p>
+                                            <p style="color:black;font-size: 2.9rem;"> Giá: <span style="color:red;font-size: 2.9rem;text-decoration:none">{{ number_format($prd->price) }} VND</span>
+                                                </p>
                                             <input type="hidden" name="price" value="{{ $prd->price }}">
                                         @endif
 
@@ -109,16 +108,13 @@
                                 </div>
                                 <div class="btn-and-quantity-wrap"
                                     style="display: inline-block;margin-top: 1rem;border-radius: .5rem;border: .2rem solid #000;font-weight: bolder;font-size: 1.7rem;
-                                color: #000;
-                                cursor: pointer;
-                                background: #fff;
-                                padding: .8rem 3rem;">
+                                color: #000;cursor: pointer;background: #fff;padding: .8rem 3rem;width:350px; background-color: black;">
 
-                                    <div class="btn-and-quantity">
+                                    <div style="text-align:center; " class="btn-and-quantity">
 
-                                        <div quickbeam="add-to-cart">
+                                        <div style="background-color: black;" quickbeam="add-to-cart">
 
-                                            <button id="order_button" type="submit" href="">ADD TO CART</button>
+                                            <button style="background-color: black; color:white" id="order_button"  type="submit" href=""> <h2> MUA NGAY </h2> Mua hàng liền tay - Giao ngay tận nhà</button>
                                         </div>
                                     </div>
                                 </div>

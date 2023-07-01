@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddCartRequest extends FormRequest
+class PaymentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +24,21 @@ class AddCartRequest extends FormRequest
     public function rules()
     {
         return [
-            'prd_size' => 'required',
+            
+                'name' => 'required',
+                'email' => 'required',
+                'city' => 'required',
+                'address' => 'required',
+                'phone' => 'required',
+                'district' => 'required',
+            
         ];
     }
     public function messages()
     {
         return [
-            'prd_size.required' => 'Need to choose shoe size before ordering',
+            'city.required' => 'Chưa chọn Thành Phố',
+            'district.required' => 'Chưa chọn Quận Huyện',
         ];
     }
 }

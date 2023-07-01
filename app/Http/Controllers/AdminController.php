@@ -33,11 +33,18 @@ class AdminController extends Controller
             ->count();
 
 
-
-        $sells = DB::table('products')
-            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            $temp = DB::table('products')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
-            ->select('product_details.sold', 'prd_img.prd_image', 'products.prd_name', DB::raw('SUM(product_details.sold) as t_sold'))
+            ->select('products.prd_id', 'prd_img.prd_image')
+            ->groupBy('products.prd_id');
+        
+            
+        $sells = DB::table('products')
+            ->joinSub($temp, 'temp', function (JoinClause $join) {
+                $join->on('products.prd_id', '=', 'temp.prd_id');
+            })
+            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->select('product_details.sold', 'temp.prd_image', 'products.prd_name', DB::raw('SUM(product_details.sold) as t_sold'))
             ->where('product_details.sold', '!=', 0)
             ->groupBy('products.prd_id')
             ->orderBy('sold', 'desc')
@@ -306,16 +313,29 @@ class AdminController extends Controller
             ->get();
 
         if ($check == null) {
-            DB::table('product_details')
-                ->where('prd_id', $prd_id)
-                ->delete();
-            DB::table('prd_img')
-                ->where('prd_id', $prd_id)
-                ->delete();
-            DB::table('products')
-                ->where('prd_id', $prd_id)
-                ->delete();
-            return redirect()->route('admin.product')->with('Notification', 'Product has been removed');
+            DB::beginTransaction();
+
+        try {
+            // delete product details
+            DB::table('product_details')->where('prd_id', $id)->delete();
+
+            // delete product images
+            DB::table('prd_img')->where('prd_id', $id)->delete();
+
+            // delete the product
+            DB::table('products')->where('prd_id', $id)->delete();
+
+            // commit the transaction
+            DB::commit();
+
+            return redirect()->route('admin.product')->with('message', 'Product has been deleted successfully.');
+        } catch (\Exception $e) {
+            // something went wrong
+            // rollback the transaction
+            DB::rollback();
+
+            return redirect()->route('admin.product')->with('error', 'Failed to delete the product.');
+        }
         }
 
         return redirect()->route('admin.product')->with('Notification', 'Product size has been removed');
