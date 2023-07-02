@@ -27,7 +27,7 @@ td input{
 td a{
     color: #ff523b;
     font-size: 12px;
-
+    text-decoration: none;
 }
 td img{
     width: auto;

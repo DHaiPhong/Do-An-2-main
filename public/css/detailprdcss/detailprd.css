@@ -3565,7 +3565,7 @@ input.boxcolor{
   display: flex;
   flex-direction: column;
   align-items: center;
-  width : 20%;
+  width : calc(100%/5 - 10px); /* 10px is the amount you want to set for either margin or gap between product cards */
   position: relative;
   
 }
@@ -3648,10 +3648,17 @@ input.boxcolor{
   text-align: center;
   cursor: pointer;
   user-select: none;
-  border: 1px solid transparent;
+  border: 1px solid #666;
+}
+
+.size:hover {
+  color: #007BFF;
+  border-color: #007BFF;
+  background-color: #e7f3ff;
 }
 
 .size.selected {
+  color: #007BFF;
   border-color: #007BFF;
   background-color: #e7f3ff;
 }
@@ -3660,4 +3667,64 @@ input.boxcolor{
   background-color: #f2f2f2;
   color: #999;
   cursor: not-allowed;
+}
+
+.btn-and-quantity-wrap {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    border-radius: .5rem;
+    border: .2rem solid #000;
+    font-weight: bolder;
+    font-size: 1.7rem;
+    background: #000;
+    padding: .8rem 3rem;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+#order_button {
+    background: #000;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.3s;
+    width: 100%;
+}
+
+#order_button:hover {
+    color: orangered;
+}
+#policy {
+    width: 100%;
+    background-color: #f9f9f9;
+    color: #333;
+    border-radius: .5rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    line-height: 1.5;
+    font-size: 1.2rem;
+}
+
+#policy img {
+    margin-right: .5rem;
+}
+
+#policy p {
+    margin-bottom: .5rem;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+    font-size: 1rem;
+    margin-top: 1rem;
+    display: inline-block;
+}
+
+a:hover {
+    color: #333;
 }

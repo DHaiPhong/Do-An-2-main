@@ -5,27 +5,14 @@
             <img src="{{ asset('img/pnglogoSneaker.png') }}" height="77px" width="auto">
         </a>
         <nav style="flex:3 ;justify-content: space-around;" class="navbar">
-            <a href="{{ url('') }}">HOME</a>
+            <a href="{{ url('') }}">Trang chủ</a>
+            <a href="{{ route('users.product') }}">Mua Hàng</a>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                    aria-expanded="false">SHOP</a>
+                    aria-expanded="false">Bài viết</a>
                 <ul class="dropdown-menu">
-
-                    <li><a class="dropdown-item" style="width: 110px" href="{{ route('users.product') }}">Product</a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/1') }}">NIKE</a></li>
-                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/2') }}">ADIDAS</a></li>
-                    <li><a class="dropdown-item" style="width: 110px" href="{{ url('/product/3') }}">PUMA</a></li>
-                </ul>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                    aria-expanded="false">Blog</a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" style="width: 120px" href="{{ route('users.blogs') }}">News</a>
+                    <li><a class="dropdown-item" style="width: 120px; background-color: #fff"
+                            href="{{ route('users.blogs') }}">Mới</a>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
@@ -34,12 +21,11 @@
                     {{-- https://shoegazing.com/topics/ --}}
                 </ul>
             </li>
-            <a href="{{ route('users.product') }}">ABOUT</a>
-            <a href="{{ route('users.product') }}">BLOG</a>
+            <a href="{{ route('users.product') }}">Thông Tin</a>
         </nav>
         <div style="flex:2" class="search-container">
             <form action="{{ route('search') }}" method="GET">
-                <input id="searchInput" type="text" name="query" placeholder="Search...">
+                <input id="searchInput" type="text" name="query" placeholder="Tìm kiếm sản phẩm...">
                 <button type="submit"><i class="fa fa-search"></i></button>
             </form>
             <ul id="suggestionList" class="suggestion-list"></ul>
@@ -48,8 +34,8 @@
             <div>
                 <div class="container">
                     <div class="row">
-                        <div class="col-sm">
-                            <a style="font-size: 2rem; margin-right:14px; background:none"
+                        <div class="col-sm" style="margin-top: 1rem;margin-right:15px; margin-left: 15px">
+                            <a style="font-size: 2rem; background:none"
                                 href="{{ route('users.cartshop') }}">{{ Cart::count() }}<i
                                     class="fa fa-shopping-cart"></i></a>
 
@@ -64,11 +50,11 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-white">
                                         <li><a class="dropdown-item" style="margin-left:0"
-                                                href="{{ route('users.order') }}">Account</a></li>
+                                                href="{{ route('users.order') }}">Tài Khoản</a></li>
                                         <form method="post" action="{{ route('logout') }}">
                                             @csrf
-                                            <button type="submit"> <a class="dropdown-item"
-                                                    style="margin-left:0">Logout</a>
+                                            <button type="submit"> <a class="dropdown-item" style="margin-left:0">Đăng
+                                                    Xuất</a>
                                             </button>
                                         </form>
                                     </ul>
@@ -77,10 +63,10 @@
                         @endauth
                         @guest
                             <div class="col-sm">
-                                <a href="{{ route('login') }}" class="login_btn"> Login </a>
+                                <a href="{{ route('login') }}" class="login_btn"> Đăng Nhập </a>
                             </div>
                             <div class="col-sm">
-                                <a href="{{ route('register') }}" class="signup_btn" style="color: white; "> Signup </a>
+                                <a href="{{ route('register') }}" class="signup_btn"> Đăng Ký </a>
                             </div>
                         @endguest
                     </div>
@@ -101,38 +87,47 @@
                     let suggestionList = document.getElementById('suggestionList');
                     suggestionList.innerHTML = '';
 
-                    data.forEach(item => {
-                        let suggestionItem = document.createElement('li');
-                        suggestionItem.classList.add('suggestion-item');
+                    if (data.length > 0) { // check if any item is returned
+                        data.forEach(item => {
+                            let suggestionItem = document.createElement('li');
+                            suggestionItem.classList.add('suggestion-item');
 
-                        let prdImage = document.createElement('img');
-                        prdImage.classList.add('suggestion-img');
-                        prdImage.src = 'anh/' + item.prd_image;
-                        suggestionItem.appendChild(prdImage);
+                            let prdImage = document.createElement('img');
+                            prdImage.classList.add('suggestion-img');
+                            prdImage.src = 'anh/' + item.prd_image;
+                            suggestionItem.appendChild(prdImage);
 
-                        let prdName = document.createElement('p');
-                        prdName.textContent = item.prd_name;
-                        suggestionItem.appendChild(prdName);
+                            let prdName = document.createElement('p');
+                            prdName.textContent = item.prd_name;
+                            suggestionItem.appendChild(prdName);
 
-                        let prdPrice = document.createElement('span');
-                        prdPrice.textContent = '$' + item.price;
-                        prdPrice.textContent = formatPrice(item.price) + 'VND';
-                        suggestionItem.appendChild(prdPrice);
+                            let prdPrice = document.createElement('span');
+                            prdPrice.textContent = '$' + item.price;
+                            prdPrice.textContent = formatPrice(item.price) + 'VNĐ';
+                            suggestionItem.appendChild(prdPrice);
 
-                        suggestionItem.addEventListener('click', function() {
-                            document.getElementById('searchInput').value = item.prd_name;
-                            suggestionList.style.display = 'none';
+                            suggestionItem.addEventListener('click', function() {
+                                document.getElementById('searchInput').value = item
+                                    .prd_name;
+                                suggestionList.style.display = 'none';
+                            });
+
+                            suggestionList.appendChild(suggestionItem);
                         });
 
-                        suggestionList.appendChild(suggestionItem);
-                    });
-
-                    suggestionList.style.display = 'block';
+                        suggestionList.style.display = 'block';
+                    } else {
+                        let noItem = document.createElement('li');
+                        noItem.textContent = 'Không tìm thấy sản phẩm liên quan';
+                        suggestionList.appendChild(noItem);
+                        suggestionList.style.display = 'block';
+                    }
                 });
         } else {
             document.getElementById('suggestionList').style.display = 'none';
         }
     });
+
 
     function formatPrice(price) {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

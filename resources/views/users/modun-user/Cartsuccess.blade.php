@@ -47,8 +47,8 @@
         <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
             <i class="checkmark">✓</i>
         </div>
-        <h1>Success</h1>
-        <p>Thank you for visiting our store;<br /> Good bye and see you again!!!</p>
-        <a class="btn" href="http://127.0.0.1:8000/">Back to Home Page</a>
+        <h1>Thành công!</h1>
+        <p>Cảm ơn đã đặt hàng ở web mình!<br /> Xin chào tạm biệt và hẹn gặp lại!!!</p>
+        <a class="btn" href="{{ route('home1') }}">Quay về Trang Chủ</a>
     </div>
 @stop

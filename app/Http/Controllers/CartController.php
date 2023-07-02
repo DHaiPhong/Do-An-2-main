@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCartRequest;
+use App\Models\Product;
+use App\Models\ProductDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Cart;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Notifications\Notifiable;
 
 class CartController extends Controller
@@ -37,7 +39,7 @@ class CartController extends Controller
                 Cart::add($product->prd_detail_id, $product->prd_name, '1', $request->price, '0', ['size' => $product->prd_size,  'img' => $product->prd_image]);
             }
         }
-        return redirect()->route('users.cartshop');
+        return redirect()->route('users.cartshop')->with(['success' => 'Thêm sản phẩm thành công!']);
     }
 
     function deletecart($id)
@@ -50,22 +52,6 @@ class CartController extends Controller
         return back();
     }
 
-    function pluscart($id)
-    {
-
-        $data = Cart::get($id);
-        $product = DB::table('product_details')->where('prd_detail_id', $data->id)->first();
-        if ($product->prd_amount > $data->qty) {
-            Cart::update($id, ['qty' => $data->qty + 1]);
-        }
-        return back();
-    }
-    function minuscart($id)
-    {
-        $data = Cart::get($id);
-        Cart::update($id, ['qty' => $data->qty - 1]);
-        return back();
-    }
 
     function pay()
     {
@@ -73,8 +59,17 @@ class CartController extends Controller
             return redirect()->route('login');
         }
 
-        return view('users.modun-user.payment', ['title' => 'Payment']);
+        return view('users.modun-user.payment', ['title' => 'Thanh Toán']);
     }
+
+    public function update(Request $request)
+    {
+        Cart::update($request->rowId, $request->qty);
+    }
+
+
+
+
     function cartsuccess()
     {
         if (Auth::user() == null) {
@@ -100,6 +95,6 @@ class CartController extends Controller
 
         Cart::destroy();
 
-        return view('users.modun-user.Cartsuccess', ['title' => 'Success']);
+        return view('users.modun-user.Cartsuccess', ['title' => 'Thành Công']);
     }
 }
