@@ -47,6 +47,29 @@ class SearchController extends Controller
 
         return view('users.modun-user.product', ['prds' => $product, 'categories' => $categories, 'title' => 'Product']);
     }
+    public function getCategoriesWithSub()
+    {
+        $categories = DB::table('categories')->whereNull('parent_id')->get();
+
+        $categories->map(function ($category) {
+            $category->subCategories = $this->getSubCategories($category->id);
+            return $category;
+        });
+
+        return $categories;
+    }
+    protected function getSubCategories($category_id)
+    {
+        $subCategories = DB::table('categories')->where('parent_id', $category_id)->get();
+
+        // recurse for any sub categories
+        $subCategories->map(function ($subCategory) {
+            $subCategory->subCategories = $this->getSubCategories($subCategory->id);
+            return $subCategory;
+        });
+
+        return $subCategories;
+    }
     public function suggestions(Request $request)
     {
         $search = $request->input('query');

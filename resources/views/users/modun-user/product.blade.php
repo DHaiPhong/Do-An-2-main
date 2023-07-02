@@ -14,38 +14,41 @@
                                 <strong>Danh Mục</strong>
                             </a>
                         </li>
-                        @if (isset($categories))
-                            @foreach ($categories as $category)
-                                <li>
-                                    <a href="{{ route('product.category', $category->slug) }}">
-                                        <strong>{{ $category->name }}</strong>
-                                    </a>
-                                    @if ($category->subCategories->isNotEmpty())
-                                        <ul>
-                                            @foreach ($category->subCategories as $sub)
-                                                <li>
-                                                    <a href="{{ route('product.category', $sub->slug) }}">
-                                                        <strong>{{ $sub->name }}</strong>
-                                                    </a>
-                                                    @if ($sub->subCategories->isNotEmpty())
-                                                        <ul>
-                                                            @foreach ($sub->subCategories as $sub2)
-                                                                <li>
-                                                                    <a href="{{ route('product.category', $sub2->slug) }}">
-                                                                        <strong>{{ $sub2->name }}</strong>
-                                                                    </a>
-                                                                </li>
-                                                            @endforeach
-                                                        </ul>
-                                                    @endif
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    @endif
-                                </li>
-                            @endforeach
-                        @endif
-                    </ul>
+                        <ul class="parent-list">
+
+                            @if (isset($categories))
+                                @foreach ($categories as $category)
+                                    <li class="list-item">
+                                        <a href="{{ route('product.category', $category->slug) }}">
+                                            <strong>{{ $category->name }}</strong>
+                                        </a>
+                                        @if ($category->subCategories->isNotEmpty())
+                                            <ul class="child-list">
+                                                @foreach ($category->subCategories as $sub)
+                                                    <li class="child-item">
+                                                        <a href="{{ route('product.category', $sub->slug) }}">
+                                                            <strong>{{ $sub->name }}</strong>
+                                                        </a>
+                                                        @if ($sub->subCategories->isNotEmpty())
+                                                            <ul>
+                                                                @foreach ($sub->subCategories as $sub2)
+                                                                    <li>
+                                                                        <a
+                                                                            href="{{ route('product.category', $sub2->slug) }}">
+                                                                            <strong>{{ $sub2->name }}</strong>
+                                                                        </a>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @endif
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            @endif
+                        </ul>
                 </div>
             </div>
             <div class="col-md-8">
