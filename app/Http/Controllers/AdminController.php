@@ -55,7 +55,7 @@ class AdminController extends Controller
                 $join->on('products.prd_id', '=', 'temp.prd_id');
             })
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-            ->select('product_details.sold', 'prd_img.prd_image', 'products.prd_name', DB::raw('SUM(product_details.sold) as t_sold'), 'product_details.prd_detail_id')
+            ->select('product_details.sold', 'temp.prd_image', 'products.prd_name', DB::raw('SUM(product_details.sold) as t_sold'), 'product_details.prd_detail_id')
 
             ->where('product_details.sold', '!=', 0)
             ->groupBy('products.prd_id')
