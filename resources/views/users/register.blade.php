@@ -63,7 +63,7 @@
                     <input type="text" class="form-control form-control-lg" name="address" id="exampleInputEmail1" placeholder="Address">
                   </div>
                   <div class="form-group">
-                    <input type="text" class="form-control form-control-lg" name="phone" id="exampleInputEmail1" placeholder="Phone Number">
+                    <input type="text" class="form-control form-control-lg" name="phone" id="phone_number" placeholder="Phone Number">
                   </div>
                   <div class="mt-3">
                     <button class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" type="submit">SIGN UP</button>
@@ -92,3 +92,13 @@
     <!-- endinject -->
   </body>
 </html>
+<script>
+  // Access the input element
+  var input = document.getElementById('phone_number');
+
+  // Listen for input into the phone number field
+  input.addEventListener('input', function() {
+    // Replace any non-digit characters with an empty string
+    input.value = input.value.replace(/\D/g, '');
+  });
+</script>
