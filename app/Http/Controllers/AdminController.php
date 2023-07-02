@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Order;
+use App\Models\User;
 use Encore\Admin\Grid\Filter\Where;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 
 use PhpParser\Node\Stmt\Function_;
 
@@ -29,23 +32,29 @@ class AdminController extends Controller
 
         $orders = DB::table('orders')
 
-            ->whereIn('status', ['pending', 'completed', 'processing'])
+            ->whereIn('status', ['pending', 'completed', 'processing', 'shipping'])
             ->count();
 
-
+        $out_of_stocks = DB::table('products')
+            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->select('product_details.prd_amount', 'products.prd_name', 'prd_img.prd_image', 'product_details.prd_size', 'product_details.prd_detail_id')
+            ->where('product_details.prd_amount', '<', 3)
+            ->groupBy('products.prd_id')
+            ->orderBy('prd_amount', 'desc')
+            ->get();
 
         $sells = DB::table('products')
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
-            ->select('product_details.sold', 'prd_img.prd_image', 'products.prd_name', DB::raw('SUM(product_details.sold) as t_sold'))
+            ->select('product_details.sold', 'prd_img.prd_image', 'products.prd_name', DB::raw('SUM(product_details.sold) as t_sold'), 'product_details.prd_detail_id')
             ->where('product_details.sold', '!=', 0)
             ->groupBy('products.prd_id')
             ->orderBy('sold', 'desc')
             ->paginate(5);
 
-        return view('Admin/modun/dashboard', ['sold' => $sold, 'revenue' => $revenue, 'orders' => $orders, 'sells' => $sells]);
+        return view('Admin/modun/dashboard', ['sold' => $sold, 'revenue' => $revenue, 'out_of_stocks' => $out_of_stocks, 'orders' => $orders, 'sells' => $sells]);
     }
-
 
 
     function chart(Request $request)
@@ -110,16 +119,39 @@ class AdminController extends Controller
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->select('products.prd_id', 'prd_img.prd_image')
             ->groupBy('products.prd_id');
+
+        $total = DB::table('products')
+            ->joinSub($temp, 'temp', function (JoinClause $join) {
+                $join->on('products.prd_id', '=', 'temp.prd_id');
+            })
+            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->count();
+
         $products = DB::table('products')
             ->joinSub($temp, 'temp', function (JoinClause $join) {
                 $join->on('products.prd_id', '=', 'temp.prd_id');
             })
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
             ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->select(
+                'products.*',
+                'categories.name as category',
+                'temp.prd_image',
+                'product_details.prd_detail_id',
+                DB::raw('GROUP_CONCAT(product_details.prd_size, "(Số lượng: ", product_details.prd_amount, ", Đã bán: ", product_details.sold, ")") as prd_details')
+            )
+            ->groupBy('products.prd_id')
             ->orderBy('product_details.prd_id')
-            ->paginate(8);
-        return view('Admin.modun.product', ['products' => $products]);
+            ->offset(0) // update this as needed for the current page
+            ->limit(8)
+            ->get();
+
+        $paginator = new LengthAwarePaginator($products, $total, 8);
+
+        return view('Admin.modun.product', ['products' => $products, 'paginator' => $paginator]);
     }
+
     function productorderby($id)
     {
         if ($id == 'amount') {
@@ -342,7 +374,7 @@ class AdminController extends Controller
 
             if ($check->isEmpty()) {
             } else {
-                return back()->with('loi', 'This product already has this Size. Please double check before entering');
+                return back()->with('loi', 'Size này của sản phẩm đã có');
             }
         } else {
 
@@ -354,6 +386,7 @@ class AdminController extends Controller
 
                 'prd_name' => $request->newprd,
                 'category_id' => $request->category_id,
+                'slug' => $request->slug,
                 'price' => $request->prd_price,
                 'prd_sale' => $request->prd_sale,
 
@@ -395,12 +428,11 @@ class AdminController extends Controller
                 'prd_id' => $temp,
                 'prd_amount' => $request->prd_amount,
                 'prd_size' => $request->prd_size
-
             ];
         }
         DB::table('product_details')
             ->insert($prddetail);
-        return redirect()->route('admin.product')->with('success', 'successfully added new product');
+        return redirect()->route('admin.product')->with('success', 'Thêm sản phẩm thành công');
     }
 
     function addprdform()
@@ -443,23 +475,49 @@ class AdminController extends Controller
     function updateStatus($id, $value)
     {
         $order = DB::table('orders')
-            ->where('id', $id)
+            ->where(
+                'id',
+                $id
+            )
             ->first();
 
+        if (!$order) {
+            return redirect()->route('admin.order')->with('error', 'Không tìm thấy đơn hàng!');
+        }
+
+        if ($order->status == 'completed') {
+            return redirect()->route('admin.order')->with('error', 'Không thể thay đổi trạng thái của đơn hàng đã hoàn thành!');
+        }
 
         if ($order->status == 'cancel') {
+            return redirect()->route('admin.order')->with('error', 'Không thể thay đổi trạng thái của đơn hàng đã hủy!');
+        }
+
+        if ($order->status == 'processing' && $value == 'cancel') {
+            return redirect()->route('admin.order')->with('error', 'Không thể hủy đơn hàng đang xử lý!');
+        }
+
+        if ($value == 'cancel') {
+            DB::table('orders')
+                ->where('id', $id)
+                ->update(['status' => 'cancel']);
         } else if ($value == "processing") {
-            $order = DB::table('orders')
+            DB::table('orders')
                 ->where('id', $id)
                 ->update(['status' => 'processing']);
+        } else if ($value == "shipping") {
+            DB::table('orders')
+                ->where('id', $id)
+                ->update(['status' => 'shipping']);
         } else if ($value == "completed") {
-            $order = DB::table('orders')
+            DB::table('orders')
                 ->where('id', $id)
                 ->update(['status' => 'completed']);
         }
 
-        return redirect()->route('admin.order');
+        return redirect()->route('admin.order')->with('success', 'Cập nhật trạng thái thành công');
     }
+
 
     function orderorderby($id)
     {

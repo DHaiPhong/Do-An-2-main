@@ -73,7 +73,9 @@
                         </tr>
                         <tr>
                             <td>Tổng</td>
-                            <td style="color: red">{{ number_format(Cart::total() - 15000 - Cart::total() * (5 / 100)) }} đ
+                            <td style="color: red">{{ number_format(Cart::total() + 15000 - Cart::total() * (5 / 100)) }} đ
+                                {{-- <input name="total_price" type="hidden"
+                                    value="{{ Cart::total() - 15000 - Cart::total() * (5 / 100) }}"> --}}
                             </td>
                         </tr>
                         <tr>

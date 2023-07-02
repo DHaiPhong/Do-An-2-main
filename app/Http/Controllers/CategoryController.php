@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
+
 
 class CategoryController extends Controller
 {
@@ -39,9 +42,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $messages = [
+            'name.required' => 'Tên không được để trống',
+            'name.unique' => 'Tên này đã sử dụng',
+        ];
+
         $this->validate($request, [
             'name' => 'required|unique:categories'
-        ]);
+        ], $messages);
+
 
         $category = new Category;
         $category->name = $request->input('name');
@@ -49,7 +58,7 @@ class CategoryController extends Controller
         $category->slug = $request->input('slug');
         $category->save();
 
-        return redirect()->route('categories.index')->with('success', 'Category created successfully');
+        return redirect()->route('categories.index')->with('success', 'Thêm Danh Mục thành công');
     }
 
     /**
@@ -96,7 +105,7 @@ class CategoryController extends Controller
         $category->description = $request->input('description');
         $category->save();
 
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully');
+        return redirect()->route('categories.index')->with('success', 'Cập nhật Danh Mục thành công');
     }
 
     /**
@@ -108,8 +117,13 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::find($id);
-        $category->delete();
-
-        return redirect()->route('categories.index')->with('success', 'Category deleted successfully');
+        if (count($category->products) > 0) {
+            return redirect()->route('categories.index')
+                ->with('error', 'Danh mục đang được sử dụng, xóa Danh Mục không thàn công');
+        } else {
+            $category->delete();
+            return redirect()->route('categories.index')
+                ->with('success', 'Xóa Danh Mục thành công!');
+        }
     }
 }

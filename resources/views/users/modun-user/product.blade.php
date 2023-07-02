@@ -9,13 +9,12 @@
             <div class="col-md-4">
                 <div class='rowprd' style="margin-right: 10rem">
                     <ul class="mcd-menu">
-                        <li>
-                            <a href="" style="pointer-events: none;">
-                                <strong>Danh Mục</strong>
-                            </a>
-                        </li>
                         <ul class="parent-list">
-
+                            <li>
+                                <a href="" style="pointer-events: none;">
+                                    <strong>Danh Mục</strong>
+                                </a>
+                            </li>
                             @if (isset($categories))
                                 @foreach ($categories as $category)
                                     <li class="list-item">
@@ -88,7 +87,7 @@
                                         <div
                                             style="text-align: center; position: absolute;top: 90%; left: 50%;transform: translate(-50%, -50%);">
 
-                                            <p style="font-size:16px;margin-bottom: 0;font-weight:600;">Price </p>
+                                            <p style="font-size:16px;margin-bottom: 0;font-weight:600;">Giá </p>
 
                                             @if ($prd->prd_sale != 0)
                                                 <div style="display:flex">

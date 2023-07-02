@@ -8,10 +8,20 @@
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card" style="float: right; width: 80%">
             <div class="card-body">
-                <h4 class="card-title">Product table</h4>
-                <p class="card-description"> Add class
-                </p>
-                <a class="badge badge-success" style=" font-size: 20px" href="{{ route('admin.add_prd') }}">Add</a>
+                <h2 class="card-title">Danh Sách Sản Phẩm</h2>
+                <div class="container" style="display: flex">
+                    <select id="chon" onchange="myFunction()" class="form-select" style="float: right"
+                        aria-label="Default select example">
+                        <option>Order By</option>
+                        <option>id</option>
+                        <option value="amount">Amount</option>
+                        <option value="sold">Sold</option>
+                        <option value="0">sold out</option>
+                    </select>
+                    <a class="badge badge-success" style=" font-size: 20px; float: right"
+                        href="{{ route('admin.add_prd') }}">Thêm</a>
+                </div>
+
                 @if (session('Notification'))
                     <div style="position: fixed;right: 20px;top: 70px; "id="myDiv" class="alert alert-danger">
 
@@ -26,26 +36,23 @@
 
                     </div>
                 @endif
-                <select id="chon" onchange="myFunction()" class="form-select" aria-label="Default select example">
-                    <option>Order By</option>
-                    <option>id</option>
-                    <option value="amount">Amount</option>
-                    <option value="sold">Sold</option>
-                    <option value="0">sold out</option>
+                <div id="filter" style="display: flex; margin-top: 1rem; margin-bottom: 1rem; ">
+                    <h4 style="margin-right: 1rem">Tìm Kiếm</h4>
+                    <input type="text" id="search-box" onkeyup="searchFunction()">
+                </div>
+                <h3 id="no-results" style="display: none; color:red; margin-top: 1rem">Không có kết quả liên quan</h3>
 
-                </select>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th style="width: 5%"> Id </th>
-                            <th style="width: 16%"> Product name </th>
+                            <th style="width: 16%"> Tên </th>
                             <th style="width: 220px"> Image </th>
-                            <th> Price </th>
+                            <th> Giá </th>
+                            <th> Danh Mục</th>
                             <th> Size </th>
-                            <th> Amount </th>
-                            <th> Sold </th>
-                            <th>On Sale </th>
-                            <th> Sua </th>
+                            <th> Giảm </th>
+                            <th> Sửa </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,32 +60,28 @@
                             <tr>
                                 <td>{{ ++$key }}</td>
                                 <td>{{ $product->prd_name }}</td>
-
                                 <td> <img src="/anh/{{ $product->prd_image }}" style="height:120px"> </td>
                                 <td> {{ number_format($product->price) }}đ </td>
-                                <td> {{ $product->prd_size }} </td>
-
-
-                                <td> {{ $product->prd_amount }} </td>
-                                <td> {{ $product->sold }} </td>
+                                <td> {{ $product->category }}</td>
+                                <td>{{ $product->prd_details }}</td>
                                 <td @if ($product->prd_sale > 0) style="color: red" @endif> {{ $product->prd_sale }}%
                                 </td>
                                 <td style=""><a
                                         href="{{ route('admin.prd_detail', ['id' => $product->prd_detail_id]) }}">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true">
                                         </i></td>
-
-
                             </tr>
                         @endforeach
-
-
                     </tbody>
 
-                </table>{{ $products->links() }}
+                </table>
+                {{-- {{ $products->links() }} --}}
             </div>
         </div>
     </div>
+
+@stop
+@section('js')
     <script>
         function myFunction() {
             var x = document.getElementById("chon").value;
@@ -89,4 +92,23 @@
             location.href = url;
         }
     </script>
-@stop
+    <script>
+        $(document).ready(function() {
+            $("#search-box").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+
+                var visibleRows = $("table tbody tr").filter(function() {
+                    var match = $(this).text().toLowerCase().indexOf(value) > -1;
+                    $(this).toggle(match);
+                    return match;
+                }).length;
+
+                if (visibleRows === 0) {
+                    $("#no-results").show();
+                } else {
+                    $("#no-results").hide();
+                }
+            });
+        });
+    </script>
+@endsection

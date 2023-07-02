@@ -59,7 +59,7 @@
                                                         {{ number_format($prd->price) }} đ</p>
                                                 </div>
                                                 <div style="margin-left:10px">
-                                                    <p style="font-size: 2.9rem; color: red;">
+                                                    <p style="font-size: 2.5rem; color: red;">
                                                         {{ number_format(($prd->price / 100) * (100 - $prd->prd_sale)) }}
                                                         đ</p>
                                                 </div>
@@ -67,8 +67,8 @@
                                                     value="{{ ($prd->price / 100) * (100 - $prd->prd_sale) }}">
                                             </div>
                                         @else
-                                            <p style="color:red;font-size: 2.9rem;"> Giá {{ number_format($prd->price) }}
-                                                VND</p>
+                                            <p style="color:red;font-size: 2.5rem;">{{ number_format($prd->price) }}
+                                                đ</p>
                                             <input type="hidden" name="price" value="{{ $prd->price }}">
                                         @endif
 
@@ -264,7 +264,7 @@
                         <img src="/anh/{{ $oprd->prd_image }}" alt="Product 1">
                         <a href="{{ route('users.productdetail', ['id' => $oprd->prd_id]) }}">{{ $oprd->prd_name }} </a>
                         <div style=" height: 30px"></div>
-                        <p>{{ number_format($oprd->price) }} VND</p>
+                        <p>{{ number_format($oprd->price) }} đ</p>
                     </a>
                 </div>
             @endforeach

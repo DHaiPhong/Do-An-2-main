@@ -158,17 +158,30 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h2 class="card-title" style="text-align: center;">ORDER LIST</h2>
+                                    @if (session('success'))
+                                        <div class="alert alert-success text-center m-0"
+                                            style="font-size: 2rem; margin-bottom: 1rem" role="alert">
+                                            {{ session('success') }}
+                                        </div>
+                                    @endif
+                                    @if (session('error'))
+                                        <div class="alert alert-danger text-center m-0"
+                                            style="font-size: 2rem; margin-bottom: 1rem" role="alert">
+                                            {{ session('error') }}
+
+                                        </div>
+                                    @endif
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
                                                 <th> # </th>
-                                                <th> Name </th>
-                                                <th style="width: 300px"> Address </th>
-                                                <th> Amount </th>
-                                                <th style="width: 90px"> Total </th>
-                                                <th> Order at </th>
-                                                <th> Status </th>
-                                                <th> Detail </th>
+                                                <th> Tên </th>
+                                                <th style="width: 300px"> Địa Chỉ </th>
+                                                <th> Số Lượng </th>
+                                                <th style="width: 90px"> Tổng </th>
+                                                <th> Ngày đặt hàng </th>
+                                                <th> Trạng Thái </th>
+                                                <th> Chi Tiết </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -182,23 +195,41 @@
                                                     <td>{{ $item->created_at }}</td>
                                                     <td>
                                                         @if ($item->status == 'cancel')
-                                                            <p>cancelled</p>
+                                                            <p class="badge bg-danger"
+                                                                style="margin-top: 5%;margin-bottom: 5%; text-transform: capitalize; font-size: 2rem  ">
+                                                                Đã Hủy</p>
                                                         @elseif($item->status == 'pending')
                                                             <div class="row">
                                                                 <div class="col-sm">
-                                                                    <p
-                                                                        style="margin-top: 5%;margin-bottom: 5%; text-transform: capitalize  ">
-                                                                        {{ $item->status }} </p>
+                                                                    <p class="badge bg-warning text-dark"
+                                                                        style="margin-top: 5%;margin-bottom: 5%; text-transform: capitalize; font-size: 2rem  ">
+                                                                        Đang Duyệt </p>
                                                                 </div>
                                                                 <div class="col-sm">
                                                                     <a class="btn btn-danger btn-fw"
-                                                                        style="  background-color: #ff375f; border-color: #ff375f; float: right; margin-top: 2px;width: 90px;padding: 0;margin-right: 10px;"
+                                                                        style="  background-color: #ff375f; border-color: #ff375f; float: right; margin-top: 2px;width: 90px;padding: 0;margin-right: 50px;"
                                                                         href="{{ route('users.ordercancel', $item->order_id) }}"
-                                                                        onclick="return confirm('Are you sure you want to delete this order?')">Cancel</a>
+                                                                        onclick="return confirm('Bạn có chắc chắn muốn xóa đơn đặt hàng này?')">Hủy</a>
+                                                                </div>
+                                                            </div>
+                                                        @elseif($item->status == 'processing')
+                                                            <div class="row">
+                                                                <div class="col-sm">
+                                                                    <p class="badge bg-primary text-dark"
+                                                                        style="margin-top: 5%;margin-bottom: 5%; text-transform: capitalize; font-size: 2rem  ">
+                                                                        Đang Xử Lý </p>
+                                                                </div>
+                                                                <div class="col-sm">
+                                                                    <a class="btn btn-danger btn-fw"
+                                                                        style="  background-color: #ff375f; border-color: #ff375f; float: right; margin-top: 2px;width: 90px;padding: 0;margin-right: 50px;"
+                                                                        href="{{ route('users.ordercancel', $item->order_id) }}"
+                                                                        onclick="return confirm('Bạn có chắc chắn muốn xóa đơn đặt hàng này?')">Hủy</a>
                                                                 </div>
                                                             </div>
                                                         @else
-                                                            {{ $item->status }}
+                                                            <p class="badge bg-info"
+                                                                style="margin-top: 5%;margin-bottom: 5%; text-transform: capitalize; font-size: 2rem  ">
+                                                                Đang Giao Hàng</p>
                                                         @endif
                                                     </td>
                                                     <td>

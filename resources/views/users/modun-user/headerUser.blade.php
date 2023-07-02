@@ -41,7 +41,7 @@
 
                         </div>
                         @auth
-                            <div class="col-sm" style="">
+                            <div class="col-sm" style="margin-top: 1rem;">
                                 <li class="nav-item dropdown">
                                     <button class="dropdown-toggle"
                                         style="font-size: 2rem;  background:none;    text-transform: uppercase;"
