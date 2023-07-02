@@ -46,16 +46,17 @@ Route::prefix('account')->group(function () {
     Route::get('/add_cart/{id}', [userController::class, 'addcart'])->name('users.cart1');
 
     Route::get('/cartshop', function () {
-        return view('users/modun-user/cartshop', ['title' => 'Cart']);
+        return view('users/modun-user/cartshop', ['title' => 'Giỏ Hàng  ']);
     })->name('users.cartshop');
 
 
     Route::get('/delete/{id}', [CartController::class, 'deletecart'])->name('cart.delete');
     Route::get('/cart/plus/{id}', [CartController::class, 'pluscart'])->name('cart.plus');
     Route::get('/cart/minus/{id}', [CartController::class, 'minuscart'])->name('cart.minus');
-
-
     Route::post('/add_cart', [CartController::class, 'addcart'])->name('cart.add');
+    Route::get('/cart/update', [CartController::class, 'update'])->name('cart.update');
+
+
 
 
     Route::get('/pay', function () {

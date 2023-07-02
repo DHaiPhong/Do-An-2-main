@@ -7,16 +7,16 @@
                 <h1 class="text-primary">{{ session('message') }}</h1>
             @endif
             <h1 style="text-align: center;
-    font-weight: bold;">Order detail </h1>
-            <table class="table table-bordered">
+    font-weight: bold;">Chi Tiết Đơn Hàng </h1>
+            <table class="table table-bordered" style="background-color: #FFF">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>image</th>
-                        <th>Product</th>
+                        <th>Hình Ảnh</th>
+                        <th>Sản Phẩm</th>
                         <th>Size</th>
-                        <th>Quantity</th>
-                        <th>total</th>
+                        <th>Số Lượng</th>
+                        <th>Tổng</th>
                     </tr>
                 </thead>`
                 <tbody>
@@ -24,8 +24,9 @@
                         <tr>
                             <td>{{ $item->id }}</td>
                             <td> <img src='/anh/{{ $item->prd_image }}' width="120px" height="auto"></td>
-                            <td>{{ $item->prd_name }}</td>
-
+                            <td><a style="text-decoration: none"
+                                    href="{{ route('users.productdetail', ['id' => $item->prd_id]) }}">{{ $item->prd_name }}</a>
+                            </td>
                             <td>{{ $item->prd_size }}</td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ number_format($item->price) }} đ</td>

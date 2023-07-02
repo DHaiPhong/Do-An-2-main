@@ -49,6 +49,9 @@
         @include('Admin.thanhphan.sidebar')
         @include('Admin.thanhphan.javascript')
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    @yield('js')
 </body>
 
 </html>

@@ -10,17 +10,17 @@
     <link href="{{ url('css/style_home.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ url('font-awesome/css/font-awesome.css') }}" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/041cb6b55e.js" crossorigin="anonymous"></script>
-    <script src="{{url('js/search.js')}}" crossorigin="anonymous"></script>
+    <script src="{{ url('js/search.js') }}" crossorigin="anonymous"></script>
     <link href="{{ url('css/productcss/prd.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="{{ url('css/sidebarcss/sd.css') }}" rel="stylesheet"type="text/css">
 
 
-    
-    
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link  href="{{ url('css/sidebarcss/sd.css') }}" rel="stylesheet"type="text/css">
-  @yield('css')
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="{{ url('css/sidebarcss/sd.css') }}" rel="stylesheet"type="text/css">
+    @yield('css')
 
     <!-- CSS only -->
     <title>{{ $title }}</title>
@@ -34,17 +34,15 @@
 
 
 </body>
-
-</html>
+@yield('js')
 <script src="{{ url('js/script.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
 </script>
-<script>
-    window.onpageshow = function(event) {
-    if (event.persisted) {
-        window.location.reload() 
-    }
-};
-</script>
+
+
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+    crossorigin="anonymous"></script>
+
+</html>
 

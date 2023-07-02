@@ -52,34 +52,40 @@ class userController extends Controller
     function orderdetail($id)
     {
         $orders = DB::table('orders')
-        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
 
-        ->join('product_details', 'order_items.product_id', '=', 'product_details.prd_detail_id')
-        ->join('products', 'products.prd_id', '=', 'product_details.prd_id')
-        ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
-        ->groupBy('products.prd_id')
+            ->join('product_details', 'order_items.product_id', '=', 'product_details.prd_detail_id')
+            ->join('products', 'products.prd_id', '=', 'product_details.prd_id')
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->groupBy('products.prd_id')
             ->where('orders.user_id', Auth::user()->id)
             ->where('orders.id', $id)
             ->get();
 
-        return view('users.modun-user.orderdetail', ['orders' => $orders,'title' => 'Order Detail']);
+        return view('users.modun-user.orderdetail', ['orders' => $orders, 'title' => 'Chi Tiết Đơn Hàng']);
     }
 
     function ordercancel($id)
     {
-
         $order = DB::table('orders')
             ->where('id', $id)
             ->first();
 
-
-        if ($order->status == 'pending') {
-            $order = DB::table('orders')
-                ->where('id', $id)
-                ->update(['status' => 'cancel']);
+        if (!$order) {
+            return back()->with('error', 'Không tìm thấy đơn hàng!');
         }
-        return back();
+
+        if ($order->status != 'pending') {
+            return back()->with('error', 'Chỉ có thể hủy đơn hàng khi đang duyệt!');
+        }
+
+        $order = DB::table('orders')
+            ->where('id', $id)
+            ->update(['status' => 'cancel']);
+
+        return back()->with('success', 'Hủy đơn hàng thành công');
     }
+
 
     function index()
     {

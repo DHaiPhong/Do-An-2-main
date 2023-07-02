@@ -57,7 +57,7 @@ header .navbar a{
     margin: 0 2rem;
     text-decoration: none;
 }
-header .navbar a:hover{
+header .navbar a:hover{ 
     color: orangered;
 }
 header .icons a{
@@ -245,7 +245,6 @@ section{
 }
 .producth .box-container .box .icons a:hover{
     color: orangered;
-    color: #fff;
 }
 .producth .box-container .box .content h3{
     color: #000;
@@ -504,23 +503,46 @@ section{
 }
 
 
-.login_btn {
-    border-width: 0.1rem;
+.login_btn { 
+    width: 12rem;
+    border-width: 1px;
     background-color: white;
     color: #000;
     border-style: solid ;
     box-sizing: border-box;
-    padding: 5;
-    margin-right: -10;
-    
+    padding: 10px;
+    border-color: #000;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px; 
+    transition-duration: 0.4s;
+    cursor: pointer; 
 }
-.signup_btn {
-    margin-left: -2;
-    background-color: rgb(0, 0, 0);
-    border-style: solid ;
-    box-sizing: border-box;
-    padding: 5.5;
-    
+
+.login_btn:hover {
+    border-color: orangered;
+}
+
+.signup_btn { 
+    width: 12rem;
+    border-width: 1px;
+    background-color: #fff; 
+    border-style: solid ; 
+    color: #000; 
+    box-sizing: border-box; 
+    padding: 10px; 
+    text-align: center; 
+    text-decoration: none; 
+    display: inline-block; 
+    font-size: 16px; 
+    transition-duration: 0.4s; 
+    cursor: pointer; 
+}
+
+.signup_btn:hover { 
+    background-color: white; 
+    color: #000; 
 }
 
 
@@ -547,16 +569,20 @@ section{
     top: 0;
     right: 0;
     padding: 10px 15px;
-    background-color: #ddd;
     font-size: 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #fff;
   }
   
   /* Change the hover style on submit button */
   .search-container button[type=submit]:hover {
-    background-color: #ccc;}
+
+        border-color: orangered
+    }
 
 
 
@@ -585,6 +611,8 @@ section{
     margin-right: 1rem;
 }
 .suggestion-list li{
+    font-size: 1.5rem;
+    text-align: center;
     cursor: pointer;
     padding: 5px;
     position: relative;
@@ -599,6 +627,7 @@ section{
     flex: 4;
 }
  .suggestion-list li span{
+    margin-left: 2rem;
     flex: 1;
     font-size: 15px;
     color: red;

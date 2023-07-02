@@ -30,7 +30,8 @@ class AddCartRequest extends FormRequest
     public function messages()
     {
         return [
-            'prd_size.required' => 'Need to choose shoe size before ordering',
+            'prd_size.required' => 'Bạn cần chọn size trước khi đặt hàng',
+
         ];
     }
 }

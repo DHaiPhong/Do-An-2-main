@@ -42,7 +42,7 @@ class ProductController extends Controller
             ->get();
 
 
-        return view('users.modun-user.productdetail', [ 'products' => $products, 'prdsize' => $prdsize,'prd' => $prd,'prdimg' => $prdimg,'otherprd'  => $otherprd, 'title' => 'Product']);
+        return view('users.modun-user.productdetail', ['products' => $products, 'prdsize' => $prdsize, 'prd' => $prd, 'prdimg' => $prdimg, 'otherprd'  => $otherprd, 'title' => 'Product']);
     }
 
     function product()
@@ -56,7 +56,7 @@ class ProductController extends Controller
             ->paginate(12);
         $categories = $this->getCategoriesWithSub();
 
-        return view('users.modun-user.product', ['prds' => $product, 'categories' => $categories, 'title' => 'Product']);
+        return view('users.modun-user.product', ['prds' => $product, 'categories' => $categories, 'title' => 'Sản Phẩm']);
     }
 
     public function getCategoriesWithSub()

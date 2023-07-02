@@ -19,45 +19,17 @@ class OrderRepository extends BaseRepository implements OrderContract
         $this->model = $model;
     }
 
-    public function handlePaymentSuccess($params)
-    {
-        // Lấy thông tin đơn hàng từ mã đơn hàng (orderId) đã nhận từ Momo
-        $order = Order::where('order_number', $params['orderId'])->first();
-
-        if ($order) {
-            // Cập nhật trạng thái đơn hàng thành 'paid' và lưu lại
-            $order->status = 'pending';
-            $order->save();
-
-            // Lưu thông tin chi tiết đơn hàng vào CSDL
-            foreach (Cart::content() as $item) {
-                $product = Product::where('prd_name', $item->name)->first();
-
-                $orderItem = new OrderItem([
-                    'product_id'    =>  $item->id,
-                    'quantity'      =>  $item->qty,
-                    'price'         =>  $item->total
-                ]);
-
-                $order->items()->save($orderItem);
-            }
-            // Xóa giỏ hàng
-            Cart::destroy();
-        }
-    }
-
-
     public function storeOrderDetails($params)
     {
         $order = Order::create([
             'order_number'      =>  'ORD-' . strtoupper(uniqid()),
-            'user_id'           => auth()->user()->id,
+            'user_id'           =>  auth()->user()->id,
             'status'            =>  'pending',
-            'grand_total'       =>  Cart::total(),
+            'grand_total'       =>  Cart::total() + 15000 - Cart::total() * (5 / 100),
             'item_count'        =>  Cart::count(),
             'name'              =>  $params['name'],
             'address'           =>  $params['address'],
-            'email'           =>  $params['email'],
+            'email'             =>  $params['email'],
             'city'              =>  $params['city'],
             'phone_number'      =>  $params['phone']
         ]);

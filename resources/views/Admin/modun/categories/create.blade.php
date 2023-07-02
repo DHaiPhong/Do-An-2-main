@@ -9,7 +9,7 @@
     <div class="card" style="float: right; width: 72%; margin-right: 7%">
         <div class="card-body">
             <div style="box-sizing: border-box; margin-bottom: 1rem">
-                <h4 class="card-title">Add Category</h4>
+                <h4 class="card-title">Thêm Danh Mục</h4>
                 <br>
             </div>
             <form method="post" action="{{ route('categories.store') }}" class="forms-sample">
@@ -17,9 +17,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="slug-source">Name</label>
+                            <label for="slug-source">Tên</label>
                             <input type="text" name="name" class="form-control" id="slug-source" value=""
-                                placeholder="Enter Category Name" onkeyup="generateSlug()">
+                                placeholder="Nhập tên Danh Mục" onkeyup="generateSlug()">
                             @error('name')
                                 <span class="text-danger"> {{ $message }}</span>
                             @enderror
@@ -31,7 +31,7 @@
                         <div class="form-group">
                             <label>Parent</label>
                             <select class="form-control" name="parent_id" id="parent_id">
-                                <option value="">-- Sellect Category Parent --</option>
+                                <option style="display:none" value="">-- Chọn --</option>
                                 @foreach ($categories as $id => $name)
                                     <option value="{{ $id }}">{{ $name }}</option>
                                 @endforeach
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <button type="submit" href="" class="btn btn-light"
-                        style="background-color: #c4f0c4; color: black">Add</button>
+                        style="background-color: #c4f0c4; color: black">Thêm</button>
                 </div>
             </form>
         </div>

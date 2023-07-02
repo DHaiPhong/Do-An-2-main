@@ -9,21 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
-    public function search(Request $request)
-    {
-        $search = $request->input('query');
-        $product = Product::where('prd_name', 'LIKE', "%{$search}%")
-
-
-            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
-            ->groupBy('products.prd_id')
-
-            ->paginate(12);
-            $categories = $this->getCategoriesWithSub();
-
-            return view('users.modun-user.product', ['prds' => $product, 'categories' => $categories, 'title' => 'Product']);
-}
-public function getCategoriesWithSub()
+    public function getCategoriesWithSub()
     {
         $categories = DB::table('categories')->whereNull('parent_id')->get();
 
@@ -34,6 +20,7 @@ public function getCategoriesWithSub()
 
         return $categories;
     }
+
     protected function getSubCategories($category_id)
     {
         $subCategories = DB::table('categories')->where('parent_id', $category_id)->get();
@@ -46,18 +33,32 @@ public function getCategoriesWithSub()
 
         return $subCategories;
     }
-public function suggestions(Request $request)
-{
-    $search = $request->input('query');
-    $results = Product::where('prd_name', 'LIKE', "%{$search}%")
-   
 
-    ->join('prd_img','products.prd_id', '=', 'prd_img.prd_id')
-    ->groupBy('products.prd_id')
-        
-        ->get();
-    
-    return response()->json($results);
-}
+    public function search(Request $request)
+    {
+        $search = $request->input('query');
+        $product = Product::where('prd_name', 'LIKE', "%{$search}%")
 
+
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->groupBy('products.prd_id')
+            ->paginate(12);
+        $categories = $this->getCategoriesWithSub();
+
+        return view('users.modun-user.product', ['prds' => $product, 'categories' => $categories, 'title' => 'Product']);
+    }
+
+    public function suggestions(Request $request)
+    {
+        $search = $request->input('query');
+        $results = Product::where('prd_name', 'LIKE', "%{$search}%")
+
+
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->groupBy('products.prd_id')
+
+            ->get();
+
+        return response()->json($results);
+    }
 }

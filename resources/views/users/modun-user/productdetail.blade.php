@@ -6,13 +6,13 @@
     <section>
 
         <section class="featured" id="fearured">
-            <h1 class="heading">Product <span>Details</span></h1>
+            <h1 class="heading">Chi Tiết <span>Sản Phẩm</span></h1>
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
                         @foreach ($errors->all() as $error)
                             <li>
-                                <p style="font-size: 2rem">
+                                <p style="font-size: 2rem; margin-top: 5px">
                                     {{ $error }}
                                 </p>
                             </li>
@@ -24,13 +24,10 @@
                 <div class="image-container">
                     <div class="boxx">
                         <div class="small-image">
-
-
                             @foreach ($prdimg as $primg)
                                 <img src="/anh/{{ $primg->prd_image }}" alt="" style="width:90px"
                                     class="featured-image-1" id="pic">
                             @endforeach
-
                         </div>
                         <button id="leftb" class="slide-left" onclick="next1()">&#8250;</button>
                         <button id="rightb" class="slide-right" onclick="pre1()">&#8249;</button>
@@ -57,11 +54,13 @@
                                     <div class="price" id="price-preview" quickbeam="price" quickbeam-price="800">
                                         @if ($prd->prd_sale != 0)
                                             <div style="display:flex">
+
                                                 <div>
                                                     <p style="font-size: 2.9rem;color:black"> Giá: <span style="font-size: 2.9rem;text-decoration: line-through; color:gray"> {{ number_format($prd->price) }} VND <span></p>
+
                                                 </div>
                                                 <div style="margin-left:10px">
-                                                    <p style="font-size: 2.9rem; color: red">
+                                                    <p style="font-size: 2.5rem; color: red;">
                                                         {{ number_format(($prd->price / 100) * (100 - $prd->prd_sale)) }}
                                                         đ</p>
                                                 </div>
@@ -69,23 +68,18 @@
                                                     value="{{ ($prd->price / 100) * (100 - $prd->prd_sale) }}">
                                             </div>
                                         @else
+
                                             <p style="color:black;font-size: 2.9rem;"> Giá: <span style="color:red;font-size: 2.9rem;text-decoration:none">{{ number_format($prd->price) }} VND</span>
                                                 </p>
+
                                             <input type="hidden" name="price" value="{{ $prd->price }}">
                                         @endif
 
                                     </div>
                                 </div>
-
-
-
                                 <input type="hidden" name="prd_id" value="{{ $prd->prd_id }}">
-
-
                                 <div class="swatches">
-
                                     <div class="swatch clearfix" style="font-size: 1.8rem" data-option-index="1">
-
                                         <div class="size-selection">
                                             <h3>Chọn Size:</h3>
                                             <div class="sizes">
@@ -103,26 +97,94 @@
                                     </div>
                                 </div>
                                 <div id="boxo" style="height:50px;border-radius: 8px; text-align: center;">
-                                    <p id="stock_message" style="display:none;font-size:18px;">Sorry! This size is
-                                        temporarily out of stock.</p>
+                                    <p id="stock_message" style="display:none;font-size:18px;">Size này đã hết hàng</p>
                                 </div>
-                                <div class="btn-and-quantity-wrap"
-                                    style="display: inline-block;margin-top: 1rem;border-radius: .5rem;border: .2rem solid #000;font-weight: bolder;font-size: 1.7rem;
-                                color: #000;cursor: pointer;background: #fff;padding: .8rem 3rem;width:350px; background-color: black;">
 
-                                    <div style="text-align:center; " class="btn-and-quantity">
+                                <div class="btn-and-quantity-wrap">
+                                    <button id="order_button" type="submit">Mua Ngay</button>
+                                </div>
+                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                                    <div class="accordion-item" style="margin-bottom: 0.5rem">
+                                        <h2 class="accordion-header" id="flush-headingOne">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                                aria-expanded="false" aria-controls="flush-collapseOne"
+                                                style="font-size: 2rem">
+                                                Chính Sách Giao Hàng & Đổi Trả
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                            aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                <p>Giao hàng hoàn toàn miễn phí 100%</p>
+                                                <p>An toàn với nhận hàng và trả tiền tại nhà</p>
+                                                <p>Bảo hành đổi trả trong vòng 60 ngày</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingTwo">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo"
+                                                aria-expanded="false" aria-controls="flush-collapseTwo"
+                                                style="font-size: 2rem">
+                                                Hướng dẫn bảo quản
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                                            aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                <ul>
+                                                    <h2>Khử mùi bên trong giày</h2>
 
-                                        <div style="background-color: black;" quickbeam="add-to-cart">
+                                                    <li>
+                                                        <p>Bạn hãy đặt túi đựng viên chống ẩm vào bên trong giày để hút
+                                                            ẩm
+                                                            và rắc phấn rôm (có thể thay bằng cách đặt vào bên trong
+                                                            giày
+                                                            gói trà túi lọc chưa qua sử dụng) để khử mùi, giúp giày luôn
+                                                            khô
+                                                            thoáng.
+                                                            Để hạn chế mùi hôi và sự ẩm ướt cho giày, hãy chọn vớ chân
+                                                            loại
+                                                            tốt, có khả năng thấm hút cao. Ngoài ra, dùng các loại lót
+                                                            giày
+                                                            khử mùi
+                                                            cũng là một phương pháp tốt.</p>
+                                                    </li>
+                                                </ul>
+                                                <ul>
+                                                    <h2>Bảo quản giày khi không sử dụng</h2>
 
-                                            <button style="background-color: black; color:white" id="order_button"  type="submit" href=""> <h2> MUA NGAY </h2> Mua hàng liền tay - Giao ngay tận nhà</button>
+                                                    <li>
+                                                        <p>Khi sử dụng giày, bạn đừng vội vứt hộp đi mà hãy cất lại để
+                                                            dành.
+                                                            Khi
+                                                            không sử dụng, hãy nhét một ít giấy vụn vào bên trong giày
+                                                            để
+                                                            giữ
+                                                            cho
+                                                            dáng giày luôn chuẩn, đẹp. Sau đó đặt giày vào hộp bảo quản
+                                                            cùng
+                                                            túi
+                                                            hút
+                                                            ẩm.
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
                         </div>
+                        <button type="button" class="btn btn-danger">
+                            Tổng Đài Bán Hàng: <span class="badge bg-Warning" style="font-size: 1.5rem">123456789</span>
+                        </button>
+                        </form>
                     </div>
-
                 </div>
+
+            </div>
             </div>
         </section>
         <div style="flex-wrap:wrap;padding:10px 50px;" class="d-flex justify-content-center">
@@ -130,32 +192,33 @@
                 <tr>
                     <td class="image-column1"><img src="/anh/qq1.png" alt="placeholder"></td>
                     <td class="text-column1">
-                        <h2>Product quality?</h2>
-                        <p>Products are always tested and evaluated by VNSneakers with the highest quality before reaching
-                            customers!</p>
+                        <h2>Chất lượng sản phẩm?</h2>
+                        <p>Sản phẩm luôn được VNSneakers kiểm tra và đánh giá chất lượng cao nhất trước khi đạt
+                            khách hàng!</p>
                     </td>
                 </tr>
                 <tr>
                     <td class="image-column1"><img src="/anh/qq2.png" alt="placeholder"></td>
                     <td class="text-column1">
-                        <h2>Delivery time?</h2>
-                        <p>We use the most reputable and fastest shipping unit, the estimated time is from 1-4 days
-                            depending on the area.</p>
+                        <h2>Thời gian giao hàng?</h2>
+                        <p>Chúng tôi sử dụng đơn vị vận chuyển uy tín nhất, nhanh nhất, thời gian ước tính từ 1-4 ngày
+                            tùy thuộc vào khu vực.</p>
                     </td>
                 </tr>
                 <tr>
                     <td class="image-column1"><img src="/anh/qq3.png" alt="placeholder"></td>
                     <td class="text-column1">
-                        <h2>Wrong product color?</h2>
-                        <p>Due to some objective factors such as screen brightness, screen quality, the product may not be
-                            the right color.</p>
+                        <h2>Màu sắc sản phẩm sai?</h2>
+                        <p>Do một số yếu tố khách quan như độ sáng màn hình, chất lượng màn hình nên sản phẩm có thể không
+                            được như ý.
+                            đúng màu.</p>
                     </td>
                 </tr>
                 <tr>
                     <td class="image-column1"><img src="/anh/qq4.png" alt="placeholder"></td>
                     <td class="text-column1">
-                        <h2>Working time?</h2>
-                        <p>The store system and Online work from 8:30 to 22:00 daily.</p>
+                        <h2>Thời gian làm việc?</h2>
+                        <p>Hệ thống cửa hàng và Online làm việc từ 8h30 đến 22h hàng ngày.</p>
                     </td>
                 </tr>
 
@@ -164,39 +227,39 @@
                 <tr>
                     <td class="image-column1"><img src="/anh/qq5.png" alt="placeholder"></td>
                     <td class="text-column1">
-                        <h2>Is the item available?</h2>
-                        <p>Products are available at VNSneakers store system and online at website.</p>
+                        <h2>Hàng có sẵn không?</h2>
+                        <p>Sản phẩm có bán tại hệ thống cửa hàng VNSneakers và online tại website.</p>
                     </td>
                 </tr>
                 <tr>
                     <td class="image-column1"><img src="/anh/qq6.png" alt="placeholder"></td>
                     <td class="text-column1">
-                        <h2>How to exchange goods?</h2>
-                        <p>Exchanges are easy and we always want our customers to be satisfied. Please contact fanpage to
-                            change!</p>
+                        <h2>Đổi hàng như thế nào?</h2>
+                        <p>Trao đổi rất dễ dàng và chúng tôi luôn muốn khách hàng hài lòng. Vui lòng liên hệ fanpage để
+                            thay đổi!</p>
                     </td>
                 </tr>
                 <tr>
                     <td class="image-column1"><img src="/anh/qq7.png" alt="placeholder"></td>
                     <td class="text-column1">
-                        <h2>Product warranty</h2>
-                        <p>The product is warranted for 30 days against any defects. SALE items are not warranted.</p>
+                        <h2>Bảo hành sản phẩm</h2>
+                        <p>Sản phẩm được bảo hành 30 ngày đối với bất kỳ lỗi nào. Hàng SALE không bảo hành.</p>
                     </td>
                 </tr>
                 <tr>
                     <td class="image-column1"><img src="/anh/qq8.png" alt="placeholder"></td>
                     <td class="text-column1">
-                        <h2>Wrong shoe size?</h2>
-                        <p>You can go to the store or send it back for an exchange with a 100% new product. Still have tags
-                            and purchase receipt.</p>
+                        <h2>Cỡ giày sai?</h2>
+                        <p>Bạn có thể đến cửa hàng hoặc gửi lại để đổi với sản phẩm mới 100%. Vẫn còn thẻ
+                            và hóa đơn mua hàng.</p>
                     </td>
                 </tr>
             </table>
         </div>
         <div style="background-color: orange;height: 2px;width: 40%; margin:0px 350px"> </div>
         <div class="title-content">
-            Some other
-            <span><b style="color: orange; font-size: 25px;">PRODUCT</b></span>
+            Sản phẩm
+            <span><b style="color: orange; font-size: 25px;">Khác</b></span>
 
         </div>
         <div class="product-container">
@@ -205,7 +268,7 @@
                         <img src="/anh/{{ $oprd->prd_image }}" alt="Product 1">
                         <a href="{{ route('users.productdetail', ['id' => $oprd->prd_id]) }}">{{ $oprd->prd_name }} </a>
                         <div style=" height: 30px"></div>
-                        <p>{{ number_format($oprd->price) }} VND</p>
+                        <p>{{ number_format($oprd->price) }} đ</p>
                     </a>
                 </div>
             @endforeach
@@ -223,6 +286,8 @@
 
     <!-- Quickbeam cart end -->
     </section>
+@stop
+@section('js')
     <script>
         const imgPositon = document.querySelectorAll(".small-image img")
         // console.log(imgPositon)
@@ -288,4 +353,4 @@
 
         }
     </script>
-@stop
+@endsection

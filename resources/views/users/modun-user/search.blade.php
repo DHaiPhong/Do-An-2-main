@@ -54,12 +54,13 @@
         </div>
         <div class='rowprd'>
             @if (count($searchproducts) == 0)
-                <div style="
-    width: 680px;
-    height: 300px;
-    text-align: center;
-    padding-top: 100px;
-">
+                <div
+                    style="
+                                width: 680px;
+                                height: 300px;
+                                text-align: center;
+                                padding-top: 100px;
+                            ">
                     <h3> Không thể tìm sản phẩm tương ứng</h3>
                 </div>
             @else
