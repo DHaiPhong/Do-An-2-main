@@ -18,21 +18,30 @@ use PhpParser\Node\Stmt\Function_;
 class AdminController extends Controller
 {
     //dashboard
-    function dashboard()
+    function dashboard(Request $request)
     {
+        $month = $request->input('month', null);
+
         $sold = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->whereIn('status', ['pending', 'completed', 'processing'])
+            ->when($month, function ($query, $month) {
+                return $query->whereMonth('orders.created_at', $month);
+            })
             ->sum('quantity');
 
         $revenue = DB::table('orders')
-
             ->where('status', 'completed')
+            ->when($month, function ($query, $month) {
+                return $query->whereMonth('orders.created_at', $month);
+            })
             ->sum('grand_total');
 
         $orders = DB::table('orders')
-
             ->whereIn('status', ['pending', 'completed', 'processing', 'shipping'])
+            ->when($month, function ($query, $month) {
+                return $query->whereMonth('orders.created_at', $month);
+            })
             ->count();
 
         $temp = DB::table('products')
@@ -65,7 +74,6 @@ class AdminController extends Controller
         return view('Admin/modun/dashboard', ['sold' => $sold, 'revenue' => $revenue, 'out_of_stocks' => $out_of_stocks, 'orders' => $orders, 'sells' => $sells]);
     }
 
-
     function chart(Request $request)
     {
         $entries = Order::select([
@@ -82,7 +90,7 @@ class AdminController extends Controller
             ->orderBy('month')
             ->get();
         $labels = [
-            1 => 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+            1 => 'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
         ];
         //        $dataset = [];
         $grand_total = [];
@@ -103,11 +111,9 @@ class AdminController extends Controller
             'labels' => array_values($labels),
             'datasets' => [
                 [
-                    'label' => 'Revenue(vnd)',
+                    'label' => 'Doanh Thu(đ)',
                     'borderWidth' => 1,
                     'data' => array_values($grand_total),
-
-
                 ],
             ]
         ];

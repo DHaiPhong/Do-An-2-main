@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <div class="main-panel">
+    <div class="main-panel" style="margin-right: 5rem">
         <div class="content-wrapper" style="float: right; width: 80%;">
             <div class="page-header">
                 <h3 class="page-title">
@@ -22,42 +22,55 @@
                     </ul>
                 </nav>
             </div>
-            <div class="row">
-                <div class="col-md-4 stretch-card grid-margin">
-                    <div class="card bg-gradient-danger card-img-holder text-white">
-                        <div class="card-body">
-                            <h4 class="font-weight-normal mb-3">Đã Bán <i
-                                    class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
-                            </h4>
-                            <h2 class="mb-5">{{ $sold }}</h2>
+            <div class="card" style="padding: 1rem">
+                <div class="flex" style="display:flex">
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-success" style="margin-right: 1rem">Tất Cả</a>
+                    <form method="get" action="{{ route('admin.dashboard') }}">
+                        <select style="margin-top: 0.5rem" name="month" onchange="this.form.submit()">
+                            <option style="display: none" value="">Chọn Tháng</option>
+                            @for ($i = 1; $i <= 12; $i++)
+                                <option value="{{ $i }}" {{ request('month') == $i ? 'selected' : '' }}>
+                                    Tháng {{ $i }}</option>
+                            @endfor
+                        </select>
+                    </form>
+                </div>
+                <div class="row" style="margin-top: 1rem">
+                    <div class="col-md-4 stretch-card grid-margin">
+                        <div class="card bg-gradient-danger card-img-holder text-white">
+                            <div class="card-body">
+                                <h4 class="font-weight-normal mb-3">Đã Bán <i
+                                        class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">{{ $sold }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 stretch-card grid-margin">
+                        <div class="card bg-gradient-success card-img-holder text-white">
+                            <div class="card-body">
+                                <h4 class="font-weight-normal mb-3">Đơn Hàng <i
+                                        class="mdi mdi-diamond mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">{{ $orders }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card-body">
 
+                                <h4 class="font-weight-normal mb-3">Doanh Thu <i
+                                        class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">{{ number_format($revenue) }} Đ</h2>
+
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 stretch-card grid-margin">
-                    <div class="card bg-gradient-success card-img-holder text-white">
-                        <div class="card-body">
-                            <h4 class="font-weight-normal mb-3">Đơn Hàng <i
-                                    class="mdi mdi-diamond mdi-24px float-right"></i>
-                            </h4>
-                            <h2 class="mb-5">{{ $orders }}</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 stretch-card grid-margin">
-                    <div class="card bg-gradient-info card-img-holder text-white">
-                        <div class="card-body">
-
-                            <h4 class="font-weight-normal mb-3">Doanh Thu <i
-                                    class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
-                            </h4>
-                            <h2 class="mb-5">{{ number_format($revenue) }} Đ</h2>
-
-                        </div>
-                    </div>
-                </div>
-
             </div>
+
             <div class="row">
                 <div class="col-md-8">
                     {{-- <div id="chart"></div> --}}
