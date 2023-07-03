@@ -66,10 +66,12 @@
                                 <td>{{ $product->prd_details }}</td>
                                 <td @if ($product->prd_sale > 0) style="color: red" @endif> {{ $product->prd_sale }}%
                                 </td>
-                                <td style=""><a
-                                        href="{{ route('admin.prd_detail', ['id' => $product->prd_detail_id]) }}">
+                                <td style="">
+                                    <a href="{{ route('admin.prd_detail', ['id' => $product->prd_detail_id]) }}">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true">
-                                        </i></td>
+                                        </i>
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
