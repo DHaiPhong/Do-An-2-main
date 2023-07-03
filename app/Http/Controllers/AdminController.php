@@ -35,11 +35,11 @@ class AdminController extends Controller
             ->whereIn('status', ['pending', 'completed', 'processing', 'shipping'])
             ->count();
 
-            $temp = DB::table('products')
+        $temp = DB::table('products')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->select('products.prd_id', 'prd_img.prd_image')
             ->groupBy('products.prd_id');
-        
+
 
         $out_of_stocks = DB::table('products')
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
@@ -136,7 +136,6 @@ class AdminController extends Controller
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
             ->join('categories', 'products.category_id', '=', 'categories.id')
             ->count();
-
         $products = DB::table('products')
             ->joinSub($temp, 'temp', function (JoinClause $join) {
                 $join->on('products.prd_id', '=', 'temp.prd_id');
@@ -148,13 +147,14 @@ class AdminController extends Controller
                 'categories.name as category',
                 'temp.prd_image',
                 'product_details.prd_detail_id',
-                DB::raw('GROUP_CONCAT(product_details.prd_size, "(Số lượng: ", product_details.prd_amount, ", Đã bán: ", product_details.sold, ")") as prd_details')
+                DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS prd_details")
             )
             ->groupBy('products.prd_id')
             ->orderBy('product_details.prd_id')
             ->offset(0) // update this as needed for the current page
             ->limit(8)
             ->get();
+
 
         $paginator = new LengthAwarePaginator($products, $total, 8);
 
@@ -349,27 +349,27 @@ class AdminController extends Controller
         if ($check == null) {
             DB::beginTransaction();
 
-        try {
-            // delete product details
-            DB::table('product_details')->where('prd_id', $id)->delete();
+            try {
+                // delete product details
+                DB::table('product_details')->where('prd_id', $id)->delete();
 
-            // delete product images
-            DB::table('prd_img')->where('prd_id', $id)->delete();
+                // delete product images
+                DB::table('prd_img')->where('prd_id', $id)->delete();
 
-            // delete the product
-            DB::table('products')->where('prd_id', $id)->delete();
+                // delete the product
+                DB::table('products')->where('prd_id', $id)->delete();
 
-            // commit the transaction
-            DB::commit();
+                // commit the transaction
+                DB::commit();
 
-            return redirect()->route('admin.product')->with('message', 'Product has been deleted successfully.');
-        } catch (\Exception $e) {
-            // something went wrong
-            // rollback the transaction
-            DB::rollback();
+                return redirect()->route('admin.product')->with('message', 'Product has been deleted successfully.');
+            } catch (\Exception $e) {
+                // something went wrong
+                // rollback the transaction
+                DB::rollback();
 
-            return redirect()->route('admin.product')->with('error', 'Failed to delete the product.');
-        }
+                return redirect()->route('admin.product')->with('error', 'Failed to delete the product.');
+            }
         }
 
         return redirect()->route('admin.product')->with('Notification', 'Product size has been removed');
