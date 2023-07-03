@@ -634,3 +634,11 @@ section{
     text-align: right;
     
 } 
+.select_city{
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    font-size: 15px;
+    text-transform: none;
+
+}

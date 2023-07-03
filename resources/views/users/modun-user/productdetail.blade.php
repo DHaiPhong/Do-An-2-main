@@ -54,9 +54,10 @@
                                     <div class="price" id="price-preview" quickbeam="price" quickbeam-price="800">
                                         @if ($prd->prd_sale != 0)
                                             <div style="display:flex">
-                                                <div style="display:flex">
-                                                    <p style="font-size: 1.5rem;text-decoration: line-through;">
-                                                        {{ number_format($prd->price) }} đ</p>
+
+                                                <div>
+                                                    <p style="font-size: 2.9rem;color:black"> Giá: <span style="font-size: 2.9rem;text-decoration: line-through; color:gray"> {{ number_format($prd->price) }} VND <span></p>
+
                                                 </div>
                                                 <div style="margin-left:10px">
                                                     <p style="font-size: 2.5rem; color: red;">
@@ -67,8 +68,10 @@
                                                     value="{{ ($prd->price / 100) * (100 - $prd->prd_sale) }}">
                                             </div>
                                         @else
-                                            <p style="color:red;font-size: 2.5rem;">{{ number_format($prd->price) }}
-                                                đ</p>
+
+                                            <p style="color:black;font-size: 2.9rem;"> Giá: <span style="color:red;font-size: 2.9rem;text-decoration:none">{{ number_format($prd->price) }} VND</span>
+                                                </p>
+
                                             <input type="hidden" name="price" value="{{ $prd->price }}">
                                         @endif
 
@@ -96,6 +99,7 @@
                                 <div id="boxo" style="height:50px;border-radius: 8px; text-align: center;">
                                     <p id="stock_message" style="display:none;font-size:18px;">Size này đã hết hàng</p>
                                 </div>
+
                                 <div class="btn-and-quantity-wrap">
                                     <button id="order_button" type="submit">Mua Ngay</button>
                                 </div>
