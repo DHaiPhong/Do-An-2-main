@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AddprdRequest;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\User;
@@ -129,13 +130,6 @@ class AdminController extends Controller
             ->select('products.prd_id', 'prd_img.prd_image')
             ->groupBy('products.prd_id');
 
-        $total = DB::table('products')
-            ->joinSub($temp, 'temp', function (JoinClause $join) {
-                $join->on('products.prd_id', '=', 'temp.prd_id');
-            })
-            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-            ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->count();
 
         $products = DB::table('products')
             ->joinSub($temp, 'temp', function (JoinClause $join) {
@@ -148,17 +142,18 @@ class AdminController extends Controller
                 'categories.name as category',
                 'temp.prd_image',
                 'product_details.prd_detail_id',
-                DB::raw('GROUP_CONCAT(product_details.prd_size, "(Số lượng: ", product_details.prd_amount, ", Đã bán: ", product_details.sold, ")") as prd_details')
+                DB::raw('GROUP_CONCAT(product_details.prd_size, "(Số lượng: ", product_details.prd_amount, ", Đã bán: ", product_details.sold, ")" ) as new_prd_details')
             )
             ->groupBy('products.prd_id')
             ->orderBy('product_details.prd_id')
             ->offset(0) // update this as needed for the current page
-            ->limit(8)
-            ->get();
+            
+            ->paginate(8)
+            ;
 
-        $paginator = new LengthAwarePaginator($products, $total, 8);
+        
 
-        return view('Admin.modun.product', ['products' => $products, 'paginator' => $paginator]);
+        return view('Admin.modun.product', ['products' => $products]);
     }
 
     function productorderby($id)
@@ -386,8 +381,39 @@ class AdminController extends Controller
     //---------------add prd---------------
 
     function prd_add(Request $request)
-    {
-        if ($request->newprd == null) {
+    {   
+        $rule = [
+            
+        ];
+    
+        // Define custom error messages
+        $message = [
+            
+            
+        ];
+    
+        // Validate the request data
+        $vali = $request->validate($rule, $message);
+        
+        if ($request->box === "uncheck") {
+            
+            $rules = [
+                'prd_id'   => 'not_in:0',
+                'prd_amount'        => 'required|integer|min:0',
+                'prd_size'   => 'not_in:0',
+            ];
+        
+            // Define custom error messages
+            $messages = [
+                
+                'prd_id.not_in'=> 'Chưa chọn sản phẩm để thêm',
+                'prd_amount'        => 'required|integer|min:0',
+                'prd_size.not_in'=> 'Chưa chọn Size để thêm',
+            ];
+        
+            // Validate the request data
+            $validatedData = $request->validate($rules, $messages);
+
             $check = DB::table('products')
                 ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
                 ->where('product_details.prd_size', $request->prd_size)
@@ -400,10 +426,37 @@ class AdminController extends Controller
             }
         } else {
 
-            $this->validate($request, [
-                'images' => 'required',
-                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-            ]);
+            
+            $rules = [
+                'newprd'      => 'required|max:255|unique:products,prd_name',
+                'prd_size'   => 'not_in:0',
+                'prd_price'         => 'required|numeric|min:0',
+                'category_id'   => 'not_in:0',
+                'prd_amount'        => 'required|integer|min:0',
+                'images'        => 'required',
+                'images.*'      => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'slug'          => 'required|max:255',
+                
+                
+            ];
+        
+            // Define custom error messages
+            $messages = [
+                'newprd.required' => 'Chưa nhập tên cho Sản phẩm',
+                'prd_price.required'    => 'Chưa nhập giá cho Sản phẩm',
+                'newprd.unique' => 'Tên sản phẩm đã được sử dụng',
+                'images.required'   => 'Sản phẩm chưa có ảnh',
+                'prd_amount.required'   => 'Chưa nhập số lượng cho sản phẩm',
+                'images.image'       => 'Dữ liệu tải lên phải là ảnh',
+                'images.mimes'       => 'Ảnh phải là kiểu dữ liệu sau: jpeg, png, jpg, gif, svg.',
+                'images.max'         => 'Kích thước ảnh không quá 2MB.',
+                'slug.required'     => 'Chưa có slug',
+                'category_id.not_in'=> 'Chưa chọn Danh mục cho sản phẩm',
+                'prd_size.not_in'=> 'Chưa chọn Size để thêm',
+            ];
+        
+            // Validate the request data
+            $validatedData = $request->validate($rules, $messages);
             $prd = [
 
                 'prd_name' => $request->newprd,
@@ -438,6 +491,8 @@ class AdminController extends Controller
             }
         }
 
+
+
         if ($request->newprd == null) {
             $prddetail = [
                 'prd_id' => $request->prd_id,
@@ -459,11 +514,28 @@ class AdminController extends Controller
 
     function addprdform()
     {
-        $products = DB::table('products')
-            ->get();
+        $temp = DB::table('products')
+        ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+        ->select('products.prd_id', 'prd_img.prd_image')
+        ->groupBy('products.prd_id');
+
+
+    $products = DB::table('products')
+        ->joinSub($temp, 'temp', function (JoinClause $join) {
+            $join->on('products.prd_id', '=', 'temp.prd_id');
+        })
+        
+        ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+        ->orderBy('product_details.prd_size', 'ASC')
+
+        ->select('temp.prd_image','products.*',DB::raw('GROUP_CONCAT(product_details.prd_size ) as new_size'))
+         
+        ->groupBy('products.prd_id')
+        ->get();
         $categories = DB::table('categories')
             ->get();
-
+        
+        
         return view('Admin/modun/addprd', compact(['products', 'categories']));
     }
 

@@ -28,11 +28,15 @@
                                 <img src="/anh/{{ $primg->prd_image }}" alt="" style="width:90px"
                                     class="featured-image-1" id="pic">
                             @endforeach
+                            
                         </div>
+                        
                         <button id="leftb" class="slide-left" onclick="next1()">&#8250;</button>
                         <button id="rightb" class="slide-right" onclick="pre1()">&#8249;</button>
+                        
+                        
                     </div>
-
+                        
 
 
                     <div class="big-image">

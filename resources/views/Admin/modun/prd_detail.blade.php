@@ -51,7 +51,7 @@
                     <div class="form-group">
                         <label for="exampleInputEmail1">Price</label>
                         <input type="number" name="prd_price" class="form-control" id="exampleInputEmail1"
-                            value="{{ $product-> price}}" step="1000" placeholder="" >
+                            value="{{ $product-> price}}"  placeholder="" >
                     </div>
                     <div class="form-group">
                     
