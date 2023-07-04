@@ -79,7 +79,31 @@
                             <div class="card-body">
                                 <h4 class="card-title">Danh Thu Theo Tháng</h4>
                                 <div>
-                                    <canvas id="myChart"></canvas>
+                                    <canvas id="totalChart"></canvas>
+                                </div>
+                                <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Số Lượng Sản Phẩm Đã Bán</h4>
+                                <div>
+                                    <canvas id="soldChart"></canvas>
+                                </div>
+                                <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Số Lượng Đơn Hàng</h4>
+                                <div>
+                                    <canvas id="ordersChart"></canvas>
                                 </div>
                                 <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left">
                                 </div>
@@ -121,10 +145,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
                     <div class="stretch-card">
                         <div class="card">
                             <div class="card-body">
@@ -136,8 +156,8 @@
                                                 <th> # </th>
                                                 <th> Tên </th>
                                                 <th> Hình Ảnh </th>
-                                                <th>Size</th>
-                                                <th> Còn Lại </th>
+                                                <th> Size </th>
+                                                <th> Còn </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -171,24 +191,30 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const ctx = document.getElementById('myChart');
-        fetch("{{ route('chart') }}")
-            .then(response => response.json())
-            .then(json => {
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: json.labels,
-                        datasets: json.datasets
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
+        const createChart = (elementId, route) => {
+            const ctx = document.getElementById(elementId);
+            fetch(route)
+                .then(response => response.json())
+                .then(json => {
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: json.labels,
+                            datasets: json.datasets
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
                             }
                         }
-                    }
-                });
-            })
+                    });
+                })
+        }
+
+        createChart('totalChart', "{{ route('totalChart') }}");
+        createChart('soldChart', "{{ route('soldChart') }}");
+        createChart('ordersChart', "{{ route('ordersChart') }}");
     </script>
 @endsection

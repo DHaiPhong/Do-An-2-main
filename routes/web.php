@@ -77,7 +77,9 @@ Route::get('/momo/success', [CheckoutController::class, 'momoSuccess'])->name('m
 //-------------------ADMIN------------------------
 Route::prefix('admin')->middleware('level')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/chart', [AdminController::class, 'chart'])->name('chart');
+    Route::get('/chart/totalChart', [AdminController::class, 'totalChart'])->name('totalChart');
+    Route::get('/chart/ordersChart', [AdminController::class, 'ordersChart'])->name('ordersChart');
+    Route::get('/chart/soldChart', [AdminController::class, 'soldChart'])->name('soldChart');
     Route::get('/getSoldCount', [AdminController::class, 'getSoldCount'])->name('getSoldCount');
     Route::resource('categories', CategoryController::class);
 

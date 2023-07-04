@@ -64,8 +64,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Giá</label>
-                                    <input type="number" name="prd_price" class="form-control" id="exampleInputEmail1"
+                                    <input type="text" name="prd_price" class="form-control" id="exampleInputEmail1"
                                         value="" placeholder="">
+
                                 </div>
                                 <div class="form-group">
                                     <label for="">Giảm (%)</label>
