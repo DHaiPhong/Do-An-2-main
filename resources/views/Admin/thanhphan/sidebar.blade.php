@@ -51,7 +51,7 @@
                     <a class="nav-link  " href="{{ route('admin.account') }}">
                         <i class="fas fa-fw fa-user "></i>
                         <p>
-                            Users
+                            Tài Khoản
                             <span class="badge badge-success right">
                                 <?php $count = DB::table('users')
                                     ->where('status', 0)
@@ -62,13 +62,12 @@
                     </a>
                 </li>
                 <li class="nav-header ">
-                    Manager
+                    Quản Lý
                 </li>
                 <li class="nav-item">
                     <a class="nav-link  " href="{{ route('admin.product') }}">
-                        <i class="fas fa-fw fa-lock "></i>
                         <p>
-                            Product
+                            Sản Phẩm
                             <span class="badge badge-success right">
                                 <?php $count = DB::table('products')->count();
                                 echo $count; ?>
@@ -80,7 +79,11 @@
                     <a class="nav-link  " href="{{ route('admin.order') }}">
                         <i class="fa-solid fa-ballot-check"></i>
                         <p>
-                            Check Order
+                            Đơn Hàng
+                            <span class="badge badge-success right">
+                                <?php $count = DB::table('orders')->count();
+                                echo $count; ?>
+                            </span>
                         </p>
                     </a>
                 </li>
@@ -102,9 +105,13 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link  " href="{{ route('categories.index') }}">
-                        <i class="fas fa-fw fa-lock "></i>
+                        <i class="fa-solid fa-circle-c"></i>
                         <p>
-                            Category
+                            Danh Mục
+                            <span class="badge badge-success right">
+                                <?php $count = DB::table('categories')->count();
+                                echo $count; ?>
+                            </span>
                         </p>
                     </a>
                 </li>

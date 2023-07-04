@@ -12,13 +12,12 @@
                 <div class="container" style="display: flex">
                     <select id="chon" onchange="myFunction()" class="form-select" style="float: right"
                         aria-label="Default select example">
-                        <option>Order By</option>
-                        <option>id</option>
-                        <option value="amount">Amount</option>
-                        <option value="sold">Sold</option>
-                        <option value="0">sold out</option>
+                        <option>Sort by</option>
+                        <option>Id</option>
+                        <option value="amount">Số lượng</option>
+                        <option value="sold">Số lượng đã bán</option>
                     </select>
-                    <a class="badge badge-success" style=" font-size: 20px; float: right"
+                    <a class="badge badge-success" style="margin-left: 1rem; font-size: 20px; float: right"
                         href="{{ route('admin.add_prd') }}">Thêm</a>
                 </div>
 
@@ -47,7 +46,7 @@
                         <tr>
                             <th style="width: 5%"> Id </th>
                             <th style="width: 16%"> Tên </th>
-                            <th style="width: 220px"> Image </th>
+                            <th style="width: 220px"> Hình Ảnh </th>
                             <th> Giá </th>
                             <th> Danh Mục</th>
                             <th> Size </th>
@@ -63,17 +62,24 @@
                                 <td> <img src="/anh/{{ $product->prd_image }}" style="height:120px"> </td>
                                 <td> {{ number_format($product->price) }}đ </td>
                                 <td> {{ $product->category }}</td>
+<!-- tu2/7
                                 <td>{{ $product->new_prd_details }}</td>
+ 
+
+-->
+                                <td>{!! $product->new_prd_details !!}</td>
+
                                 <td @if ($product->prd_sale > 0) style="color: red" @endif> {{ $product->prd_sale }}%
                                 </td>
-                                <td style=""><a
-                                        href="{{ route('admin.prd_detail', ['id' => $product->prd_detail_id]) }}">
+                                <td style="">
+                                    <a href="{{ route('admin.prd_detail', ['id' => $product->prd_detail_id]) }}">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true">
-                                        </i></td>
+                                        </i>
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
-
                 </table>
                {{ $products->links() }} 
             </div>

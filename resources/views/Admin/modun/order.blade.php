@@ -76,7 +76,7 @@
                                 </td>
                                 <td> {{ $order->phone_number }} </td>
                                 <td> {{ $order->item_count }} </td>
-                                <td> {{ $order->created_at }}</td>
+                                <td> {{ $order->updated_at }}</td>
                                 </td>
                                 <td style=""><a href="{{ route('admin.orderdetail', ['id' => $order->order_id]) }}">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true">

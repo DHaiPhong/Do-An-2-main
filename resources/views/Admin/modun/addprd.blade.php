@@ -65,8 +65,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Giá</label>
+
                                     <input type="number" name="prd_price" class="form-control" max="10000000" min="0" id="exampleInputEmail1"
+
                                         value="" placeholder="">
+
                                 </div>
                                 <div class="form-group">
                                     <label for="">Giảm (%)</label>

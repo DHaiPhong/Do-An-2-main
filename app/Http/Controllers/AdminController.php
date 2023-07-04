@@ -19,28 +19,37 @@ use PhpParser\Node\Stmt\Function_;
 class AdminController extends Controller
 {
     //dashboard
-    function dashboard()
+    function dashboard(Request $request)
     {
+        $month = $request->input('month', null);
+
         $sold = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->whereIn('status', ['pending', 'completed', 'processing'])
+            ->whereIn('status', ['completed'])
+            ->when($month, function ($query, $month) {
+                return $query->whereMonth('orders.created_at', $month);
+            })
             ->sum('quantity');
 
         $revenue = DB::table('orders')
-
             ->where('status', 'completed')
+            ->when($month, function ($query, $month) {
+                return $query->whereMonth('orders.created_at', $month);
+            })
             ->sum('grand_total');
 
         $orders = DB::table('orders')
-
-            ->whereIn('status', ['pending', 'completed', 'processing', 'shipping'])
+            ->whereIn('status', ['pending', 'completed', 'processing', 'shipping', 'cancel'])
+            ->when($month, function ($query, $month) {
+                return $query->whereMonth('orders.created_at', $month);
+            })
             ->count();
 
-            $temp = DB::table('products')
+        $temp = DB::table('products')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->select('products.prd_id', 'prd_img.prd_image')
             ->groupBy('products.prd_id');
-        
+
 
         $out_of_stocks = DB::table('products')
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
@@ -66,8 +75,95 @@ class AdminController extends Controller
         return view('Admin/modun/dashboard', ['sold' => $sold, 'revenue' => $revenue, 'out_of_stocks' => $out_of_stocks, 'orders' => $orders, 'sells' => $sells]);
     }
 
+    function soldChart(Request $request)
+    {
+        $entries =
+            DB::table('orders')
+            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->select([
+                DB::raw('MONTH(orders.created_at) as month'),
+                DB::raw('SUM(order_items.quantity) as quantity'),
+            ])
+            ->whereYear('orders.created_at', 2023)
+            ->whereIn('orders.status', ['completed'])
+            ->groupBy([
+                'month'
+            ])
+            ->orderBy('month')
+            ->get();
 
-    function chart(Request $request)
+        $labels = [
+            1 => 'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
+        ];
+        //        $dataset = [];
+        $sold = [];
+        foreach ($entries as $entry) {
+            $sold[$entry->month] = $entry->quantity;
+        }
+        foreach ($labels as $month => $name) {
+            if (!array_key_exists($month, $sold)) {
+                $sold[$month] = 0;
+            }
+        }
+        ksort($sold);
+
+        return [
+            'labels' => array_values($labels),
+            'datasets' => [
+                [
+                    'label' => 'Sản phẩm đã bán',
+                    'borderWidth' => 1,
+                    'data' => array_values($sold),
+                ],
+            ]
+        ];
+    }
+
+    function ordersChart(Request $request)
+    {
+        $entries =
+            DB::table('orders')
+            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->select([
+                DB::raw('MONTH(orders.created_at) as month'),
+                DB::raw('SUM(order_items.quantity) as quantity'),
+            ])
+            ->whereYear('orders.created_at', 2023)
+            ->whereIn('orders.status', ['pending', 'completed', 'processing', 'shipping'])
+            ->groupBy([
+                'month'
+            ])
+            ->orderBy('month')
+            ->get();
+
+        $labels = [
+            1 => 'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
+        ];
+        //        $dataset = [];
+        $orders = [];
+        foreach ($entries as $entry) {
+            $orders[$entry->month] = $entry->quantity;
+        }
+        foreach ($labels as $month => $name) {
+            if (!array_key_exists($month, $orders)) {
+                $orders[$month] = 0;
+            }
+        }
+        ksort($orders);
+
+        return [
+            'labels' => array_values($labels),
+            'datasets' => [
+                [
+                    'label' => 'Đơn Hàng',
+                    'borderWidth' => 1,
+                    'data' => array_values($orders),
+                ],
+            ]
+        ];
+    }
+
+    function totalChart(Request $request)
     {
         $entries = Order::select([
             DB::raw('MONTH(created_at) as month'),
@@ -83,7 +179,7 @@ class AdminController extends Controller
             ->orderBy('month')
             ->get();
         $labels = [
-            1 => 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+            1 => 'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
         ];
         //        $dataset = [];
         $grand_total = [];
@@ -104,11 +200,9 @@ class AdminController extends Controller
             'labels' => array_values($labels),
             'datasets' => [
                 [
-                    'label' => 'Revenue(vnd)',
+                    'label' => 'Doanh Thu(đ)',
                     'borderWidth' => 1,
                     'data' => array_values($grand_total),
-
-
                 ],
             ]
         ];
@@ -130,7 +224,6 @@ class AdminController extends Controller
             ->select('products.prd_id', 'prd_img.prd_image')
             ->groupBy('products.prd_id');
 
-
         $products = DB::table('products')
             ->joinSub($temp, 'temp', function (JoinClause $join) {
                 $join->on('products.prd_id', '=', 'temp.prd_id');
@@ -142,18 +235,30 @@ class AdminController extends Controller
                 'categories.name as category',
                 'temp.prd_image',
                 'product_details.prd_detail_id',
-                DB::raw('GROUP_CONCAT(product_details.prd_size, "(Số lượng: ", product_details.prd_amount, ", Đã bán: ", product_details.sold, ")" ) as new_prd_details')
+
+                DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
             )
             ->groupBy('products.prd_id')
             ->orderBy('product_details.prd_id')
-            ->offset(0) // update this as needed for the current page
-            
-            ->paginate(8)
-            ;
-
-        
+            ->paginate(5);
 
         return view('Admin.modun.product', ['products' => $products]);
+    }
+
+    public function search(Request $request, $model)
+    {
+        $model = '\\App\\' . ucwords($model);  // Dynamic Model Class Name
+        $searchFields = explode(',', $request->get('fields'));  // Comma separated fields
+        $query = $request->get('query');
+
+        $results = $model::where(function ($queryBuilder) use ($query, $searchFields) {
+            foreach ($searchFields as $field) {
+                $queryBuilder->orWhere($field, 'LIKE', '%' . $query . '%');
+            }
+        })->get();
+
+        return response()->json(['results' => $results]);
+
     }
 
     function productorderby($id)
@@ -344,27 +449,27 @@ class AdminController extends Controller
         if ($check == null) {
             DB::beginTransaction();
 
-        try {
-            // delete product details
-            DB::table('product_details')->where('prd_id', $id)->delete();
+            try {
+                // delete product details
+                DB::table('product_details')->where('prd_id', $id)->delete();
 
-            // delete product images
-            DB::table('prd_img')->where('prd_id', $id)->delete();
+                // delete product images
+                DB::table('prd_img')->where('prd_id', $id)->delete();
 
-            // delete the product
-            DB::table('products')->where('prd_id', $id)->delete();
+                // delete the product
+                DB::table('products')->where('prd_id', $id)->delete();
 
-            // commit the transaction
-            DB::commit();
+                // commit the transaction
+                DB::commit();
 
-            return redirect()->route('admin.product')->with('message', 'Product has been deleted successfully.');
-        } catch (\Exception $e) {
-            // something went wrong
-            // rollback the transaction
-            DB::rollback();
+                return redirect()->route('admin.product')->with('message', 'Product has been deleted successfully.');
+            } catch (\Exception $e) {
+                // something went wrong
+                // rollback the transaction
+                DB::rollback();
 
-            return redirect()->route('admin.product')->with('error', 'Failed to delete the product.');
-        }
+                return redirect()->route('admin.product')->with('error', 'Failed to delete the product.');
+            }
         }
 
         return redirect()->route('admin.product')->with('Notification', 'Product size has been removed');
@@ -546,7 +651,7 @@ class AdminController extends Controller
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->groupBy('orders.id')
             ->orderByDesc('orders.id')
-            ->paginate(6);
+            ->paginate(9);
         return view('Admin.modun.order', compact('orders'));
     }
 
