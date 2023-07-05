@@ -72,6 +72,24 @@
 
 
 
+ <!-- tu2/7
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Price</label>
+                        <input type="number" name="prd_price" class="form-control" id="exampleInputEmail1"
+                            value="{{ $product-> price}}"  placeholder="" >
+                    </div>
+                    <div class="form-group">
+                    
+                        <label for="exampleInputPassword1">Amount</label>
+                        <input type="number" name="prd_amount" class="form-control" id="exampleInputPassword1"
+                            value="{{ $product-> prd_amount}}" placeholder="">
+                    </div>
+                    <div class="form-group">
+                       
+
+-->
+                        
+
                     </div>
                 </div>
 

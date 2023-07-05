@@ -1147,11 +1147,11 @@ header{
   flex: 1 1 50rem;
 
   position: relative;
-  overflow: hidden;
+  
 
 }
 .featured .row .image-container .small-image{
-  width: 100%;
+  width: 90px;
   display: flex;
   height: wrap-content;
   flex-wrap: wrap;
@@ -3510,8 +3510,8 @@ input.boxcolor{
   position: absolute;
     z-index: 1;
     top: -15px;
-    left: 36%;
-    background-color: rgb(215 215 215 / 40%);
+    left: 39%;
+    background-color: rgba(0, 0, 0, 0.4);
     border: none;
     cursor: pointer;
     font-size: 34px;
@@ -3519,17 +3519,18 @@ input.boxcolor{
     padding-bottom: 22px;
     padding-top: 17px;
     opacity: 1;
-    color: black;
+    color: rgb(255, 255, 255);
     transition: opacity 0.3s ease;
     transform: rotate(90deg);
+    
 
 }
 .slide-left {
   position: absolute;
     z-index: 1;
     bottom: -15px;
-    left: 36%;
-    background-color: rgb(215 215 215 / 40%);
+    left: 39%;
+    background-color: rgba(0, 0, 0, 0.4);
     border: none;
     cursor: pointer;
     font-size: 34px;
@@ -3537,7 +3538,7 @@ input.boxcolor{
     padding-bottom: 22px;
     padding-top: 17px;
     opacity: 1;
-    color: black;
+    color: rgb(255, 255, 255);
     transition: opacity 0.3s ease;
     transform: rotate(90deg);
 
@@ -3545,13 +3546,13 @@ input.boxcolor{
 
 .slide-left:hover,
 .slide-right:hover {
-  background-color: #33333393;
+  color: yellow;
 }
 .boxx{
-  width: 20%;
+  
   height: 450px;
   position: relative;
-  
+  overflow: hidden;
 }
 
 
