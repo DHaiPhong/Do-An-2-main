@@ -224,6 +224,13 @@ class AdminController extends Controller
             ->select('products.prd_id', 'prd_img.prd_image')
             ->groupBy('products.prd_id');
 
+        $total = DB::table('products')
+            ->joinSub($temp, 'temp', function (JoinClause $join) {
+                $join->on('products.prd_id', '=', 'temp.prd_id');
+            })
+            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->count();    
         $products = DB::table('products')
             ->joinSub($temp, 'temp', function (JoinClause $join) {
                 $join->on('products.prd_id', '=', 'temp.prd_id');
