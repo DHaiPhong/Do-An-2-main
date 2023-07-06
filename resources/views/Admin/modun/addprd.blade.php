@@ -95,7 +95,7 @@
                                 <select class="product" id="example FormControlSelect2" name="prd_id">
                                     <option value="0" hidden >chọn </option>
                                     @foreach ($products as $product)
-                                        <option value="{{ $product->prd_id }}" data-size="{{$product->new_size}}"data-image-url="{{ $product->prd_image }}">{{ $product->prd_name }}</option>
+                                        <option value="{{ $product->prd_id }}" data-size="{{$product->new_size}}"data-image-url="{{ $product->prd_image }}"> {{ $product->prd_name }}</option>
                                     @endforeach
                                 </select>
                                 <img style="width:200px;padding-top:20px" id="productImage" src="/anh/noimg.jpg" alt="Product Image">
@@ -122,8 +122,9 @@
                                 <option value="39">39</option>
                                 <option value="40">40</option>
                                 <option value="41">41</option>
-                                <option disabled value="42">42</option>
+                                <option value="42">42</option>
                                 <option value="43">43</option>
+                                <option value="44">44</option>
                             </select>
                         </div>
                         <div class="">
@@ -223,7 +224,7 @@ $(document).ready(function() {
         $('.sosize option').each(function() {
             $(this).show();
         });
-        for (var i = 38; i < 44; i++) {
+        for (var i = 38; i < 45; i++) {
             $('.sosize option[value="' + i + '"]').prop('disabled', false);
             $('.sosize option[value="' + i + '"]').css('background', 'white');
             $('.sosize option:eq(0)').prop('selected', true);

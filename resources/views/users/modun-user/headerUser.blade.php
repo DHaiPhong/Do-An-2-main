@@ -33,9 +33,9 @@
         <div class="icons">
             <div>
                 <div class="container">
-                    <div class="row">
-                        <div class="col-sm" style="margin-top: 1rem;margin-right:15px; margin-left: 15px">
-                            <a style="font-size: 2rem; background:none"
+                    <div class="row" style="flex-wrap:nowrap;">
+                        <div class="col-sm" style="margin-top: 1rem; margin-right:15px; margin-left: 15px;display: contents;">
+                            <a style="font-size: 2rem; margin-top: 1rem; background:none;text-wrap: nowrap;"
                                 href="{{ route('users.cartshop') }}">{{ Cart::count() }}<i
                                     class="fa fa-shopping-cart"></i></a>
 
@@ -94,7 +94,7 @@
 
                             let prdImage = document.createElement('img');
                             prdImage.classList.add('suggestion-img');
-                            prdImage.src = 'anh/' + item.prd_image;
+                            prdImage.src = '/anh/' + item.prd_image;
                             suggestionItem.appendChild(prdImage);
 
                             let prdName = document.createElement('p');

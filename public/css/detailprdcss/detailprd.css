@@ -3581,6 +3581,7 @@ input.boxcolor{
 .product a, .product p {
   margin: 0;
   text-align: center;
+  font-weight: 600;
 }
 
 .product a {

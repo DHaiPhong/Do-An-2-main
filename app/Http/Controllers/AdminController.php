@@ -638,7 +638,9 @@ class AdminController extends Controller
         })
         
         ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+        ->orderBy('products.prd_name',"asc")
         ->orderBy('product_details.prd_size', 'ASC')
+        
 
         ->select('temp.prd_image','products.*',DB::raw('GROUP_CONCAT(product_details.prd_size ) as new_size'))
          

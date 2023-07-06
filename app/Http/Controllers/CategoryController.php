@@ -102,7 +102,6 @@ class CategoryController extends Controller
         $category = Category::find($id);
         $category->name = $request->input('name');
         $category->parent_id = $request->input('parent_id');
-        $category->description = $request->input('description');
         $category->save();
 
         return redirect()->route('categories.index')->with('success', 'Cập nhật Danh Mục thành công');

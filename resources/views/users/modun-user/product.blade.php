@@ -4,15 +4,15 @@
 @stop
 @section('content')
     <section class="main-content" style="margin-top: 5%; font-size: 1.5rem">
-        <h1 style="    text-align: center"> Sản Phẩm</h1>
+        <h1 style="  padding-left:25%;  text-align: center"> {{$cat}}</h1>
         <div class="row">
-            <div class="col-md-4">
-                <div class='rowprd' style="margin-right: 10rem">
+            <div class="col-md-3">
+                <div class='rowprd' style="margin-right: 10rem; position:sticky; top:110px">
                     <ul class="mcd-menu">
                         <ul class="parent-list">
                             <li>
                                 <a href="" style="pointer-events: none;">
-                                    <strong>Danh Mục</strong>
+                                    <strong style="">Danh Mục </strong>
                                 </a>
                             </li>
                             @if (isset($categories))
@@ -50,7 +50,7 @@
                         </ul>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="rowprd" style="float: left">
                     <table>
                         <tbody>
