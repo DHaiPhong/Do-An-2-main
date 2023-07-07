@@ -56,7 +56,8 @@
     </section>
     <!--end product-->
     <section class="featured" id="fearured">
-        <h1 class="heading">New <span>Product</span></h1>
+        <h1 class="heading">Sản Phẩm <span>HOT</span></h1>
+        @foreach($products as $product)
         <div class="row">
             <div class="image-container">
                 <div class="small-image">
@@ -71,19 +72,15 @@
             </div>
             <div class="content">
                 <h3>New Nike Alphafly 2</h3>
-                <p>
-                    Once you take a few strides in the Nike Alphafly 2, you'll never look at your favourite pair of old
-                    racing shoes in the same way. These rocket ships are made to help shave precious time off your personal
-                    records without surrendering the foundation you need to go the full distance. A thick, lightweight
-                    support system brings comfort and speed together so you can enjoy our greatest energy return while you
-                    chase your personal bests.
-                </p>
+                
                 <div class="price"> Price: 8.369.000VND <span></span></div>
-                <a href="{{ route('users.productdetail', ['id' => 16]) }}" class="btn">Add To Cart</a>
+                <a href="{{ route('users.productdetail', ['id' => 16]) }}" class="btn">Mua</a>
             </div>
         </div>
+        @endforeach
+        
 
-        </div>
+        
     </section>
     <!--end featured-->
 

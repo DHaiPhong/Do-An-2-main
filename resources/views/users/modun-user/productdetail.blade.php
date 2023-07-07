@@ -33,30 +33,36 @@
 
                     <button id="leftb" class="slide-left" onclick="next1()">&#8250;</button>
                     <button id="rightb" class="slide-right" onclick="pre1()">&#8249;</button>
+                </div>
 
-                                                <div>
-                                                    <p style="font-size: 2.9rem;color:black"> Giá: <span
-                                                            style="font-size: 2.9rem;text-decoration: line-through; color:gray">
-                                                            {{ number_format($prd->price) }} VND <span></p>
 
-                                                </div>
-                                                <div style="margin-left:10px">
-                                                    <p style="font-size: 2.5rem; color: red;">
-                                                        {{ number_format(($prd->price / 100) * (100 - $prd->prd_sale)) }}
-                                                        đ</p>
-                                                </div>
-                                                <input type="hidden" name="price"
-                                                    value="{{ ($prd->price / 100) * (100 - $prd->prd_sale) }}">
-                                            </div>
-                                        @else
-                                            <p style="color:black;font-size: 2.9rem;"> Giá: <span
-                                                    style="color:red;font-size: 2.9rem;text-decoration:none">{{ number_format($prd->price) }}
-                                                    VND</span>
-                                            </p>
 
-                                            <input type="hidden" name="price" value="{{ $prd->price }}">
-                                        @endif
-                                        <p>Lượt xem: {{ $prd->views }}</p>
+                <div class="big-image">
+                    <img src="/anh/{{ $primg->prd_image }}" alt="" class="big-image-1">
+                </div>
+            </div>
+            <div class="content">
+
+                <!-- ------------------------------------ -->
+                <div class="right-col">
+                    <h1 style="font-size:33px" itemprop="name">{{ $prd->prd_name }}</h1>
+
+                    <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                        <meta itemprop="priceCurrency" content="USD">
+                        <link itemprop="availability" href="http://schema.org/InStock">
+                        <form method="post" action="{{ route('cart.add') }}">
+                            @csrf
+                            <div class="price-shipping">
+                                <div class="price" id="price-preview" quickbeam="price" quickbeam-price="800">
+
+                                    @if ($prd->prd_sale != 0)
+                                    <div style="display:flex">
+
+
+                                        <div>
+                                            <p style="font-size: 2.9rem;color:black"> Giá: <span
+                                                    style="font-size: 2.9rem;text-decoration: line-through; color:gray">
+                                                    {{ number_format($prd->price) }} VND <span></p>
 
                                         </div>
                                         <div style="margin-left:10px">
@@ -68,7 +74,6 @@
                                             value="{{ ($prd->price / 100) * (100 - $prd->prd_sale) }}">
                                     </div>
                                     @else
-
                                     <p style="color:black;font-size: 2.9rem;"> Giá: <span
                                             style="color:red;font-size: 2.9rem;text-decoration:none">{{ number_format($prd->price) }}
                                             VND</span>
@@ -76,6 +81,9 @@
 
                                     <input type="hidden" name="price" value="{{ $prd->price }}">
                                     @endif
+                                    <p>Lượt xem: {{ $prd->views }}</p>
+
+
 
                                 </div>
                             </div>
@@ -265,31 +273,37 @@
     </div>
     <div class="d-flex justify-content-center">
         @foreach ($otherprd as $oprd)
-        <div class="product" style="max-width:21em"><a href="{{ route('users.productdetail', ['id' => $oprd->prd_id]) }}">
-        @if ($oprd->prd_sale != 0)
-                                                <div>
-                                                    <!-- <img src="/anh/sale-tag-icon.png" style="width: 38px;position: absolute;right: 0px; top:0px;"> -->
+        <div class="product" style="max-width:21em"><a
+                href="{{ route('users.productdetail', ['id' => $oprd->prd_id]) }}">
+                @if ($oprd->prd_sale != 0)
+                <div>
+                    <!-- <img src="/anh/sale-tag-icon.png" style="width: 38px;position: absolute;right: 0px; top:0px;"> -->
 
-                                                    <p
-                                                        style="padding-left:2px;background-color:red;position: absolute; left: 8px ; top: 18px;font-size:12px;bottom:unset; font-weight:600;color:white;">
-                                                        SALE {{ $oprd->prd_sale }}%</p>
-                                                </div>
-                                            @endif
+                    <p
+                        style="padding-left:2px;background-color:red;position: absolute; left: 8px ; top: 18px;font-size:12px;bottom:unset; font-weight:600;color:white;">
+                        SALE {{ $oprd->prd_sale }}%</p>
+                </div>
+                @endif
                 <img src="/anh/{{ $oprd->prd_image }}" alt="Product 1">
-                <a style="font-size:16px;line-height: 1.1;" href="{{ route('users.productdetail', ['id' => $oprd->prd_id]) }}">{{ $oprd->prd_name }} </a>
+                <a style="font-size:16px;line-height: 1.1;"
+                    href="{{ route('users.productdetail', ['id' => $oprd->prd_id]) }}">{{ $oprd->prd_name }} </a>
                 <div style=" height: 30px"></div>
                 @if ($oprd->prd_sale != 0)
-                                                <div style="text-wrap: nowrap;">
-                                                    
-                             <p style="color:gray;margin-bottom: 0;text-decoration: line-through;font-size:15px;position: absolute; left: 12px;">{{ number_format($oprd->price) }}đ<span style="margin-left: 10px; margin-bottom: 0;color: red;font-size:15px;">{{ number_format(($oprd->price / 100) * (100 - $oprd->prd_sale)) }}đ</span></p>
-                             
-                                                   
-                                                </div>
-                                            @else
-                                                <p style="color:red;margin-bottom: 0;font-size:15px;">
-                                                    {{ number_format($oprd->price) }} đ
-                                                </p>
-                                            @endif
+                <div style="text-wrap: nowrap;">
+
+                    <p
+                        style="color:gray;margin-bottom: 0;text-decoration: line-through;font-size:15px;position: absolute; left: 12px;">
+                        {{ number_format($oprd->price) }}đ<span
+                            style="margin-left: 10px; margin-bottom: 0;color: red;font-size:15px;">{{ number_format(($oprd->price / 100) * (100 - $oprd->prd_sale)) }}đ</span>
+                    </p>
+
+
+                </div>
+                @else
+                <p style="color:red;margin-bottom: 0;font-size:15px;">
+                    {{ number_format($oprd->price) }} đ
+                </p>
+                @endif
             </a>
         </div>
         @endforeach
