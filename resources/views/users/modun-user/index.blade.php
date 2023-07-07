@@ -57,7 +57,7 @@
     <!--end product-->
     <section class="featured" id="fearured">
         <h1 class="heading">Sản Phẩm <span>HOT</span></h1>
-        @foreach($products as $product)
+        <!-- foreach($products as $product)
         <div class="row">
             <div class="image-container">
                 <div class="small-image">
@@ -77,7 +77,7 @@
                 <a href="{{ route('users.productdetail', ['id' => 16]) }}" class="btn">Mua</a>
             </div>
         </div>
-        @endforeach
+        endforeach -->
         
 
         
