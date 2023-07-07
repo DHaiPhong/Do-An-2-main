@@ -110,6 +110,10 @@
                 style="background-color: #f85766;">Xóa Sản Phẩm</button>
         </div>
     </div>
+
+@stop
+
+@section('js')
     <script>
         function myalert(id) {
 
@@ -166,4 +170,4 @@
             }
         }
     </script>
-@stop
+@endsection

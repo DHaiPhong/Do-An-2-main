@@ -10,6 +10,18 @@ use Encore\Admin\Layout\Row;
 
 class HomeController extends Controller
 {
+    public function roleTestAdmin()
+    {
+        return view('home', ['msg' => 'Đây là Admin']);
+    }
+    public function roleTestEditor()
+    {
+        return view('home', ["msg" => "Đây là Editor"]);
+    }
+    public function roleTestUser()
+    {
+        return view('home', ["msg" => "Đây là User"]);
+    }
     public function index(Content $content)
     {
         return $content

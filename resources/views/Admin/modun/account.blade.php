@@ -16,7 +16,7 @@
                         <th>Email</th>
                         <th>Địa Chỉ</th>
                         <th>Số Điện Thoại</th>
-                        <th>Level</th>
+                        <th>Role</th>
                         <th>Sửa</th>
                     </tr>
                 </thead>
@@ -31,15 +31,17 @@
                                 <td>{{ $user->address }}</td>
                                 <td>{{ $user->phone }}</td>
                                 <td>
-                                    @if ($user->level == 1)
+                                    @if ($user->role == 2)
                                         <p class="badge badge-danger">Admin</p>
+                                    @elseif ($user->role == 1)
+                                        <p class="badge badge-warning">Editor</p>
                                     @else
                                         <p class="badge badge-success">Người Dùng</p>
                                     @endif
                                 </td>
-                                <td style="padding-left: 48px"><a
+                                <td style="padding-left: 48px"><a class="check-permission"
                                         href="{{ route('account.detail', ['id' => $user->id]) }}"><i
-                                            class="fa fa-pencil-square-o" aria-hidden="true" width="50px"></i></td>
+                                            class="fa fa-pencil-square-o " aria-hidden="true" width="50px"></i></td>
 
                             </tr>
                         @endif
@@ -67,6 +69,28 @@
                     $("#no-results").hide();
                 }
             });
+        });
+    </script>
+    <script>
+        var userRole = "{{ Auth::user()->role }}"; // get the user's role
+
+        $(document).ready(function() {
+            // all buttons and a tags that need permission checking
+            var elements = document.querySelectorAll("a.check-permission");
+
+            for (var i = 0; i < elements.length; i++) {
+                // Ensure the click event is only attached once
+                if (!elements[i].hasAttribute('data-click-bound')) {
+                    elements[i].addEventListener("click", function(e) {
+                        // check editor's permission
+                        if (userRole == "editor") {
+                            e.preventDefault();
+                            alert("Bạn không có quyền thực hiện chức năng này");
+                        }
+                    });
+                    elements[i].setAttribute('data-click-bound', 'true');
+                }
+            }
         });
     </script>
 @endsection

@@ -110,7 +110,7 @@ class AdminController extends Controller
             'labels' => array_values($labels),
             'datasets' => [
                 [
-                    'label' => 'Sản phẩm đã bán',
+                    'label' => 'Đơn Hàng Đã Hoàn Thành',
                     'borderWidth' => 1,
                     'data' => array_values($sold),
                 ],
@@ -639,6 +639,14 @@ class AdminController extends Controller
             DB::table('orders')
                 ->where('id', $id)
                 ->update(['status' => 'completed']);
+            $order_items = DB::table('order_items')->where('order_id', $id)->get();
+            foreach ($order_items as $item) {
+                $product = DB::table('product_details')->where('prd_detail_id', $item->product_id)->first();
+                $sold = $product->sold;
+                DB::table('product_details')
+                    ->where('prd_detail_id', $item->product_id)
+                    ->update(['sold' => $sold + $item->quantity]);
+            }
         }
 
         return redirect()->route('admin.order')->with('success', 'Cập nhật trạng thái thành công');

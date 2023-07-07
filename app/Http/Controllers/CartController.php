@@ -59,7 +59,7 @@ class CartController extends Controller
             return redirect()->route('login');
         }
         $data = Cart::count();
-        if ( $data == 0  ){
+        if ($data == 0) {
             return redirect()->route('home1');
         }
 
@@ -92,9 +92,9 @@ class CartController extends Controller
             DB::table('product_details')
                 ->where('prd_detail_id', $item->id)
                 ->update(['prd_amount' =>  $product - $item->qty]);
-            DB::table('product_details')
-                ->where('prd_detail_id', $item->id)
-                ->update(['sold' => $sold + $item->qty]);
+            // DB::table('product_details')
+            //     ->where('prd_detail_id', $item->id)
+            //     ->update(['sold' => $sold + $item->qty]);
         }
 
         Cart::destroy();

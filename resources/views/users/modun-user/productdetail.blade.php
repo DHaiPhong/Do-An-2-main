@@ -56,7 +56,9 @@
                                             <div style="display:flex">
 
                                                 <div>
-                                                    <p style="font-size: 2.9rem;color:black"> Giá: <span style="font-size: 2.9rem;text-decoration: line-through; color:gray"> {{ number_format($prd->price) }} VND <span></p>
+                                                    <p style="font-size: 2.9rem;color:black"> Giá: <span
+                                                            style="font-size: 2.9rem;text-decoration: line-through; color:gray">
+                                                            {{ number_format($prd->price) }} VND <span></p>
 
                                                 </div>
                                                 <div style="margin-left:10px">
@@ -68,12 +70,14 @@
                                                     value="{{ ($prd->price / 100) * (100 - $prd->prd_sale) }}">
                                             </div>
                                         @else
-
-                                            <p style="color:black;font-size: 2.9rem;"> Giá: <span style="color:red;font-size: 2.9rem;text-decoration:none">{{ number_format($prd->price) }} VND</span>
-                                                </p>
+                                            <p style="color:black;font-size: 2.9rem;"> Giá: <span
+                                                    style="color:red;font-size: 2.9rem;text-decoration:none">{{ number_format($prd->price) }}
+                                                    VND</span>
+                                            </p>
 
                                             <input type="hidden" name="price" value="{{ $prd->price }}">
                                         @endif
+                                        <p>Lượt xem: {{ $prd->views }}</p>
 
                                     </div>
                                 </div>

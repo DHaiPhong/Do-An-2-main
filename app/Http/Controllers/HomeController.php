@@ -21,13 +21,12 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function errorPermission()
     {
-        return view('users.modun-user.home');
+        return view('home', ['error' => 'Bạn không có quyền truy cập vào trang này']);
     }
     public function adminhome()
     {
         return view('Admin.modun.dashboard');
     }
-  
 }

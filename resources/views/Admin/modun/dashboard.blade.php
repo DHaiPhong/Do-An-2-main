@@ -89,7 +89,7 @@
                     <div class="stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Số Lượng Sản Phẩm Đã Bán</h4>
+                                <h4 class="card-title">Đã Bán</h4>
                                 <div>
                                     <canvas id="soldChart"></canvas>
                                 </div>
