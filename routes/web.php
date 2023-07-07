@@ -154,3 +154,5 @@ Route::get('search', [userController::class, 'searchproduct']);
 
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/suggestions', [SearchController::class, 'suggestions']);
+
+Route::get('/api/products', [AdminController::class, 'loadMoreProducts']);

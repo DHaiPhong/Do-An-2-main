@@ -37,11 +37,11 @@
                 @endif
                 <div id="filter" style="display: flex; margin-top: 1rem; margin-bottom: 1rem; ">
                     <h4 style="margin-right: 1rem">Tìm Kiếm</h4>
-                    <input type="text" id="search-box" onkeyup="searchFunction()">
+                    <input type="text" id="search-box" >
                 </div>
                 <h3 id="no-results" style="display: none; color:red; margin-top: 1rem">Không có kết quả liên quan</h3>
 
-                <table class="table table-bordered">
+                <table id="productTable" class="table table-bordered">
                     <thead>
                         <tr>
                             <th style="width: 5%"> Id </th>
@@ -54,7 +54,7 @@
                             <th> Sửa </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="productTableBody">
                         @foreach ($products as $key => $product)
                             <tr>
                                 <td>{{ ++$key }}</td>
@@ -93,22 +93,102 @@
         }
     </script>
     <script>
-        $(document).ready(function() {
-            $("#search-box").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
+        var hasFetchedData = false;
 
-                var visibleRows = $("table tbody tr").filter(function() {
-                    var match = $(this).text().toLowerCase().indexOf(value) > -1;
-                    $(this).toggle(match);
-                    return match;
-                }).length;
+        function fetchData() {
+            if (!hasFetchedData) {
+var row
+  // Make the AJAX request to fetch the data
+  $.ajax({
+    url: '/api/products',
+    type: 'GET',
+    success: function(response) {
+      // Hide the loading message
+      
+      $('#productTableBody').hide();
 
-                if (visibleRows === 0) {
-                    $("#no-results").show();
-                } else {
-                    $("#no-results").hide();
-                }
-            });
-        });
+      // Clear any existing rows in the table body
+      
+
+      // Iterate over the fetched data and filter based on search input
+      var a = 0;
+      response.forEach(function(product) {
+        // Check if the product matches the search input
+          row = '<tr class="temp" >' +
+                    '<td>' + ++a + '</td>' +
+                    '<td>' + product.prd_name + '</td>' +
+                    '<td><img src="/anh/' + product.prd_image + '" style="height:120px"></td>' +
+                    '<td>' + product.price + 'đ</td>' +
+                    '<td>' + product.category + '</td>' +
+                    '<td>' + product.new_prd_details + '</td>' +
+                    
+                    '<td';
+
+          if (product.prd_sale > 0) {
+            row += ' style="color: red"';
+          }
+
+          row += '>' + product.prd_sale + '%</td>' +
+                 '<td>' +
+                 '<a href="http://127.0.0.1:8000/admin/product/modify/' + product.prd_detail_id + '">' +
+                 '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
+                 '</a>' +
+                 '</td>' +
+                 '</tr>';
+
+          // Append the row to the table body
+          $('#productTableBody').append(row);
+          $(".temp").hide();
+          $('#productTableBody').show();
+        
+      });
+    },
+    error: function(error) {
+      console.log(error); // Output any errors that occurred during the request
+    }
+  });
+  hasFetchedData = true;
+  }
+}     
+
+
+      $("#search-box").on("keyup", function() {
+          fetchData()
+       
+         var value = $(this).val().toLowerCase();
+          $(".pagination").show();
+          
+          var visibleRows = $("table tbody tr").filter(function() {
+            
+            var match = $(this).text().toLowerCase().indexOf(value) > -1;
+            $(this).toggle(match);
+            
+            return match;
+          }).length;
+
+          if (visibleRows === 0) {
+            $("#no-results").show();
+            $('#productTableBody').show();
+            $(".pagination").show();
+          }else if(value === ""){
+            $("#no-results").hide();
+            $(".temp").hide();
+            $('#productTableBody').show();
+          }
+           else {
+            $("#no-results").hide();
+            $(".pagination").hide();
+            
+          }
+ }); 
+ 
+ 
+
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+
+    </script>
+
 @endsection
