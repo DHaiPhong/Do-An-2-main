@@ -43,6 +43,7 @@ return array(
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
     'App\\Http\\Middleware\\level' => $baseDir . '/app/Http/Middleware/level.php',
     'App\\Http\\Requests\\AddCartRequest' => $baseDir . '/app/Http/Requests/AddCartRequest.php',
+    'App\\Http\\Requests\\AddprdRequest' => $baseDir . '/app/Http/Requests/AddprdRequest.php',
     'App\\Http\\Requests\\CreateBlogCategoryRequest' => $baseDir . '/app/Http/Requests/CreateBlogCategoryRequest.php',
     'App\\Http\\Requests\\LoginRequest' => $baseDir . '/app/Http/Requests/LoginRequest.php',
     'App\\Http\\Requests\\PaymentRequest' => $baseDir . '/app/Http/Requests/PaymentRequest.php',

@@ -597,6 +597,7 @@ class ComposerStaticInit8c65a85c2b108da553ff7fb6f55a2899
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Middleware\\level' => __DIR__ . '/../..' . '/app/Http/Middleware/level.php',
         'App\\Http\\Requests\\AddCartRequest' => __DIR__ . '/../..' . '/app/Http/Requests/AddCartRequest.php',
+        'App\\Http\\Requests\\AddprdRequest' => __DIR__ . '/../..' . '/app/Http/Requests/AddprdRequest.php',
         'App\\Http\\Requests\\CreateBlogCategoryRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CreateBlogCategoryRequest.php',
         'App\\Http\\Requests\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/LoginRequest.php',
         'App\\Http\\Requests\\PaymentRequest' => __DIR__ . '/../..' . '/app/Http/Requests/PaymentRequest.php',

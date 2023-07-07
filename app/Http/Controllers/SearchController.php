@@ -45,7 +45,7 @@ class SearchController extends Controller
             ->paginate(12);
         $categories = $this->getCategoriesWithSub();
 
-        return view('users.modun-user.product', ['prds' => $product, 'categories' => $categories, 'title' => 'Product']);
+        return view('users.modun-user.product', ['prds' => $product, 'categories' => $categories, 'title' => 'Product', 'cat'=>'Tìm kiếm']);
     }
 
     public function suggestions(Request $request)

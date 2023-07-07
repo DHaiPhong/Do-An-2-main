@@ -272,8 +272,8 @@ body {
     height: auto;
     /* == */
   }
-  .parent-list li ul li a strong{
-    font-size: 15px;
+  .parent-list li ul li a strong {
+    font-size: 16px;
   }
   .parent-list li ul li a i {
     font-size: 16px;
@@ -538,7 +538,10 @@ body {
     display: block;
     border-left: 4px solid #e67e22;
   }
-  
+  .list-item{
+    animation: animate 1s ease;
+  }
+
   
   
   

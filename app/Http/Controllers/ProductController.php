@@ -41,7 +41,7 @@ class ProductController extends Controller
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->groupBy('products.prd_id')
             ->where('products.prd_id', '!=', $id)
-            ->inRandomOrder(5)
+            ->inRandomOrder()
             ->limit(5)
             ->get();
 
@@ -55,11 +55,12 @@ class ProductController extends Controller
 
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->groupBy('products.prd_id')
-
+            ->inRandomOrder()
             ->paginate(12);
         $categories = $this->getCategoriesWithSub();
+        
 
-        return view('users.modun-user.product', ['prds' => $product, 'categories' => $categories, 'title' => 'Sản Phẩm']);
+        return view('users.modun-user.product', ['prds' => $product, 'categories' => $categories, 'title' => 'Sản Phẩm','cat'=>'Sản Phẩm']);
     }
 
     public function getCategoriesWithSub()
@@ -107,6 +108,7 @@ class ProductController extends Controller
         $category = DB::table('categories')->where('slug', $slug)->first();
         // Here, we get the category using the slug, then store its id in the variable $id.
         $id = $category->id;
+        $cat = $category->name;
 
         $categoryIds = $this->getSubCategoriesIds($id);
 
@@ -114,6 +116,7 @@ class ProductController extends Controller
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->whereIn('products.category_id', $categoryIds)
             ->groupBy('products.prd_id')
+            ->orderBy('products.prd_name')
             ->paginate(12);
 
         $categories = $this->getCategoriesWithSub();
@@ -121,7 +124,9 @@ class ProductController extends Controller
         return view('users.modun-user.product', [
             'prds' => $product,
             'title' => 'Product',
-            'categories' => $categories // Add this line
+            'categories' => $categories, // Add this line
+            'cat' => $cat
+
         ]);
     }
 }
