@@ -87,7 +87,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link  " href="{{ route('admin.blog.category') }}">
                         <i class="fa-solid fa-ballot-check"></i>
                         <p>
@@ -102,7 +102,7 @@
                             Blog
                         </p>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a class="nav-link  " href="{{ route('categories.index') }}">
                         <i class="fa-solid fa-circle-c"></i>

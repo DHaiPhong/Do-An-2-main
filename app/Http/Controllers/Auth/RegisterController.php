@@ -50,12 +50,28 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        $messages = [
+            'name.required' => 'Tên không được để trống.',
+            'name.string' => 'Tên phải là một chuỗi ký tự.',
+            'name.max' => 'Tên không được quá 255 ký tự.',
+            'email.required' => 'Email không được để trống.',
+            'email.string' => 'Email phải là một chuỗi ký tự.',
+            'email.email' => 'Email không hợp lệ.',
+            'email.max' => 'Email không được quá 255 ký tự.',
+            'email.unique' => 'Email đã được sử dụng.',
+            'password.required' => 'Mật khẩu không được để trống.',
+            'password.string' => 'Mật khẩu phải là một chuỗi ký tự.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+        ];
+
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        ], $messages);
     }
+
 
     /**
      * Create a new user instance after a valid registration.
@@ -65,17 +81,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            
             'address' => $data['address'],
             'phone' => $data['phone'],
-            
             'password' => Hash::make($data['password']),
-            
         ]);
-
     }
 }

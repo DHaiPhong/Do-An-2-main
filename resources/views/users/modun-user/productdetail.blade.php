@@ -34,35 +34,29 @@
                     <button id="leftb" class="slide-left" onclick="next1()">&#8250;</button>
                     <button id="rightb" class="slide-right" onclick="pre1()">&#8249;</button>
 
+                                                <div>
+                                                    <p style="font-size: 2.9rem;color:black"> Giá: <span
+                                                            style="font-size: 2.9rem;text-decoration: line-through; color:gray">
+                                                            {{ number_format($prd->price) }} VND <span></p>
 
-                </div>
+                                                </div>
+                                                <div style="margin-left:10px">
+                                                    <p style="font-size: 2.5rem; color: red;">
+                                                        {{ number_format(($prd->price / 100) * (100 - $prd->prd_sale)) }}
+                                                        đ</p>
+                                                </div>
+                                                <input type="hidden" name="price"
+                                                    value="{{ ($prd->price / 100) * (100 - $prd->prd_sale) }}">
+                                            </div>
+                                        @else
+                                            <p style="color:black;font-size: 2.9rem;"> Giá: <span
+                                                    style="color:red;font-size: 2.9rem;text-decoration:none">{{ number_format($prd->price) }}
+                                                    VND</span>
+                                            </p>
 
-
-
-                <div class="big-image">
-                    <img src="/anh/{{ $primg->prd_image }}" alt="" class="big-image-1">
-                </div>
-            </div>
-            <div class="content">
-
-                <!-- ------------------------------------ -->
-                <div class="right-col">
-                    <h1 style="font-size:33px" itemprop="name">{{ $prd->prd_name }}</h1>
-
-                    <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-                        <meta itemprop="priceCurrency" content="USD">
-                        <link itemprop="availability" href="http://schema.org/InStock">
-                        <form method="post" action="{{ route('cart.add') }}">
-                            @csrf
-                            <div class="price-shipping">
-                                <div class="price" id="price-preview" quickbeam="price" quickbeam-price="800">
-                                    @if ($prd->prd_sale != 0)
-                                    <div style="display:flex">
-
-                                        <div>
-                                            <p style="font-size: 2.9rem;color:black"> Giá: <span
-                                                    style="font-size: 2.9rem;text-decoration: line-through; color:gray">
-                                                    {{ number_format($prd->price) }} VND <span></p>
+                                            <input type="hidden" name="price" value="{{ $prd->price }}">
+                                        @endif
+                                        <p>Lượt xem: {{ $prd->views }}</p>
 
                                         </div>
                                         <div style="margin-left:10px">

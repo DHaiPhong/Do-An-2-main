@@ -19,13 +19,11 @@ class CheckoutController extends Controller
 
     public function getCheckout()
     {
-        return view('users.modun-user.payment', ['title' => 'Payment']);
+        return view('users.modun-user.payment', ['title' => 'Thanh Toán']);
     }
 
     public function placeOrder(PaymentRequest $request)
     {
-        // Before storing the order we should implement the
-        // request validation which I leave it to you
 
         $order = $this->orderRepository->storeOrderDetails($request->all());
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -38,22 +39,30 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $validated = $request->validate([
+        $messages = [
+            'email.required' => 'Email không được để trống',
+            'email.email' => 'Sai định dạng email',
+            'password.required' => 'Password không được để trống',
+        ];
+
+        $credentials = $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required'
-        ]);
-        if (auth()->attempt(array('email' => $validated['email'], 'password' => $validated['password']))) {
-            if (auth()->user()->level == 1) {
+        ], $messages);
+
+        if (auth()->attempt($credentials)) {
+            if (auth()->user()->role == 'admin') {
                 return redirect()->route('admin.dashboard');
-
-            }else{
+            } else if (auth()->user()->role == 'editor') {
+                return redirect()->route('admin.dashboard');
+            } else {
                 return redirect()->route('home1');
-            } 
-
-        }else {
-            return redirect()->route('login')->with('error', 'input proper email or password');
+            }
+        } else {
+            return redirect()->route('login')
+                ->with('error', 'Lỗi Đăng Nhập. Kiểm tra lại Email và Mật Khẩu của bạn.');
         }
     }
 }

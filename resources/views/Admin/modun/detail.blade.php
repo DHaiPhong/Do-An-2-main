@@ -40,12 +40,13 @@
                     @if (Auth::user()->id != $user->id)
                         <label for="exampleFormControlSelect2">Level</label>
                         <select class="form-control" id="example FormControlSelect2" name="level">
-                            <option value="1" @if ($user->level == 1) selected @endif>Admin</option>
-                            <option value="2" @if ($user->level != 1) selected @endif>Người Dùng</option>
+                            <option value="2" @if ($user->role == 2) selected @endif>Admin</option>
+                            <option value="1" @if ($user->role == 1) selected @endif>Editor</option>
+                            <option value="0" @if ($user->role == 0) selected @endif>Người Dùng</option>
                         </select>
                     @else
-                        <input type="hidden" name="level" class="form-control" id=""
-                            value="{{ $user->level }} ">
+                        <input type="hidden" name="role" class="form-control" id=""
+                            value="{{ $user->role }} ">
                     @endif
                 </div>
                 <button type="submit" href="{{ route('account.edit', ['id' => $user->id]) }}" class="btn btn-light"

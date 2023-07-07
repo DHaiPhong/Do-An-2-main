@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
+use App\Models\ProductDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -10,11 +12,13 @@ class ProductController extends Controller
 {
     function prd_detail($id)
     {
-        $products = DB::table('product_details')
+        DB::table('products')
+            ->where('prd_id', $id)
+            ->increment('views');
 
+        $products = DB::table('product_details')
             ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
             ->where('product_details.prd_id', $id)
-
             ->get();
 
         $prdsize = DB::table('product_details')
@@ -40,7 +44,6 @@ class ProductController extends Controller
             ->inRandomOrder()
             ->limit(5)
             ->get();
-
 
         return view('users.modun-user.productdetail', ['products' => $products, 'prdsize' => $prdsize, 'prd' => $prd, 'prdimg' => $prdimg, 'otherprd'  => $otherprd, 'title' => 'Product']);
     }

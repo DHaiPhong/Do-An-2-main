@@ -7,7 +7,7 @@
         <nav style="flex:3 ;justify-content: space-around;" class="navbar">
             <a href="{{ url('') }}">Trang chủ</a>
             <a href="{{ route('users.product') }}">Mua Hàng</a>
-            <li class="nav-item dropdown">
+            {{-- <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                     aria-expanded="false">Bài viết</a>
                 <ul class="dropdown-menu">
@@ -18,9 +18,9 @@
                         <hr class="dropdown-divider">
                     </li>
 
-                    {{-- https://shoegazing.com/topics/ --}}
+                    https://shoegazing.com/topics/
                 </ul>
-            </li>
+            </li> --}}
             <a href="{{ route('users.product') }}">Thông Tin</a>
         </nav>
         <div style="flex:2" class="search-container">

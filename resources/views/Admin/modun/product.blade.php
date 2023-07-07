@@ -62,13 +62,7 @@
                                 <td> <img src="/anh/{{ $product->prd_image }}" style="height:120px"> </td>
                                 <td> {{ number_format($product->price) }}đ </td>
                                 <td> {{ $product->category }}</td>
-<!-- tu2/7
-                                <td>{{ $product->new_prd_details }}</td>
- 
-
--->
                                 <td>{!! $product->new_prd_details !!}</td>
-
                                 <td @if ($product->prd_sale > 0) style="color: red" @endif> {{ $product->prd_sale }}%
                                 </td>
                                 <td style="">
@@ -81,7 +75,7 @@
                         @endforeach
                     </tbody>
                 </table>
-               {{ $products->links() }} 
+                {{ $products->links() }}
             </div>
         </div>
     </div>
