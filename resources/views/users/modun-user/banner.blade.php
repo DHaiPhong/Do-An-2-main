@@ -10,7 +10,7 @@
                 <!-- <a href="#" class="btn">add to card</a> -->
             </div>
             <div class="image">
-                <img src="{{asset('img/slide/giayslide.png')}}" class="shoe">
+                <img src="{{ asset('img/slide/giayslide.png') }}" class="shoe">
             </div>
         </a>
 
@@ -21,37 +21,39 @@
             <div class="content">
                 <span>Nike Sport Shoes</span>
                 <h3>Nike Jordan 1 Low Trắng Xám Đế Đen</h3>
-                
+
                 <!-- <a href="#" class="btn">add to card</a> -->
             </div>
             <div class="image">
-                <img src="{{asset('img/slide/giayslide2.png')}}" class="shoe">
+                <img src="{{ asset('img/slide/giayslide2.png') }}" class="shoe">
             </div>
         </a>
     </div>
     <div class="slide-container">
-        <a class="slide" style="background:white;color:none;text-decoration:none;" href="http://127.0.0.1:8000/productdetail/67">
+        <a class="slide" style="background:white;color:none;text-decoration:none;"
+            href="http://127.0.0.1:8000/productdetail/67">
             <div class="content">
                 <span>Nike Sport Shoes</span>
                 <h3>Converse 1970s Đen Cao Cổ REP</h3>
-                
+
                 <!-- <a href="#" class="btn">add to card</a> -->
             </div>
             <div class="image">
-                <img src="{{asset('img/slide/giayslide3.png')}}" class="shoe">
+                <img src="{{ asset('img/slide/giayslide3.png') }}" class="shoe">
             </div>
         </a>
     </div>
     <div class="slide-container">
-        <a class="slide" style="background:white;color:none;text-decoration:none;" href="http://127.0.0.1:8000/productdetail/71">
+        <a class="slide" style="background:white;color:none;text-decoration:none;"
+            href="http://127.0.0.1:8000/productdetail/71">
             <div class="content">
                 <span></span>
                 <h3>New Balance M5740 Đen Trắng</h3>
-                
+
                 <!-- <a href="#" class="btn">add to card</a> -->
             </div>
             <div class="image">
-                <img src="{{asset('img/slide/giayslide4.png')}}" class="shoe">
+                <img src="{{ asset('img/slide/giayslide4.png') }}" class="shoe">
             </div>
         </a>
     </div>

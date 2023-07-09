@@ -51,9 +51,11 @@ Route::prefix('blog')->group(function () {
     Route::get('/', [BlogController::class, 'index'])->name('users.blogs');
     Route::get('/{id}/{slug}', [BlogController::class, 'showBlogByCategory'])->name('users.blogs.category');
 });
+
+Route::get('/about', [userController::class, 'about'])->name('users.about');
+
 //------------------------Cart---------------
 Route::prefix('account')->group(function () {
-
     //Cart
     Route::get('/cart', function () {
         return view('users/modun-user/cart');

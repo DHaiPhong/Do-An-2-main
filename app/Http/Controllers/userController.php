@@ -94,11 +94,21 @@ class userController extends Controller
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
             ->groupBy('products.prd_id')
             ->orderBy('sold', 'desc')
+            ->paginate(10);
 
-            ->paginate(5);
-        
+        $views = DB::table('products')
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->groupBy('products.prd_id')
+            ->orderBy('views', 'desc')
+            ->paginate(10);
 
-        return view('users.modun-user.index', ['sells' => $sells, 'title' => 'Home']);
+        return view('users.modun-user.index', ['sells' => $sells, 'views' => $views, 'title' => 'Trang Chủ']);
+    }
+
+    public function about()
+    {
+        return view('users.modun-user.about', ['title' => 'Thông Tin']);
     }
 
     function searchproduct(Request $request)

@@ -13,18 +13,32 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        Tên: {{ Auth::user()->name }}
+                        Tên tài khoản: {{ Auth::user()->name }}
                         <br>
-                        Role: @if (Auth::user()->role == 0)
-                            Người Dùng
-                        @elseif (Auth::user()->role == 1)
-                            Editor
-                        @elseif (Auth::user()->role == 2)
-                            Admin
-                        @endif
+                        Role:
+                        @php
+                            $role = '';
+                            
+                            switch (Auth::user()->role) {
+                                case 0:
+                                    $role = 'Người Dùng';
+                                    break;
+                                case 1:
+                                    $role = 'Editor';
+                                    break;
+                                case 2:
+                                    $role = 'Admin';
+                                    break;
+                                default:
+                                    $role = 'Không xác định';
+                                    break;
+                            }
+                        @endphp
+                        {{ $role }}
                         <br>
                         {{ $error }}
                     </div>
+
                 </div>
             </div>
         </div>
