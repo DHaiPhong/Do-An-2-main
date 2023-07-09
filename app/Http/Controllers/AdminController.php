@@ -697,13 +697,12 @@ class AdminController extends Controller
     {
         $orders = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-
             ->join('product_details', 'order_items.product_id', '=', 'product_details.prd_detail_id')
             ->join('products', 'products.prd_id', '=', 'product_details.prd_id')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->groupBy('products.prd_id')
             ->where('orders.id', $id)
-
+            ->select('orders.*','order_items.*','product_details.*','prd_img.*','products.prd_name')
             ->get();
 
         return view('Admin.modun.orderdetail', compact('orders'));
