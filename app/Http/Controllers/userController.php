@@ -97,6 +97,8 @@ class userController extends Controller
 
             ->paginate(5);
         
+           
+        
 
         return view('users.modun-user.index', ['sells' => $sells, 'title' => 'Home']);
     }

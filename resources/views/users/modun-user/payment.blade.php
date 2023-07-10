@@ -25,15 +25,15 @@
                                     placeholder="">
                             </div>
                             <div class="inputBox">
-                                <span>email :</span>
+                                
                                 <input name="email" type="email" value="{{ Auth::user()->email }}" required
                                     placeholder="">
                             </div>
                             <div class="inputBox">
                                 <span>Thành phố :</span>
                                 <select class="select_city" name="city" id="city">
-                                    <option value="" selected>Chọn tỉnh thành</option>
                                 </select>
+                                
                             </div>
 
                         </div>
@@ -68,9 +68,10 @@
 
                             <article class="card-body">
                                 <dl class="dlist-align">
-                                    <dt style="font-size: 15px; font-weight: bold">Total cost: </dt>
-                                    <dd class="text-right h4 b"> {{ number_format(Cart::total()) }} đ
-                                    </dd>
+
+                                    <dt style="font-size: 15px; font-weight: bold ; text-wrap:nowrap;">Tiền vận chuyển : <span style="font-weight:100" id="ship" >20.000đ </span></dt>
+                                    <dt style="font-size: 15px; font-weight: bold">Tông tiền : </dt>
+                                    <dd class="text-right h4 b"> {{ number_format(Cart::total()) }} đ </dd>
                                 </dl>
                             </article>
                         </div>
@@ -92,7 +93,17 @@
             </div>
         </div>
     </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
     <script>
+    $(document).ready(function() {
+    $('#city').change(function() {
+        if ($(this).val() === 'Thành phố Hà Nội') {
+        $('#ship').text('20.000 đ');
+        } else {
+        $('#ship').text('30.000 đ');
+        }
+    });
+    });
         // Access the input element
         var input = document.getElementById('phone_number');
         input.addEventListener('input', function() {
@@ -109,7 +120,7 @@
             }
         });
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         const host = "https://provinces.open-api.vn/api/";

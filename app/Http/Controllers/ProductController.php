@@ -13,34 +13,38 @@ class ProductController extends Controller
     function prd_detail($id)
     {
         DB::table('products')
-            ->where('prd_id', $id)
+            ->where('slug', $id)
             ->increment('views');
+
+            $prdd=  DB::table('products')
+            ->where('slug',$id)
+            ->first();
 
         $products = DB::table('product_details')
             ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
-            ->where('product_details.prd_id', $id)
+            ->where('product_details.prd_id', $prdd->prd_id)
             ->get();
 
         $prdsize = DB::table('product_details')
             ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
-            ->where('product_details.prd_id', $id)
+            ->where('product_details.prd_id', $prdd->prd_id)
             ->groupBy('product_details.prd_size')
             ->get();
 
         $prd = DB::table('product_details')
             ->join('products', 'product_details.prd_id', '=', 'products.prd_id')
-            ->where('product_details.prd_id', $id)
+            ->where('product_details.prd_id', $prdd->prd_id)
             ->first();
 
         $prdimg = DB::table('prd_img')
-            ->where('prd_id', $id)
+            ->where('prd_id', $prdd->prd_id)
             ->get();
 
         $otherprd = DB::table('products')
 
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->groupBy('products.prd_id')
-            ->where('products.prd_id', '!=', $id)
+            ->where('products.prd_id', '!=', $prdd->prd_id)
             ->inRandomOrder()
             ->limit(5)
             ->get();
