@@ -56,7 +56,7 @@
                     </thead>
                     <tbody id="productTableBody">
                         @foreach ($products as $key => $product)
-                            <tr>
+                            <tr class="bangcu" >
                                 <td>{{ ++$key }}</td>
                                 <td>{{ $product->prd_name }}</td>
                                 <td> <img src="/anh/{{ $product->prd_image }}" style="height:120px"> </td>
@@ -170,15 +170,18 @@ var row
             $("#no-results").show();
             $('#productTableBody').show();
             $(".pagination").show();
+            $("#bangcu").show();
           }else if(value === ""){
             $("#no-results").hide();
             $(".temp").hide();
             $('#productTableBody').show();
+            $("#bangcu").show();
           }
            else {
             $("#no-results").hide();
+             $(".bangcu").hide();
             $(".pagination").hide();
-            
+           
           }
  }); 
  

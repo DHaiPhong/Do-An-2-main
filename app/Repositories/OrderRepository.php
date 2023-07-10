@@ -25,12 +25,13 @@ class OrderRepository extends BaseRepository implements OrderContract
             'order_number'      =>  'ORD-' . strtoupper(uniqid()),
             'user_id'           =>  auth()->user()->id,
             'status'            =>  'pending',
-            'grand_total'       =>  Cart::total() + 15000 - Cart::total() * (5 / 100),
+            'grand_total'       =>  Cart::total() + $params['total'],
             'item_count'        =>  Cart::count(),
             'name'              =>  $params['name'],
             'address'           =>  $params['address'],
             'email'             =>  $params['email'],
             'city'              =>  $params['city'],
+            'district'          =>  $params['district'],
             'phone_number'      =>  $params['phone']
         ]);
 

@@ -45,6 +45,7 @@
                             <th style="width: 25%"> Địa Chỉ </th>
                             <th style="width: 9%"> Số Điện Thoại </th>
                             <th style="width: 5%; text-align: center;"> Số Lượng </th>
+                            <th style="width: 5%; text-align: center;"> Người Chỉnh sửa </th>
                             <th> Ngày Mua </th>
                             <th style="align-item: center"> Chi Tiết </th>
                         </tr>
@@ -76,6 +77,7 @@
                                 </td>
                                 <td> {{ $order->phone_number }} </td>
                                 <td> {{ $order->item_count }} </td>
+                                <td> {{ $order->updated_by }} </td>
                                 <td> {{ $order->updated_at }}</td>
                                 </td>
                                 <td style=""><a href="{{ route('admin.orderdetail', ['id' => $order->order_id]) }}">

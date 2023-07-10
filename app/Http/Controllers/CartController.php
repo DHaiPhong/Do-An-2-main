@@ -23,20 +23,28 @@ class CartController extends Controller
             ->where('product_details.prd_id', $request->prd_id)
             ->where('product_details.prd_size', $request->prd_size)
             ->first();
-
+        
+        
         if ($product->prd_amount == 0) {
+            return redirect()->route('users.cartshop')->with(['fail' => 'Lỗi sản phẩm đã hết hàng!']);
         } else {
             $data = Cart::content()
                 ->where('id', $product->prd_detail_id)
                 ->first();
+            
 
             if ($data != null) {
-                if ($product->prd_amount > $data->qty) {
-                    Cart::add($product->prd_detail_id, $product->prd_name, '1', $request->price, '0', ['size' => $product->prd_size, 'img' => $product->prd_image]);
+                $totalqty = $request->quantity + $data->qty;
+                
+                if($totalqty <= $product->prd_amount){
+
+                    Cart::add($product->prd_detail_id, $product->prd_name, $request->quantity, $request->price, '0', ['size' => $product->prd_size, 'img' => $product->prd_image]);
+                    
                 } else {
+                    $data->qty = $product->prd_amount;
                 }
             } else {
-                Cart::add($product->prd_detail_id, $product->prd_name, '1', $request->price, '0', ['size' => $product->prd_size,  'img' => $product->prd_image]);
+                Cart::add($product->prd_detail_id, $product->prd_name, $request->quantity, $request->price, '0', ['size' => $product->prd_size,  'img' => $product->prd_image]);
             }
         }
         return redirect()->route('users.cartshop')->with(['success' => 'Thêm sản phẩm thành công!']);
@@ -51,9 +59,14 @@ class CartController extends Controller
         }
         return back();
     }
+    function cartshop(){
 
 
-    function pay()
+        return view('users/modun-user/cartshop', ['title' => 'Giỏ Hàng  ']);
+    }
+
+
+    function pay(Request $request)
     {
         if (Auth::user() == null) {
             return redirect()->route('login');
@@ -62,13 +75,26 @@ class CartController extends Controller
         if ($data == 0) {
             return redirect()->route('home1');
         }
+        
+        
 
         return view('users.modun-user.payment', ['title' => 'Thanh Toán']);
     }
 
     public function update(Request $request)
     {
-        Cart::update($request->rowId, $request->qty);
+
+        $data = Cart::get($request->rowId);
+        $prd = DB::table('product_details')
+        ->where('prd_detail_id',$data->id)
+        ->first();
+        if($prd->prd_amount > $request->qty){
+           Cart::update($request->rowId, $request->qty); 
+        }else{
+            Cart::update($request->rowId, $prd->prd_amount); 
+        }
+
+        
     }
 
 

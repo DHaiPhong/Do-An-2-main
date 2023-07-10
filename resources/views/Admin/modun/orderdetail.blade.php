@@ -42,7 +42,7 @@
                     <a class="btn btn-success btn-fw check-permission" style="margin-top: 1rem"
                         href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'completed']) }}"> Hoàn Thành </a>
                 @endif
-                @if ($order->status != 'cancel' && $order->status != 'completed')
+                @if ($order->status == 'pending' & $order->status != 'cancel')
                     <a class="btn btn-danger btn-fw check-permission" style="margin-top: 1rem"
                         href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'cancel']) }}"> Hủy Đơn </a>
                 @endif

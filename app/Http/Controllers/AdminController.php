@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\User;
 use Encore\Admin\Grid\Filter\Where;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -710,11 +711,9 @@ class AdminController extends Controller
 
     function updateStatus($id, $value)
     {
+        
         $order = DB::table('orders')
-            ->where(
-                'id',
-                $id
-            )
+            ->where('id',$id)
             ->first();
 
         if (!$order) {
@@ -733,19 +732,12 @@ class AdminController extends Controller
             return redirect()->route('admin.order')->with('error', 'Không thể hủy đơn hàng đang xử lý!');
         }
 
-        if ($value == 'cancel') {
+        if ($value != "completed") {
             DB::table('orders')
                 ->where('id', $id)
-                ->update(['status' => 'cancel']);
-        } else if ($value == "processing") {
-            DB::table('orders')
-                ->where('id', $id)
-                ->update(['status' => 'processing']);
-        } else if ($value == "shipping") {
-            DB::table('orders')
-                ->where('id', $id)
-                ->update(['status' => 'shipping']);
-        } else if ($value == "completed") {
+                ->update(['status' => $value,'updated_by' => Auth::user()->name]);
+        
+        }else{
             DB::table('orders')
                 ->where('id', $id)
                 ->update(['status' => 'completed']);

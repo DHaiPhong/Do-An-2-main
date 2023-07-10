@@ -13,6 +13,11 @@
                     Thêm sản phẩm thành công!
                 </div>
             @endif
+            @if (session('fail'))
+                <div class="alert alert-danger text-center m-0" style="font-size: 2rem; margin-bottom: 1rem" role="alert">
+                    Lỗi sản phẩm đã hết hàng!
+                </div>
+            @endif
             @if (count(Cart::content()))
                 <table style="margin-top: 1rem">
                     <tr>
@@ -59,40 +64,28 @@
                 </div>
                 <div class="total-price">
                     <table>
-                        <tr>
-                            <td>Tạm Tính</td>
-                            <td style="color: red">{{ number_format(Cart::total()) }} đ</td>
-                        </tr>
-                        <tr>
-                            <td>Phí Ship</td>
-                            <td style="color: red">15.000 đ</td>
-                        </tr>
-                        <tr>
-                            <td>Giảm Giá</td>
-                            <td style="color: red">5%</td>
-                        </tr>
+                       
+                        
+                        <form method="post" action="{{ route('users.payment') }}">
+                        @csrf
                         <tr>
                             <td>Tổng</td>
-                            <td style="color: red">{{ number_format(Cart::total() + 15000 - Cart::total() * (5 / 100)) }} đ
-                                {{-- <input name="total_price" type="hidden"
-                                    value="{{ Cart::total() - 15000 - Cart::total() * (5 / 100) }}"> --}}
+                            <td style="color: red">{{ number_format(Cart::total()) }} đ
+                                <input name="total_price" type="hidden"
+                                    value="5000"> 
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                @auth
-                                    <a class="btn" style="background-color: orangered; width: 100%; color: #fff"
-                                        href="{{ route('users.payment') }}">
-                                        Thanh toán </a>
-                                @endauth
-                                @guest
-                                    <a class="btn" style="background-color: orangered; width: 100%; color: #fff"
-                                        href="{{ route('login') }}"> Thanh
-                                        toán
-                                    </a>
-                                @endguest
+                                
+                                    <button class="btn" style="background-color: orangered; width: 100%; color: #fff"
+                                        >
+                                        Thanh toán </button>
+                                
+                                
                             </td>
                         </tr>
+                        <form>
                     </table>
                 </div>
             @else
