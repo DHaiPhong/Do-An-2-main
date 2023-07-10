@@ -440,6 +440,27 @@ section{
     width: 90%;
 }
 
+.image-container-about {
+    position: relative;
+    width: 100%;
+}
+
+.image-container-about img {
+    width: 100%;
+    height: auto;
+}
+
+.image-container-about .text {
+    position: absolute;
+    bottom: 10px;
+    color: white;
+    font-size: 24px;
+    padding: 10px;
+    left: 40%;
+    top: 10%;
+    text-align: justify;
+    margin-right: 4rem;
+}
 
 
 

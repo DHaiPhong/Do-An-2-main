@@ -35,6 +35,7 @@ class UserRoleMiddleware
                 return $next($request);
             }
         }
-        return response()->json(["Bạn không có quyền để vào trang này!"]);
+        return response()->view('home', ['error' => 'Bạn không có quyền thực hiện chức năng này!'])
+            ->cookie('cookie_name', 'cookie_value');
     }
 }

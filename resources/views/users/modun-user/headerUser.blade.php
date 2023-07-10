@@ -21,7 +21,7 @@
                     https://shoegazing.com/topics/
                 </ul>
             </li> --}}
-            <a href="{{ route('users.product') }}">Thông Tin</a>
+            <a href="{{ route('users.about') }}">Thông Tin</a>
         </nav>
         <div style="flex:2" class="search-container">
             <form action="{{ route('search') }}" method="GET">
@@ -34,7 +34,8 @@
             <div>
                 <div class="container">
                     <div class="row" style="flex-wrap:nowrap;">
-                        <div class="col-sm" style="margin-top: 1rem; margin-right:15px; margin-left: 15px;display: contents;">
+                        <div class="col-sm"
+                            style="margin-top: 1rem; margin-right:15px; margin-left: 15px;display: contents;">
                             <a style="font-size: 2rem; margin-top: 1rem; background:none;text-wrap: nowrap;"
                                 href="{{ route('users.cartshop') }}">{{ Cart::count() }}<i
                                     class="fa fa-shopping-cart"></i></a>
