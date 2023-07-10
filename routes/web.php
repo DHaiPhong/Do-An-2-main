@@ -61,9 +61,7 @@ Route::prefix('account')->group(function () {
         return view('users/modun-user/cart');
     })->name('users.cart');
     Route::get('/add_cart/{id}', [userController::class, 'addcart'])->name('users.cart1');
-    Route::get('/cartshop', function () {
-        return view('users/modun-user/cartshop', ['title' => 'Giỏ Hàng  ']);
-    })->name('users.cartshop');
+    Route::get('/cartshop', [CartController::class, 'cartshop'])->name('users.cartshop');
     Route::get('/delete/{id}', [CartController::class, 'deletecart'])->name('cart.delete');
     Route::get('/cart/plus/{id}', [CartController::class, 'pluscart'])->name('cart.plus');
     Route::get('/cart/minus/{id}', [CartController::class, 'minuscart'])->name('cart.minus');
@@ -71,7 +69,7 @@ Route::prefix('account')->group(function () {
     Route::get('/cart/update', [CartController::class, 'update'])->name('cart.update');
 
     //Payment
-    Route::get('/payment', [CartController::class, 'pay'])->name('users.payment');
+    Route::post('/payment', [CartController::class, 'pay'])->name('users.payment');
     Route::get('/pay', function () {
         return view('users.modun-user.payment.payment');
     });

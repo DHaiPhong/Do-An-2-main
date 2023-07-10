@@ -85,6 +85,7 @@
 
 
 
+
                                 </div>
                             </div>
                             <input type="hidden" name="prd_id" value="{{ $prd->prd_id }}">
@@ -99,7 +100,15 @@
                                                 {{ $prdsize->prd_size }}
                                             </div>
                                             @endforeach
+                                            
+                                        </div>
+<p style="display:none" id="qt-size">0</p>
                                             <input type="hidden" id="slsize" name="prd_size" value="">
+                                        <div style="display:none" id="quantity-container" class="quantity-container">
+                                            <button type="button" class="quantity-btn minus">-</button>
+                                            <input style="display:block;padding-left:13px" class="quantity-input" id="qtinput"
+                                                name="quantity" type="number" min="1" max="10" readonly value="0">
+                                            <button type="button" class="quantity-btn plus">+</button>
                                         </div>
                                     </div>
 
@@ -147,8 +156,7 @@
                                                 <h2>Khử mùi bên trong giày</h2>
 
                                                 <li>
-                                                    <p>Bạn hãy đặt túi đựng viên chống ẩm vào bên trong giày để hút
-                                                        ẩm
+                                                    <p>Bạn hãy đặt túi đựng viên chống ẩm vào bên trong giày để hút ẩm
                                                         và rắc phấn rôm (có thể thay bằng cách đặt vào bên trong
                                                         giày
                                                         gói trà túi lọc chưa qua sử dụng) để khử mùi, giúp giày luôn
@@ -194,7 +202,7 @@
             </div>
 
         </div>
-        </div>
+
     </section>
     <div style="flex-wrap:wrap;padding:10px 50px;" class="d-flex justify-content-center">
         <table class="table1">
@@ -273,8 +281,7 @@
     </div>
     <div class="d-flex justify-content-center">
         @foreach ($otherprd as $oprd)
-        <div class="product" style="max-width:21em"><a
-                href="{{ route('users.productdetail', ['id' => $oprd->slug]) }}">
+        <div class="product" style="max-width:21em"><a href="{{ route('users.productdetail', ['id' => $oprd->slug]) }}">
                 @if ($oprd->prd_sale != 0)
                 <div>
                     <!-- <img src="/anh/sale-tag-icon.png" style="width: 38px;position: absolute;right: 0px; top:0px;"> -->
@@ -379,11 +386,51 @@ function checkStock(size) {
     document.getElementById("stock_message").style.display = quantity === 0 ? "block" : "none";
     document.getElementById("boxo").style.border = quantity === 0 ? "2px solid red" : "none";
     document.getElementById("order_button").disabled = quantity === 0;
+    document.getElementById("qt-size").textContent = "Số lượng còn: " + quantity;
+    document.getElementById("qt-size").style.display = "block";
+    document.getElementById("quantity-container").style.display = "flex";
+
+    const qtinput = document.getElementById("qtinput")
+    qtinput.value = 1;
+    qtinput.max = quantity;
 
     const slsize = parseInt(size.getAttribute("data-size"))
     document.getElementById("slsize").value = slsize;
 
 
 }
+</script>
+<script>
+const minusBtn = document.querySelector('.minus');
+const plusBtn = document.querySelector('.plus');
+const quantityInput = document.querySelector('.quantity-input');
+const qtinput = document.getElementById("qtinput")
+
+// Xử lý sự kiện khi nhấn nút "-"
+minusBtn.addEventListener('click', function() {
+    // Lấy giá trị hiện tại từ input và chuyển đổi thành số
+    let currentQuantity = parseInt(quantityInput.value);
+
+    // Kiểm tra giá trị số lượng nếu lớn hơn 0 thì giảm đi 1
+    if (currentQuantity > 1) {
+        currentQuantity--;
+    }
+
+    // Cập nhật giá trị số lượng mới vào input
+    quantityInput.value = currentQuantity;
+});
+
+// Xử lý sự kiện khi nhấn nút "+"
+plusBtn.addEventListener('click', function() {
+    // Lấy giá trị hiện tại từ input và chuyển đổi thành số
+    let currentQuantity = parseInt(quantityInput.value);
+    if (currentQuantity < qtinput.max) {
+        // Tăng giá trị số lượng lên 1
+        currentQuantity++;
+
+        // Cập nhật giá trị số lượng mới vào input
+        quantityInput.value = currentQuantity;
+    }
+});
 </script>
 @endsection

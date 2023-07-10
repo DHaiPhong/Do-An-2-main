@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategoryBlog;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -51,13 +52,20 @@ class userController extends Controller
 
     function orderdetail($id)
     {
+
+        $temp = DB::table('products')
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->select('products.prd_id', 'prd_img.prd_image')
+            ->groupBy('products.prd_id');
         $orders = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
 
             ->join('product_details', 'order_items.product_id', '=', 'product_details.prd_detail_id')
             ->join('products', 'products.prd_id', '=', 'product_details.prd_id')
-            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
-            ->groupBy('products.prd_id')
+            ->joinSub($temp, 'temp', function (JoinClause $join) {
+                $join->on('products.prd_id', '=', 'temp.prd_id');
+            })
+            
             ->where('orders.user_id', Auth::user()->id)
             ->where('orders.id', $id)
             ->get();

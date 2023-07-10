@@ -25,13 +25,13 @@
                                     placeholder="">
                             </div>
                             <div class="inputBox">
-                                
+                                <span>Email :</span>
                                 <input name="email" type="email" value="{{ Auth::user()->email }}" required
                                     placeholder="">
                             </div>
                             <div class="inputBox">
                                 <span>Thành phố :</span>
-                                <select class="select_city" name="city" id="city">
+                                <select class="select_city" name="city" id="city" onchange="getSelectedOptionId()">
                                 </select>
                                 
                             </div>
@@ -51,8 +51,8 @@
                             </div>
                             <div class="inputBox">
                                 <span>Số điện thoại :</span>
-                                <input name="phone" id="phone_number" type="text" value="" required
-                                    placeholder="">
+                                <input name="phone" id="phone_number" type="text" value="{{ Auth::user()->phone }}" required
+                                    placeholder="sô điện thoại">
                             </div>
                             <div class="inputBox">
                                 <span>Quận Huyện :</span>
@@ -69,9 +69,11 @@
                             <article class="card-body">
                                 <dl class="dlist-align">
 
-                                    <dt style="font-size: 15px; font-weight: bold ; text-wrap:nowrap;">Tiền vận chuyển : <span style="font-weight:100" id="ship" >20.000đ </span></dt>
+                                    <dt style="font-size: 15px; font-weight: bold ; text-wrap:nowrap;">Tiền vận chuyển : <span style="font-weight:100" id="ship" >chọn tỉnh thành trước </span></dt>
                                     <dt style="font-size: 15px; font-weight: bold">Tông tiền : </dt>
-                                    <dd class="text-right h4 b"> {{ number_format(Cart::total()) }} đ </dd>
+                                    <dd class="text-right h4 b" id="totalht" > {{ number_format(Cart::total()) }} đ </dd>
+                                    <input type="hidden" id="total" name="total" value="{{ Cart::total() }}">
+                                    <input type="hidden" id="shipp" name="ship" value="">
                                 </dl>
                             </article>
                         </div>
@@ -95,15 +97,7 @@
     </section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
     <script>
-    $(document).ready(function() {
-    $('#city').change(function() {
-        if ($(this).val() === 'Thành phố Hà Nội') {
-        $('#ship').text('20.000 đ');
-        } else {
-        $('#ship').text('30.000 đ');
-        }
-    });
-    });
+    
         // Access the input element
         var input = document.getElementById('phone_number');
         input.addEventListener('input', function() {
@@ -120,6 +114,41 @@
             }
         });
     </script>
+    <script>
+        function getSelectedOptionId() {
+  var selectElement = document.getElementById("city");
+  var selectedOptionId = selectElement.options[selectElement.selectedIndex].getAttribute("data-id");
+  var total = document.getElementById("total");
+   
+    
+
+  console.log(selectedOptionId);
+  if(selectedOptionId == 1){
+    document.getElementById("ship").textContent = "20.000"
+    var ttotal = parseInt(total.value) + 20000
+    document.getElementById("totalht").textContent = ttotal +" đ"
+    document.getElementById("shipp").value = 20000
+  }else if(selectedOptionId > 1 && selectedOptionId <= 40){
+    
+    document.getElementById("ship").textContent = "35.000"
+    var ttotal = parseInt(total.value) + 35000
+    document.getElementById("totalht").textContent = ttotal +" đ"
+    document.getElementById("shipp").value = 35000
+  }else if(selectedOptionId > 40 && selectedOptionId <= 56){
+    document.getElementById("ship").textContent = "45.000"
+    var ttotal = parseInt(total.value) + 45000
+    document.getElementById("totalht").textContent = ttotal +" đ"
+    document.getElementById("shipp").value = 45000
+  }else if(selectedOptionId > 56 ){
+    document.getElementById("ship").textContent = "55.000"
+    var ttotal = parseInt(total.value) + 55000
+    document.getElementById("totalht").textContent = ttotal +" đ"
+    document.getElementById("shipp").value = 55000
+}
+        }
+
+    </script>
+
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
@@ -148,12 +177,9 @@
 
         $("#city").change(() => {
             callApiDistrict(host + "p/" + $("#city").find(':selected').data('id') + "?depth=2");
-            printResult();
+          
         });
-        $("#district").change(() => {
-            callApiWard(host + "d/" + $("#district").find(':selected').data('id') + "?depth=2");
-            printResult();
-        });
+      
 
         /////////////////////////nut thanh toan /////////////////////////////
         document.getElementById('btnCash').addEventListener('click', function(event) {
