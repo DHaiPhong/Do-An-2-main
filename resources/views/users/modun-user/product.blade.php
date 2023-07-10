@@ -75,7 +75,7 @@
                                             @endif
 
                                             <a style="border:none"
-                                                href="{{ route('users.productdetail', ['id' => $prd->prd_id]) }}">
+                                                href="{{ route('users.productdetail', ['id' => $prd->slug]) }}">
                                                 <img style="width:200px" src='/anh/{{ $prd->prd_image }}'>
                                             </a>
 

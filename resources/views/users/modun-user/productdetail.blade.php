@@ -274,7 +274,7 @@
     <div class="d-flex justify-content-center">
         @foreach ($otherprd as $oprd)
         <div class="product" style="max-width:21em"><a
-                href="{{ route('users.productdetail', ['id' => $oprd->prd_id]) }}">
+                href="{{ route('users.productdetail', ['id' => $oprd->slug]) }}">
                 @if ($oprd->prd_sale != 0)
                 <div>
                     <!-- <img src="/anh/sale-tag-icon.png" style="width: 38px;position: absolute;right: 0px; top:0px;"> -->
