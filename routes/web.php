@@ -11,6 +11,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CouponController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use PhpParser\Node\Stmt\Function_;
@@ -91,8 +92,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/chart/totalChart', [AdminController::class, 'totalChart'])->name('totalChart');
     Route::get('/chart/ordersChart', [AdminController::class, 'ordersChart'])->name('ordersChart');
     Route::get('/chart/soldChart', [AdminController::class, 'soldChart'])->name('soldChart');
+    Route::get('/chart/dailyRevenueChart', [AdminController::class, 'dailyRevenueChart'])->name('dailyRevenueChart');
     Route::get('/getSoldCount', [AdminController::class, 'getSoldCount'])->name('getSoldCount');
     Route::resource('categories', CategoryController::class);
+    Route::resource('coupons', CouponController::class);
 
     //----------------Acount----------------
     Route::prefix('account')->group(function () {
@@ -144,6 +147,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/productt/add', [AdminController::class, 'addprdform'])->name('admin.add_prd')->middleware('user-role:admin');
     Route::post('/productt/add', [AdminController::class, 'prd_add'])->name('admin.prd_add')->middleware('user-role:admin');
 });
+
+Route::get('/applyCoupon', [CartController::class, 'applyCoupon'])->name('applyCoupon');
 
 Auth::routes();
 

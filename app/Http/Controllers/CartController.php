@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCartRequest;
+use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use Illuminate\Support\Facades\Auth;
@@ -23,23 +24,22 @@ class CartController extends Controller
             ->where('product_details.prd_id', $request->prd_id)
             ->where('product_details.prd_size', $request->prd_size)
             ->first();
-        
-        
+
+
         if ($product->prd_amount == 0) {
             return redirect()->route('users.cartshop')->with(['fail' => 'Lỗi sản phẩm đã hết hàng!']);
         } else {
             $data = Cart::content()
                 ->where('id', $product->prd_detail_id)
                 ->first();
-            
+
 
             if ($data != null) {
                 $totalqty = $request->quantity + $data->qty;
-                
-                if($totalqty <= $product->prd_amount){
+
+                if ($totalqty <= $product->prd_amount) {
 
                     Cart::add($product->prd_detail_id, $product->prd_name, $request->quantity, $request->price, '0', ['size' => $product->prd_size, 'img' => $product->prd_image]);
-                    
                 } else {
                     $data->qty = $product->prd_amount;
                 }
@@ -59,7 +59,8 @@ class CartController extends Controller
         }
         return back();
     }
-    function cartshop(){
+    function cartshop()
+    {
 
 
         return view('users/modun-user/cartshop', ['title' => 'Giỏ Hàng  ']);
@@ -75,8 +76,8 @@ class CartController extends Controller
         if ($data == 0) {
             return redirect()->route('home1');
         }
-        
-        
+
+
 
         return view('users.modun-user.payment', ['title' => 'Thanh Toán']);
     }
@@ -86,18 +87,40 @@ class CartController extends Controller
 
         $data = Cart::get($request->rowId);
         $prd = DB::table('product_details')
-        ->where('prd_detail_id',$data->id)
-        ->first();
-        if($prd->prd_amount > $request->qty){
-           Cart::update($request->rowId, $request->qty); 
-        }else{
-            Cart::update($request->rowId, $prd->prd_amount); 
+            ->where('prd_detail_id', $data->id)
+            ->first();
+        if ($prd->prd_amount > $request->qty) {
+            Cart::update($request->rowId, $request->qty);
+        } else {
+            Cart::update($request->rowId, $prd->prd_amount);
+        }
+    }
+    public function applyCoupon(Request $request)
+    {
+        $coupon = Coupon::where('code', $request->code)->first();
+
+        if (!$coupon || $coupon->expires_at->lt(now())) {
+            return redirect()->back()->withErrors('Invalid coupon code. Please try again');
         }
 
-        
+        $cart = Cart::content();
+        $total = Cart::total();
+
+        // Tính tổng giảm giá
+        if ($coupon->type == 'fixed') {
+            $discount = $total - $coupon->amount;
+        } else if ($coupon->type == 'percent') {
+            $discount = $total - ($total * ($coupon->amount / 100));
+        }
+        dd($discount);
+        // Thêm vào phiên
+        session()->put('coupon', [
+            'name' => $coupon->code,
+            'discount' => $discount
+        ]);
+
+        return redirect()->back()->with(['message', 'Coupon applied successfully.']);
     }
-
-
 
 
     function cartsuccess()

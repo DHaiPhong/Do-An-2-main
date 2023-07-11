@@ -40,13 +40,14 @@
                         <tr>
                             <th> Id </th>
                             <th style="width: 16%"> Số Đơn Hàng </th>
-                            <th style="width: 10%"> Trạng Thái </th>
-                            <th> Giá </th>
-                            <th style="width: 25%"> Địa Chỉ </th>
+                            <th style="width: 10%; text-align: center"> Trạng Thái </th>
+                            <th style="text-align: center"> Giá </th>
+                            <th style="width: 23%"> Địa Chỉ </th>
                             <th style="width: 9%"> Số Điện Thoại </th>
                             <th style="width: 5%; text-align: center;"> Số Lượng </th>
-                            <th style="width: 5%; text-align: center;"> Người Chỉnh sửa </th>
-                            <th> Ngày Mua </th>
+                            <th style="width: 7%; text-align: center;"> Người Chỉnh sửa </th>
+                            <th style="text-align: center"> Thời Gian Mua </th>
+                            <th style="text-align: center"> Thời Gian Cập Nhật </th>
                             <th style="align-item: center"> Chi Tiết </th>
                         </tr>
                     </thead>
@@ -72,21 +73,21 @@
                                     @endif
                                 </td>
                                 <td> {{ number_format($order->grand_total) }}đ </td>
-                                <td>
-                                    {{ $order->address }}
-                                </td>
+                                <td>{{ $order->address }}</td>
                                 <td> {{ $order->phone_number }} </td>
                                 <td> {{ $order->item_count }} </td>
-                                <td> {{ $order->updated_by }} </td>
+                                <td style="text-align: center"> {{ $order->updated_by }} </td>
+                                <td> {{ $order->created_at }}</td>
                                 <td> {{ $order->updated_at }}</td>
-                                </td>
-                                <td style=""><a href="{{ route('admin.orderdetail', ['id' => $order->order_id]) }}">
+                                <td style="text-align: center"><a style="text-align: center"
+                                        href="{{ route('admin.orderdetail', ['id' => $order->id]) }}">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true">
                                         </i></td>
                             </tr>
                         @endforeach
                     </tbody>
-                </table>{{ $orders->links() }}
+                </table>
+                {{ $orders->links() }}
             </div>
         </div>
     </div>

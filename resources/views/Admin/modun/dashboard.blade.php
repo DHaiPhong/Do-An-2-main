@@ -42,17 +42,21 @@
                                 <h4 class="font-weight-normal mb-3">Đã Bán <i
                                         class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                                 </h4>
-                                <h2 class="mb-5">{{ $sold }}</h2>
+                                <h2 class="mb-3">{{ $sold }}</h2>
+                                <a href="{{ route('admin.order') }}" class="btn btn-warning" style="color: #FFF">Chi
+                                    Tiết</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4 stretch-card grid-margin">
                         <div class="card bg-gradient-success card-img-holder text-white">
                             <div class="card-body">
-                                <h4 class="font-weight-normal mb-3">Đơn Hàng <i
+                                <h4 class="font-weight-normal mb-3">Đơn Hàng Chưa Hoàn Thành<i
                                         class="mdi mdi-diamond mdi-24px float-right"></i>
                                 </h4>
-                                <h2 class="mb-5">{{ $orders }}</h2>
+                                <h2 class="mb-3">{{ $orders }}</h2>
+                                <a href="{{ route('admin.order') }}" class="btn btn-warning" style="color: #FFF">Chi
+                                    Tiết</a>
                             </div>
                         </div>
                     </div>
@@ -63,8 +67,9 @@
                                 <h4 class="font-weight-normal mb-3">Doanh Thu <i
                                         class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                                 </h4>
-                                <h2 class="mb-5">{{ number_format($revenue) }} Đ</h2>
-
+                                <h2 class="mb-3">{{ number_format($revenue) }} Đ</h2>
+                                <a href="{{ route('admin.order') }}" class="btn btn-warning" style="color: #FFF">Chi
+                                    Tiết</a>
                             </div>
                         </div>
                     </div>
@@ -74,6 +79,29 @@
             <div class="row">
                 <div class="col-md-8">
                     {{-- <div id="chart"></div> --}}
+                    <div class="stretch-card">
+                        <div class="card">
+                            <form method="get" action="{{ route('dailyRevenueChart') }}">
+                                <select style="margin-top: 0.5rem; margin-left: 1rem" name="month"
+                                    onchange="this.form.submit()">
+                                    <option style="display: none" value="">Chọn Tháng</option>
+                                    @for ($i = 1; $i <= 12; $i++)
+                                        <option value="{{ $i }}"
+                                            {{ request('month') == $i ? 'selected' : '' }}>
+                                            Tháng {{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </form>
+                            <div class="card-body">
+                                <h4 class="card-title">Danh Thu Theo Ngày</h4>
+                                <div>
+                                    <canvas id="dailyRevenueChart"></canvas>
+                                </div>
+                                <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="stretch-card">
                         <div class="card">
                             <div class="card-body">
@@ -216,5 +244,6 @@
         createChart('totalChart', "{{ route('totalChart') }}");
         createChart('soldChart', "{{ route('soldChart') }}");
         createChart('ordersChart', "{{ route('ordersChart') }}");
+        createChart('dailyRevenueChart', "{{ route('dailyRevenueChart') }}");
     </script>
 @endsection
