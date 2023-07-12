@@ -7,6 +7,7 @@ use App\Http\Requests\AddCartRequest;
 use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\ProductDetail;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -96,10 +97,16 @@ class CartController extends Controller
             Cart::update($request->rowId, $prd->prd_amount);
         }
     }
+    public function deleteCoupon()
+    {
+        Session::forget(['id', 'amount', 'code', 'expires_at', 'type']);
+        return redirect()->route('users.cartshop');
+    }
+
     public function applyCoupon(Request $request)
     {
         $messages = [
-            'code.required' => 'Tên không được để trống',
+            'code.required' => 'Mã không được để trống',
         ];
 
         $this->validate($request, [
@@ -107,15 +114,20 @@ class CartController extends Controller
         ], $messages);
 
         $coupon = Coupon::where('code', $request->code)->first();
-        if ($coupon) {
+        $expiresAt = Carbon::parse($coupon->expires_at);
+        if ($coupon && $expiresAt->isFuture()) {
             $message = 'Áp Dụng Mã Giảm Giá Thành Công!';
             Session::put('id', $coupon->id);
             Session::put('amount', $coupon->amount);
+            Session::put('expires_at', $coupon->expires_at);
+            Session::put('type', $coupon->type);
             Session::put('code', $coupon->code);
         } else {
-            Session::forget(['id', 'amount', 'code']);
+            Session::forget(['id', 'amount', 'code', 'expires_at', 'type']);
             $message = 'Mã giảm giá sai hoặc đã hết hạn';
         }
+
+
 
         return redirect()->route('users.cartshop')->with(['message' => $message]);
         // if (!$coupon || $coupon->expires_at->lt(now())) {

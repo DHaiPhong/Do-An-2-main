@@ -46,7 +46,7 @@
                                 <input type="hidden" value="{{ $coupon->id }} ">
                                 <td>{{ $coupon->code }}</td>
                                 <td>{{ $coupon->slug }}</td>
-                                <td>{{ $coupon->amount }}</td>
+                                <td>{{ number_format($coupon->amount) }}</td>
                                 @if ($coupon->type == 'percent')
                                     <td>Phần Trăm</td>
                                 @else

@@ -46,6 +46,8 @@ Route::get(
 )->name('users.productdetail');
 Route::get('/product', [ProductController::class, 'product'])->name('users.product');
 Route::get('/product/{slug}', [ProductController::class, 'prdbyCategory'])->name('product.category');
+Route::post('/load-comment', [ProductController::class, 'loadComment'])->name('loadComment');
+Route::post('/send-comment', [ProductController::class, 'sendComment'])->name('sendComment');
 
 //------------------------------Blog----------------------------
 Route::prefix('blog')->group(function () {
@@ -75,6 +77,7 @@ Route::prefix('account')->group(function () {
         return view('users.modun-user.payment.payment');
     });
     Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('applyCoupon');
+    Route::get('/deleteCoupon', [CartController::class, 'deleteCoupon'])->name('deleteCoupon');
 
     Route::get('/success', [CartController::class, 'cartsuccess'])->name('cart.success');
 });

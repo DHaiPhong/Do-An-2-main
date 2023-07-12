@@ -25,23 +25,32 @@ class CheckoutController extends Controller
 
     public function placeOrder(PaymentRequest $request)
     {
+        if ($request->coupon_type == 'fixed') {
+            $total = Cart::total() + $request->ship - $request->coupon_amount;
+        } else {
+            $total = Cart::total() + $request->ship - (Cart::total() * $request->coupon_amount / 100);
+        }
 
-        $total = Cart::total() + $request->ship;
-        $order = $this->orderRepository->storeOrderDetails(["_token" => $request->_token,
-        "name" => $request->name,
-        "email" => $request->email,
-        "city" => $request->city,
-        "address" => $request->address,
-        "phone" => $request->phone,
-        "district" => $request->district,
-        "pay_method" => 'Tiền mặt',
-        'status' => 'pending',
-        "total" => $total 
-        
-    ]);
+        if ($total < 0) {
+            $total = 0;
+        }
+
+        $order = $this->orderRepository->storeOrderDetails([
+            "_token" => $request->_token,
+            "name" => $request->name,
+            "email" => $request->email,
+            "city" => $request->city,
+            "address" => $request->address,
+            "phone" => $request->phone,
+            "district" => $request->district,
+            "pay_method" => 'Tiền mặt',
+            'status' => 'pending',
+            "total" => $total
+
+        ]);
 
 
-        Session::forget(['id', 'amount', 'code']);
+        Session::forget(['id', 'amount', 'code', 'expires_at', 'type']);
 
         return redirect()->route('cart.success');
     }
@@ -74,14 +83,14 @@ class CheckoutController extends Controller
 
         $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
 
-        
+
         $partnerCode = 'MOMOBKUN20180529';
         $accessKey = 'klm05TvNBzhg7h7j';
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $orderInfo = $request->city;
-        
+
         $amount = Cart::total() + $request->ship;
-        
+
         $orderId = time() . "";
         $redirectUrl = "http://127.0.0.1:8000/momo/success";
         $ipnUrl = "http://127.0.0.1:8000/momo/success";
@@ -107,8 +116,8 @@ class CheckoutController extends Controller
             'redirectUrl' => $redirectUrl,
             'ipnUrl' => $ipnUrl,
             'lang' => 'vi',
-            
-          
+
+
             'extraData' => $extraData,
             'requestType' => $requestType,
             'signature' => $signature
@@ -127,7 +136,7 @@ class CheckoutController extends Controller
         // kiểm tra xem thanh toán có thành công hay không bằng cách kiểm tra statusCode từ MOMO
         if ($request->get('errorCode') == 0) { // nếu errorCode = 0, thanh toán thành công 
             // Thanh toán thành công, lưu đơn hàng vào CSDL
-            
+
             $orderData = [
                 'name' => auth()->user()->name,
                 'address' => auth()->user()->address,
@@ -135,11 +144,11 @@ class CheckoutController extends Controller
                 'city' => $request->orderInfo,
                 'phone' => auth()->user()->phone,
                 'status' => 'processing',
-                'pay_method'=>'MoMo',
-                
-                
+                'pay_method' => 'MoMo',
+
+
                 'district' => $request->extraData,
-                
+
                 'total' => $request->get('amount')
             ];
             $order = $this->orderRepository->storeOrderDetails($orderData);

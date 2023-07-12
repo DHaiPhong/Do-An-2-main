@@ -52,6 +52,7 @@ return array(
     'App\\Models\\Blog' => $baseDir . '/app/Models/Blog.php',
     'App\\Models\\Category' => $baseDir . '/app/Models/Category.php',
     'App\\Models\\CategoryBlog' => $baseDir . '/app/Models/CategoryBlog.php',
+    'App\\Models\\Comment' => $baseDir . '/app/Models/Comment.php',
     'App\\Models\\Coupon' => $baseDir . '/app/Models/Coupon.php',
     'App\\Models\\Images' => $baseDir . '/app/Models/Images.php',
     'App\\Models\\Order' => $baseDir . '/app/Models/Order.php',

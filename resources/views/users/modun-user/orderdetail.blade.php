@@ -25,7 +25,7 @@
                             <td>{{ $item->id }}</td>
                             <td> <img src='/anh/{{ $item->prd_image }}' width="120px" height="auto"></td>
                             <td><a style="text-decoration: none"
-                                    href="{{ route('users.productdetail', ['id' => $item->prd_id]) }}">{{ $item->prd_name }}</a>
+                                    href="{{ route('users.productdetail', ['id' => $item->slug]) }}">{{ $item->prd_name }}</a>
                             </td>
                             <td>{{ $item->prd_size }}</td>
                             <td>{{ $item->quantity }}</td>

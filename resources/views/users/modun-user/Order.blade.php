@@ -219,11 +219,13 @@
                                                                         style="margin-top: 5%;margin-bottom: 5%; text-transform: capitalize; font-size: 2rem  ">
                                                                         Đang Xử Lý </p>
                                                                 </div>
+                                                            </div>
+                                                        @elseif($item->status == 'completed')
+                                                            <div class="row">
                                                                 <div class="col-sm">
-                                                                    <a class="btn btn-danger btn-fw"
-                                                                        style="  background-color: #ff375f; border-color: #ff375f; float: right; margin-top: 2px;width: 90px;padding: 0;margin-right: 50px;"
-                                                                        href="{{ route('users.ordercancel', $item->order_id) }}"
-                                                                        onclick="return confirm('Bạn có chắc chắn muốn xóa đơn đặt hàng này?')">Hủy</a>
+                                                                    <p class="badge bg-success text-dark"
+                                                                        style="margin-top: 5%;margin-bottom: 5%; text-transform: capitalize; font-size: 2rem;  ">
+                                                                        Đã Hoàn Thành </p>
                                                                 </div>
                                                             </div>
                                                         @else

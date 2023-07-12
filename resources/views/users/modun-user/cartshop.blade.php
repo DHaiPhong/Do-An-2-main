@@ -45,7 +45,8 @@
                                                 <img src="/anh/{{ $item->options->img }}">
                                                 <div>
                                                     <p>{{ $item->name }}</p>
-                                                    <a href="{{ route('cart.delete', ['id' => $item->rowId]) }}">Xóa</a>
+                                                    <a href="{{ route('cart.delete', ['id' => $item->rowId]) }}"
+                                                        style="font-size: 2rem"><i class="fas fa-trash-alt"></i></a>
                                                 </div>
                                             </div>
                                         </td>
@@ -74,6 +75,10 @@
                                     <span style="font-size: 1.5rem">Mã Giảm Giá:</span>
                                     <input name="code" id="coupon-code" type="text" value=""
                                         placeholder="Nhập mã giảm giá">
+                                    @error('code')
+                                        <span style="font-size: 1.5rem" class="text-danger"> {{ $message }}</span>
+                                    @enderror
+                                    <br>
                                     <button type="submit" class="btn btn-success">Xác Nhận</button>
                                 </div>
                             </form>
@@ -90,18 +95,39 @@
                                             <tr>
                                                 <td>Giảm giá</td>
                                                 <td style="color: red">
-                                                    <h6 style="font-size: 16px" class="coupon-div"
-                                                        data-price="{{ session('amount') }}">
-                                                        {{ number_format(session('amount')) }} đ</h6>
+                                                    @if (session('type') == 'fixed')
+                                                        <h6 style="font-size: 16px; display: inline-block;"
+                                                            class="coupon-div" data-price="{{ session('amount') }}">
+                                                            {{ number_format(session('amount')) }} đ</h6>
+                                                        <a href="{{ route('deleteCoupon') }}"
+                                                            style="font-size: 16px; color: orangered; display: inline-block;"><i
+                                                                class="fas fa-trash-alt"></i></a>
+                                                    @elseif(session('type') == 'percent')
+                                                        <h6 style="font-size: 16px; display: inline-block;"
+                                                            class="coupon-div" data-price="{{ session('amount') }}">
+                                                            {{ number_format(session('amount')) }} %</h6>
+                                                        <a href="{{ route('deleteCoupon') }}"
+                                                            style="font-size: 16px; color: #000; display: inline-block;"><i
+                                                                class="fas fa-trash-alt"></i></a>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endif
                                         <tr>
                                             <td>Tổng</td>
                                             <td style="color: red">
-                                                {{ number_format(Cart::total() - session('amount')) }} đ
-                                                <input name="total_price" type="hidden"
-                                                    value="{{ Cart::total() - session('amount') }}">
+                                                @if (session('type') == 'fixed')
+                                                    {{ number_format(Cart::total() - session('amount')) }} đ
+                                                    <input name="total_price" type="hidden"
+                                                        value="{{ Cart::total() - session('amount') }}">
+                                                @elseif(session('type') == 'percent')
+                                                    {{ number_format(Cart::total() - (Cart::total() * session('amount')) / 100) }}
+                                                    đ
+                                                    <input name="total_price" type="hidden"
+                                                        value="{{ Cart::total() - (Cart::total() * session('amount')) / 100 }}">
+                                                @else
+                                                    {{ number_format(Cart::total()) }} đ
+                                                @endif
                                             </td>
                                         </tr>
                                         <tr>

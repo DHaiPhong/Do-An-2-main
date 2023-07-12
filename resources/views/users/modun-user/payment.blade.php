@@ -62,15 +62,32 @@
                                     <dt style="font-size: 1.8rem; font-weight: bold ; text-wrap:nowrap;">Tiền vận chuyển :
                                         <span style="font-weight:100" id="ship">Chọn tỉnh thành trước </span>
                                     </dt>
-                                    <dt style="font-size: 1.8rem; font-weight: bold ; text-wrap:nowrap;">Giảm Giá :
-                                        <span style="font-weight:100" id="ship">{{ number_format(session('amount')) }}
-                                            đ</span>
-                                    </dt>
-                                    <dt style="font-size: 1.8rem; font-weight: bold">Tổng tiền : </dt>
-                                    <dd class="text-right h3 b" id="totalht">
-                                        {{ number_format(Cart::total() - session('amount')) }} đ </dd>
-                                    <input type="hidden" id="total" name="total"
-                                        value="{{ Cart::total() - session('amount') }}">
+                                    @if (session('type') == 'fixed')
+                                        <dt style="font-size: 1.8rem; font-weight: bold ; text-wrap:nowrap;">Giảm Giá :
+                                            <span style="font-weight:100"
+                                                id="ship">{{ number_format(session('amount')) }}
+                                                đ</span>
+                                        </dt>
+                                        <dt style="font-size: 1.8rem; font-weight: bold">Tổng tiền : </dt>
+                                        <dd class="text-right h3 b" id="totalht">
+                                            {{ number_format(Cart::total() - session('amount')) }} đ </dd>
+                                        <input type="hidden" id="total" name="total"
+                                            value="{{ Cart::total() - session('amount') }}">
+                                    @elseif(session('type') == 'percent')
+                                        <dt style="font-size: 1.8rem; font-weight: bold ; text-wrap:nowrap;">Giảm Giá :
+                                            <span style="font-weight:100"
+                                                id="ship">{{ number_format(session('amount')) }}
+                                                %</span>
+                                        </dt>
+                                        <dt style="font-size: 1.8rem; font-weight: bold">Tổng tiền : </dt>
+                                        <dd class="text-right h3 b" id="totalht">
+                                            {{ number_format(Cart::total() - (Cart::total() * session('amount')) / 100) }}
+                                            đ </dd>
+                                        <input type="hidden" id="total" name="total"
+                                            value="{{ Cart::total() - (Cart::total() * session('amount')) / 100 }}">
+                                    @endif
+                                    <input type="hidden" name="coupon_amount" value="{{ session('amount') }}">
+                                    <input type="hidden" name="coupon_type" value="{{ session('type') }}">
                                     <input type="hidden" id="shipp" name="ship" value="">
                                 </dl>
                             </article>
@@ -85,7 +102,8 @@
                             <button type="button" id="btnCash" class="submit-btn">Tiền mặt</button>
                         </div>
                         <div class="col-md-6" style="width: 49%;">
-                            <button type="button" id="btnOnline" class="submit-btn momo" name="payUrl">MOMO<br>(Thanh toán
+                            <button type="button" id="btnOnline" class="submit-btn momo" name="payUrl">MOMO<br>(Thanh
+                                toán
                                 Online)</button>
                             <input type="hidden" name="coupon" value="{{ session('amount') }}">
                             <input type="hidden" name="total_momo" value="{{ Cart::total() - session('amount') }}">
