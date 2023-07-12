@@ -89,8 +89,8 @@ Route::get('/momo/success', [CheckoutController::class, 'momoSuccess'])->name('m
 
 
 //-------------------ADMIN------------------------
-Route::prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard')->middleware('user-role:editor,admin');
+Route::prefix('admin')->middleware('user-role:editor,admin')->group(function () {
+    Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/chart/totalChart', [AdminController::class, 'totalChart'])->name('totalChart');
     Route::get('/chart/ordersChart', [AdminController::class, 'ordersChart'])->name('ordersChart');
     Route::get('/chart/soldChart', [AdminController::class, 'soldChart'])->name('soldChart');
@@ -102,9 +102,9 @@ Route::prefix('admin')->group(function () {
     //----------------Acount----------------
     Route::prefix('account')->group(function () {
         Route::get('/', [AdminController::class, 'account'])->name('admin.account');
-        Route::get('/modify/{id}', [AdminController::class, 'modify'])->name('account.detail')->middleware('user-role:admin');
-        Route::get('/delete/{id}', [AdminController::class, 'delete'])->name('account.delete')->middleware('user-role:admin');
-        Route::post('/edit/{id}', [AdminController::class, 'edit'])->name('account.edit')->middleware('user-role:admin');
+        Route::get('/modify/{id}', [AdminController::class, 'modify'])->name('account.detail');
+        Route::get('/delete/{id}', [AdminController::class, 'delete'])->name('account.delete');
+        Route::post('/edit/{id}', [AdminController::class, 'edit'])->name('account.edit');
         Route::post('/img/{id}', [AdminController::class, 'image'])->name('account.image');
     });
 
@@ -124,7 +124,7 @@ Route::prefix('admin')->group(function () {
     //-----------------Product----------------
     Route::prefix('product')->group(function () {
         Route::get('/', [AdminController::class, 'product'])->name('admin.product');
-        Route::get('/{id}', [AdminController::class, 'productorderby'])->name('admin.productorderby');
+        Route::post('/', [AdminController::class, 'productorderby'])->name('admin.productorderby');
         Route::get('/modify/{id}', [AdminController::class, 'prd_modify'])->name('admin.prd_detail');
         Route::post('/edit/{id}', [AdminController::class, 'prd_edit'])->name('admin.prd_edit');
         Route::get('/removeImage/{image}', [AdminController::class, 'removeImage'])->name('product.removeImage');
@@ -144,7 +144,7 @@ Route::prefix('admin')->group(function () {
         [AdminController::class, 'orderdetail']
     )->name('admin.orderdetail');
 
-    Route::get('update-status/{id}/{value}', [AdminController::class, 'updateStatus'])->name('admin.updatestatus')->middleware('user-role:admin');
+    Route::get('update-status/{id}/{value}', [AdminController::class, 'updateStatus'])->name('admin.updatestatus');
 
     Route::get('/productt/add', [AdminController::class, 'addprdform'])->name('admin.add_prd')->middleware('user-role:admin');
     Route::post('/productt/add', [AdminController::class, 'prd_add'])->name('admin.prd_add')->middleware('user-role:admin');

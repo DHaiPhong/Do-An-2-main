@@ -24,17 +24,19 @@ class OrderRepository extends BaseRepository implements OrderContract
         $order = Order::create([
             'order_number'      =>  'ORD-' . strtoupper(uniqid()),
             'user_id'           =>  auth()->user()->id,
-            'status'            =>  'pending',
-            'grand_total'       =>  Cart::total() + $params['total'],
+            'status'            =>  $params['status'],
+            'grand_total'       =>  $params['total'],
             'item_count'        =>  Cart::count(),
             'name'              =>  $params['name'],
             'address'           =>  $params['address'],
             'email'             =>  $params['email'],
             'city'              =>  $params['city'],
             'district'          =>  $params['district'],
+            'pay_method'        =>  $params['pay_method'],
             'phone_number'      =>  $params['phone']
         ]);
 
+        
         if ($order) {
 
 

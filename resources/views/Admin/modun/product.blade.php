@@ -9,16 +9,30 @@
         <div class="card" style="float: right; width: 80%">
             <div class="card-body">
                 <h2 class="card-title">Danh Sách Sản Phẩm</h2>
-                <div class="container" style="display: flex">
-                    <select id="chon" onchange="myFunction()" class="form-select" style="float: right"
+                <div  >
+                <form class="container" style="display: flex" method="post" action="{{ route('admin.productorderby') }}">   
+                    @csrf                 
+                    <select id="chon" name="sort" class="form-select" style="float: right"
                         aria-label="Default select example">
-                        <option>Sort by</option>
+                        <option hidden >Sắp xếp</option>
                         <option>Id</option>
-                        <option value="amount">Số lượng</option>
-                        <option value="sold">Số lượng đã bán</option>
+                        <option value="quantity-desc">Số lượng giảm dần</option>
+                        <option value="quantity-asc">Số lượng tăng dần</option>
+                        <option value="sold-desc">Số lượng đã bán giảm dần</option>
+                        <option value="sold-asc">Số lượng đã bán tăng dần</option>
+                        <option value="price-asc">Giá tăng dần</option>
+                        <option value="price-desc">Giá giảm dần</option>
+                        <option value="sale">Sản phẩm sale</option>
                     </select>
-                    <a class="badge badge-success" style="margin-left: 1rem; font-size: 20px; float: right"
-                        href="{{ route('admin.add_prd') }}">Thêm</a>
+                    <select id="chon" name="filter" class="form-select" style="float: right"
+                        aria-label="Default select example">
+                        <option value="all" hidden >Danh Mục</option>
+                        @foreach($cats as $cat )
+                        <option value="{{$cat->id}}">{{$cat->name}}</option>
+                        @endforeach
+                    </select>
+                    <button type="submit"> Sắp Xếp </button>
+                <form>    
                 </div>
 
                 @if (session('Notification'))
@@ -38,6 +52,8 @@
                 <div id="filter" style="display: flex; margin-top: 1rem; margin-bottom: 1rem; ">
                     <h4 style="margin-right: 1rem">Tìm Kiếm</h4>
                     <input type="text" id="search-box" >
+                    <a class="badge badge-success" style="margin-left: 1rem; font-size: 20px;position: absolute; right: 20px; padding:10px"
+                        href="{{ route('admin.add_prd') }}">Thêm Sản phẩm</a>
                 </div>
                 <h3 id="no-results" style="display: none; color:red; margin-top: 1rem">Không có kết quả liên quan</h3>
 
