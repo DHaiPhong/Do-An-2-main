@@ -127,7 +127,7 @@ Route::prefix('admin')->middleware('user-role:editor,admin')->group(function () 
     //-----------------Product----------------
     Route::prefix('product')->group(function () {
         Route::get('/', [AdminController::class, 'product'])->name('admin.product');
-        Route::post('/', [AdminController::class, 'productorderby'])->name('admin.productorderby');
+        Route::post('/order', [AdminController::class, 'productorderby'])->name('admin.productorderby');
         Route::get('/modify/{id}', [AdminController::class, 'prd_modify'])->name('admin.prd_detail');
         Route::post('/edit/{id}', [AdminController::class, 'prd_edit'])->name('admin.prd_edit');
         Route::get('/removeImage/{image}', [AdminController::class, 'removeImage'])->name('product.removeImage');

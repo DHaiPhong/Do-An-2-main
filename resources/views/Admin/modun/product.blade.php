@@ -10,12 +10,12 @@
             <div class="card-body">
                 <h2 class="card-title">Danh Sách Sản Phẩm</h2>
                 <div  >
-                <form class="container" style="display: flex" method="post" action="{{ route('admin.productorderby') }}">   
+                <form class="container" style="display: flex" method="post" action="{{ route('admin.productorderby' ) }}">   
                     @csrf                 
                     <select id="chon" name="sort" class="form-select" style="float: right"
                         aria-label="Default select example">
-                        <option hidden >Sắp xếp</option>
-                        <option>Id</option>
+                        <option hidden value="">Sắp xếp</option>
+                        <option value="">Id</option>
                         <option value="quantity-desc">Số lượng giảm dần</option>
                         <option value="quantity-asc">Số lượng tăng dần</option>
                         <option value="sold-desc">Số lượng đã bán giảm dần</option>
@@ -91,7 +91,8 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $products->links() }}
+                <div id="pagination"></div>
+
             </div>
         </div>
     </div>
@@ -109,71 +110,62 @@
         }
     </script>
     <script>
-        var hasFetchedData = false;
-
-        function fetchData() {
-            if (!hasFetchedData) {
-var row
-  // Make the AJAX request to fetch the data
-  $.ajax({
-    url: '/api/products',
-    type: 'GET',
-    success: function(response) {
-      // Hide the loading message
-      
-      $('#productTableBody').hide();
-
-      // Clear any existing rows in the table body
-      
-
-      // Iterate over the fetched data and filter based on search input
-      var a = 0;
-      response.forEach(function(product) {
-        // Check if the product matches the search input
-          row = '<tr class="temp" >' +
-                    '<td>' + ++a + '</td>' +
-                    '<td>' + product.prd_name + '</td>' +
-                    '<td><img src="/anh/' + product.prd_image + '" style="height:120px"></td>' +
-                    '<td>' + product.price + 'đ</td>' +
-                    '<td>' + product.category + '</td>' +
-                    '<td>' + product.new_prd_details + '</td>' +
-                    
-                    '<td';
-
-          if (product.prd_sale > 0) {
-            row += ' style="color: red"';
-          }
-
-          row += '>' + product.prd_sale + '%</td>' +
-                 '<td>' +
-                 '<a href="http://127.0.0.1:8000/admin/product/modify/' + product.prd_detail_id + '">' +
-                 '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
-                 '</a>' +
-                 '</td>' +
-                 '</tr>';
-
-          // Append the row to the table body
-          $('#productTableBody').append(row);
-          $(".temp").hide();
-          $('#productTableBody').show();
         
-      });
-    },
-    error: function(error) {
-      console.log(error); // Output any errors that occurred during the request
-    }
-  });
-  hasFetchedData = true;
+
+    // Calculation for total pages
+    var table = $('.bangcu');
+    console.log(table)
+    var currentPage = 1;
+    var totalRows = table.length;
+    var totalPages = Math.ceil(totalRows / 8);
+
+// Clear the pagination links
+$('#pagination').empty();
+
+// Create the pagination links
+for (var i = 1; i <= totalPages; i++) {
+  var link = $('<a class="page-link" href="javascript:void(0);"></a>').text(i);
+  link.attr('data-page', i); // Set the 'data-page' attribute
+  console.log(link);
+  $('#pagination').append(link);
+}
+
+// Display the rows for the first page
+displayPage(currentPage);
+
+// Handle click event for pagination links
+$('.page-link').on('click', function() {
+  var page = $(this).attr('data-page'); // Retrieve the 'data-page' attribute
+
+  if (page === currentPage) {
+    return;
   }
-}     
+
+  displayPage(page);
+});
+
+// Function to display rows for the given page
+function displayPage(page) {
+  // Update current page
+  currentPage = page;
+  
+  // Hide all rows
+  $('#productTableBody tr').hide();
+
+  // Calculate the index range for the selected page
+  var startIndex = (page - 1) * 8;
+  var endIndex = Math.min(startIndex + 8, totalRows);
+
+  // Display the rows for the selected page
+  for (var i = startIndex; i < endIndex; i++) {
+    $('#productTableBody tr:eq(' + i + ')').show();
+  }
+}
+
 
 
       $("#search-box").on("keyup", function() {
-          fetchData()
-       
          var value = $(this).val().toLowerCase();
-          $(".pagination").show();
-          
           var visibleRows = $("table tbody tr").filter(function() {
             
             var match = $(this).text().toLowerCase().indexOf(value) > -1;
@@ -184,20 +176,15 @@ var row
 
           if (visibleRows === 0) {
             $("#no-results").show();
-            $('#productTableBody').show();
-            $(".pagination").show();
-            $("#bangcu").show();
+            $("#pagination").hide();
           }else if(value === ""){
             $("#no-results").hide();
-            $(".temp").hide();
-            $('#productTableBody').show();
-            $("#bangcu").show();
+            $("#pagination").show();
+            displayPage(currentPage);
           }
            else {
             $("#no-results").hide();
-             $(".bangcu").hide();
-            $(".pagination").hide();
-           
+            $("#pagination").hide();
           }
  }); 
  
@@ -206,8 +193,6 @@ var row
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
-    <script>
-
-    </script>
+    
 
 @endsection
