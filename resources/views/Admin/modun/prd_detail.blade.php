@@ -6,7 +6,9 @@
     <div class="card" style="float: right; width: 72%; margin-right: 7%">
         <div class="card-body">
             <div style="box-sizing: border-box;">
+            <a href="{{ route('admin.product') }}">Go Back</a>
                 <h4 class="card-title">Sửa Sản Phẩm</h4>
+
                 <br>
             </div>
             @if ($errors->any())
@@ -44,13 +46,13 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Giá</label>
                             <input type="number" name="prd_price" class="form-control" id="exampleInputEmail1"
-                                value="{{ $product->price }}" step="1000" placeholder="">
+                                value="{{ $product->price }}"  placeholder="">
                         </div>
                         <div class="form-group">
 
                             <label for="exampleInputPassword1">Số Lượng</label>
                             <input type="number" name="prd_amount" class="form-control" id="exampleInputPassword1"
-                                value="{{ $product->prd_amount }}" placeholder="">
+                                value="{{ $product->prd_amount }}" min="0" placeholder="">
                         </div>
                         <div class="form-group">
 
