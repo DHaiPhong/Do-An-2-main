@@ -7,6 +7,7 @@ use App\Http\Requests\PaymentRequest;
 use Illuminate\Http\Request;
 use App\Contracts\OrderContract;
 use Cart;
+use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
 {
@@ -24,6 +25,7 @@ class CheckoutController extends Controller
 
     public function placeOrder(PaymentRequest $request)
     {
+
         $total = Cart::total() + $request->ship;
         $order = $this->orderRepository->storeOrderDetails(["_token" => $request->_token,
         "name" => $request->name,
@@ -38,6 +40,8 @@ class CheckoutController extends Controller
         
     ]);
 
+
+        Session::forget(['id', 'amount', 'code']);
 
         return redirect()->route('cart.success');
     }

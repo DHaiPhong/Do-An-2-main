@@ -115,6 +115,18 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link  " href="{{ route('coupons.index') }}">
+                        <i class="fa-solid fa-circle-c"></i>
+                        <p>
+                            Mã Giảm Giá
+                            <span class="badge badge-success right">
+                                <?php $count = DB::table('coupons')->count();
+                                echo $count; ?>
+                            </span>
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>

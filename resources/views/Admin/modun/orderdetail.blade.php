@@ -30,6 +30,7 @@
                         @endforeach
                     </tbody>
                 </table>
+
                 @if(Auth::user()->role == 'admin')
                     @if ($order->status == 'cancel')
                         <p class="btn btn-danger btn-fw check-permission" style="margin-top: 1rem;">Đã Hủy</p>
@@ -43,8 +44,6 @@
                         <a class="btn btn-danger btn-fw check-permission" style="margin-top: 1rem"
                             href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'cancel']) }}"> Hủy Đơn </a>
                     @endif
-
-
 
                 @else
                     @if ($order->status == 'cancel')
@@ -63,6 +62,7 @@
                         <a class="btn btn-danger btn-fw check-permission" style="margin-top: 1rem"
                             href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'cancel']) }}"> Hủy Đơn </a>
                     @endif
+
                 @endif
             </div>
         </div>

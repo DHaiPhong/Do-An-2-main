@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCartRequest;
+use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
@@ -23,23 +25,22 @@ class CartController extends Controller
             ->where('product_details.prd_id', $request->prd_id)
             ->where('product_details.prd_size', $request->prd_size)
             ->first();
-        
-        
+
+
         if ($product->prd_amount == 0) {
             return redirect()->route('users.cartshop')->with(['fail' => 'Lỗi sản phẩm đã hết hàng!']);
         } else {
             $data = Cart::content()
                 ->where('id', $product->prd_detail_id)
                 ->first();
-            
+
 
             if ($data != null) {
                 $totalqty = $request->quantity + $data->qty;
-                
-                if($totalqty <= $product->prd_amount){
+
+                if ($totalqty <= $product->prd_amount) {
 
                     Cart::add($product->prd_detail_id, $product->prd_name, $request->quantity, $request->price, '0', ['size' => $product->prd_size, 'img' => $product->prd_image]);
-                    
                 } else {
                     $data->qty = $product->prd_amount;
                 }
@@ -59,7 +60,8 @@ class CartController extends Controller
         }
         return back();
     }
-    function cartshop(){
+    function cartshop()
+    {
 
 
         return view('users/modun-user/cartshop', ['title' => 'Giỏ Hàng  ']);
@@ -75,8 +77,8 @@ class CartController extends Controller
         if ($data == 0) {
             return redirect()->route('home1');
         }
-        
-        
+
+
 
         return view('users.modun-user.payment', ['title' => 'Thanh Toán']);
     }
@@ -86,17 +88,60 @@ class CartController extends Controller
 
         $data = Cart::get($request->rowId);
         $prd = DB::table('product_details')
-        ->where('prd_detail_id',$data->id)
-        ->first();
-        if($prd->prd_amount > $request->qty){
-           Cart::update($request->rowId, $request->qty); 
-        }else{
-            Cart::update($request->rowId, $prd->prd_amount); 
+            ->where('prd_detail_id', $data->id)
+            ->first();
+        if ($prd->prd_amount > $request->qty) {
+            Cart::update($request->rowId, $request->qty);
+        } else {
+            Cart::update($request->rowId, $prd->prd_amount);
+        }
+    }
+    public function applyCoupon(Request $request)
+    {
+        $messages = [
+            'code.required' => 'Tên không được để trống',
+        ];
+
+        $this->validate($request, [
+            'code' => 'required'
+        ], $messages);
+
+        $coupon = Coupon::where('code', $request->code)->first();
+        if ($coupon) {
+            $message = 'Áp Dụng Mã Giảm Giá Thành Công!';
+            Session::put('id', $coupon->id);
+            Session::put('amount', $coupon->amount);
+            Session::put('code', $coupon->code);
+        } else {
+            Session::forget(['id', 'amount', 'code']);
+            $message = 'Mã giảm giá sai hoặc đã hết hạn';
         }
 
-        
-    }
+        return redirect()->route('users.cartshop')->with(['message' => $message]);
+        // if (!$coupon || $coupon->expires_at->lt(now())) {
+        //     return response()->json(['error' => 'Sai mã giảm giá. Hoặc mã đã hết hạn']);
+        // }
 
+        // $cart = Cart::content();
+        // $total = Cart::total();
+
+        // // Tính tổng giảm giá
+        // if ($coupon->type == 'fixed') {
+        //     $discount = $total - $coupon->amount;
+        // } else if ($coupon->type == 'percent') {
+        //     $discount = $total - ($total * ($coupon->amount / 100));
+        // }
+
+        // // dd($discount);
+
+        // // Thêm vào phiên
+        // session()->put('coupon', [
+        //     'name' => $coupon->code,
+        //     'discount' => $discount
+        // ]);
+
+        // return response()->json(['success' => 'Áp dụng mã giảm giá thành công!', 'discount' => $discount]);
+    }
 
 
 

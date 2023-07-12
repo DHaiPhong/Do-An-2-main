@@ -40,7 +40,7 @@ class AdminController extends Controller
             ->sum('grand_total');
 
         $orders = DB::table('orders')
-            ->whereIn('status', ['pending', 'completed', 'processing', 'shipping', 'cancel'])
+            ->whereIn('status', ['pending', 'processing', 'shipping'])
             ->when($month, function ($query, $month) {
                 return $query->whereMonth('orders.created_at', $month);
             })
@@ -163,6 +163,55 @@ class AdminController extends Controller
             ]
         ];
     }
+    function dailyRevenueChart(Request $request)
+    {
+        // Get month from request parameters. If not given, use current month
+        $currentMonth = $request->input('month', date('m'));
+
+        $entries = Order::select([
+            DB::raw('DATE(updated_at) as date'),
+            DB::raw('SUM(grand_total) as grand_total'),
+        ])
+            ->whereYear('created_at', 2023)
+            ->whereMonth('created_at', $currentMonth)
+            ->where('status', 'completed')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $daysInMonth = date('t', strtotime("2023-$currentMonth-01"));
+        $labels = [];
+
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $labels[$day] = $day;
+        }
+
+        $grand_total = [];
+        foreach ($entries as $entry) {
+            $dayOfMonth = date('j', strtotime($entry->date));
+            $grand_total[$dayOfMonth] = $entry->grand_total;
+        }
+
+        foreach ($labels as $day => $name) {
+            if (!array_key_exists($day, $grand_total)) {
+                $grand_total[$day] = 0;
+            }
+        }
+
+        ksort($grand_total);
+
+        return [
+            'labels' => array_values($labels),
+            'datasets' => [
+                [
+                    'label' => 'Doanh Thu(đ) của tháng ' . $currentMonth,
+                    'borderWidth' => 1,
+                    'data' => array_values($grand_total),
+                ],
+            ],
+        ];
+    }
+
 
     function totalChart(Request $request)
     {
@@ -225,7 +274,7 @@ class AdminController extends Controller
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->select('products.prd_id', 'prd_img.prd_image')
             ->groupBy('products.prd_id');
-   
+
         $products = DB::table('products')
             ->joinSub($temp, 'temp', function (JoinClause $join) {
                 $join->on('products.prd_id', '=', 'temp.prd_id');
@@ -247,34 +296,32 @@ class AdminController extends Controller
         return view('Admin.modun.product', ['products' => $products,'cats' => $cats]);
     }
     public function loadMoreProducts(Request $request)
-{
-    
-    $temp = DB::table('products')
+    {
+
+        $temp = DB::table('products')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->select('products.prd_id', 'prd_img.prd_image')
             ->groupBy('products.prd_id');
-    $products = DB::table('products')
-        ->joinSub($temp, 'temp', function (JoinClause $join) {
-            $join->on('products.prd_id', '=', 'temp.prd_id');
-        })
-        ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-        ->join('categories', 'products.category_id', '=', 'categories.id')
-        ->select(
-            'products.*',
-            'categories.name as category',
-            'temp.prd_image',
-            'product_details.prd_detail_id',
+        $products = DB::table('products')
+            ->joinSub($temp, 'temp', function (JoinClause $join) {
+                $join->on('products.prd_id', '=', 'temp.prd_id');
+            })
+            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->select(
+                'products.*',
+                'categories.name as category',
+                'temp.prd_image',
+                'product_details.prd_detail_id',
 
-            DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
-        )
-        ->groupBy('products.prd_id')
-        ->orderBy('product_details.prd_id')
-        ->get();
+                DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
+            )
+            ->groupBy('products.prd_id')
+            ->orderBy('product_details.prd_id')
+            ->get();
 
-    return response()->json($products);
-
-    
-}
+        return response()->json($products);
+    }
 
     public function search(Request $request, $model)
     {
@@ -289,7 +336,6 @@ class AdminController extends Controller
         })->get();
 
         return response()->json(['results' => $results]);
-
     }
 
     function productorderby(Request $request)
@@ -696,36 +742,31 @@ class AdminController extends Controller
     //---------------add prd---------------
 
     function prd_add(Request $request)
-    {   
-        $rule = [
-            
-        ];
-    
+    {
+        $rule = [];
+
         // Define custom error messages
-        $message = [
-            
-            
-        ];
-    
+        $message = [];
+
         // Validate the request data
         $vali = $request->validate($rule, $message);
-        
+
         if ($request->box === "uncheck") {
-            
+
             $rules = [
                 'prd_id'   => 'not_in:0',
                 'prd_amount'        => 'required|integer|min:0',
                 'prd_size'   => 'not_in:0',
             ];
-        
+
             // Define custom error messages
             $messages = [
-                
-                'prd_id.not_in'=> 'Chưa chọn sản phẩm để thêm',
+
+                'prd_id.not_in' => 'Chưa chọn sản phẩm để thêm',
                 'prd_amount'        => 'required|integer|min:0',
-                'prd_size.not_in'=> 'Chưa chọn Size để thêm',
+                'prd_size.not_in' => 'Chưa chọn Size để thêm',
             ];
-        
+
             // Validate the request data
             $validatedData = $request->validate($rules, $messages);
 
@@ -741,7 +782,7 @@ class AdminController extends Controller
             }
         } else {
 
-            
+
             $rules = [
                 'newprd'      => 'required|max:255|unique:products,prd_name',
                 'prd_size'   => 'not_in:0',
@@ -751,10 +792,10 @@ class AdminController extends Controller
                 'images'        => 'required',
                 'images.*'      => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'slug'          => 'required|max:255',
-                
-                
+
+
             ];
-        
+
             // Define custom error messages
             $messages = [
                 'newprd.required' => 'Chưa nhập tên cho Sản phẩm',
@@ -766,10 +807,10 @@ class AdminController extends Controller
                 'images.mimes'       => 'Ảnh phải là kiểu dữ liệu sau: jpeg, png, jpg, gif, svg.',
                 'images.max'         => 'Kích thước ảnh không quá 2MB.',
                 'slug.required'     => 'Chưa có slug',
-                'category_id.not_in'=> 'Chưa chọn Danh mục cho sản phẩm',
-                'prd_size.not_in'=> 'Chưa chọn Size để thêm',
+                'category_id.not_in' => 'Chưa chọn Danh mục cho sản phẩm',
+                'prd_size.not_in' => 'Chưa chọn Size để thêm',
             ];
-        
+
             // Validate the request data
             $validatedData = $request->validate($rules, $messages);
             $prd = [
@@ -830,29 +871,29 @@ class AdminController extends Controller
     function addprdform()
     {
         $temp = DB::table('products')
-        ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
-        ->select('products.prd_id', 'prd_img.prd_image')
-        ->groupBy('products.prd_id');
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->select('products.prd_id', 'prd_img.prd_image')
+            ->groupBy('products.prd_id');
 
 
-    $products = DB::table('products')
-        ->joinSub($temp, 'temp', function (JoinClause $join) {
-            $join->on('products.prd_id', '=', 'temp.prd_id');
-        })
-        
-        ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-        ->orderBy('products.prd_name',"asc")
-        ->orderBy('product_details.prd_size', 'ASC')
-        
+        $products = DB::table('products')
+            ->joinSub($temp, 'temp', function (JoinClause $join) {
+                $join->on('products.prd_id', '=', 'temp.prd_id');
+            })
 
-        ->select('temp.prd_image','products.*',DB::raw('GROUP_CONCAT(product_details.prd_size ) as new_size'))
-         
-        ->groupBy('products.prd_id')
-        ->get();
+            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+            ->orderBy('products.prd_name', "asc")
+            ->orderBy('product_details.prd_size', 'ASC')
+
+
+            ->select('temp.prd_image', 'products.*', DB::raw('GROUP_CONCAT(product_details.prd_size ) as new_size'))
+
+            ->groupBy('products.prd_id')
+            ->get();
         $categories = DB::table('categories')
             ->get();
-        
-        
+
+
         return view('Admin/modun/addprd', compact(['products', 'categories']));
     }
 
@@ -861,9 +902,11 @@ class AdminController extends Controller
     {
         $orders = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->select('orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
             ->groupBy('orders.id')
-            ->orderByDesc('orders.id')
+            ->orderByDesc('orders.updated_at')
             ->paginate(9);
+
         return view('Admin.modun.order', compact('orders'));
     }
 
@@ -876,7 +919,7 @@ class AdminController extends Controller
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->groupBy('products.prd_id')
             ->where('orders.id', $id)
-            ->select('orders.*','order_items.*','product_details.*','prd_img.*','products.prd_name')
+            ->select('orders.*', 'order_items.*', 'product_details.*', 'prd_img.*', 'products.prd_name')
             ->get();
 
         return view('Admin.modun.orderdetail', compact('orders'));
@@ -884,9 +927,8 @@ class AdminController extends Controller
 
     function updateStatus($id, $value)
     {
-        
         $order = DB::table('orders')
-            ->where('id',$id)
+            ->where('id', $id)
             ->first();
 
         if (!$order) {
@@ -905,15 +947,15 @@ class AdminController extends Controller
             return redirect()->route('admin.order')->with('error', 'Không thể hủy đơn hàng đang xử lý!');
         }
 
-        if ($value != "completed") {
-            DB::table('orders')
-                ->where('id', $id)
-                ->update(['status' => $value,'updated_by' => Auth::user()->name]);
-        
-        }else{
-            DB::table('orders')
-                ->where('id', $id)
-                ->update(['status' => 'completed']);
+        $updateData = [
+            'status' => $value,
+            'updated_by' => Auth::user()->name,
+            'updated_at' => now()
+        ];
+
+        if ($value == "completed") {
+            $updateData['status'] = 'completed';
+
             $order_items = DB::table('order_items')->where('order_id', $id)->get();
             foreach ($order_items as $item) {
                 $product = DB::table('product_details')->where('prd_detail_id', $item->product_id)->first();
@@ -924,8 +966,13 @@ class AdminController extends Controller
             }
         }
 
+        DB::table('orders')
+            ->where('id', $id)
+            ->update($updateData);
+
         return redirect()->route('admin.order')->with('success', 'Cập nhật trạng thái thành công');
     }
+
 
 
     function orderorderby($id)

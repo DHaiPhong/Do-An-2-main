@@ -51,6 +51,14 @@
   text-transform: none;
 }
 
+.inputBox input {
+  width: 100%;
+  border:1px solid #ccc;
+  padding:10px 15px;
+  font-size: 15px;
+  text-transform: none;
+}
+
 .containerpm form .row .col .inputBox input:focus{
   border:1px solid #000;
 }

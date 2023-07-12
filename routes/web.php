@@ -11,6 +11,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CouponController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use PhpParser\Node\Stmt\Function_;
@@ -73,6 +74,8 @@ Route::prefix('account')->group(function () {
     Route::get('/pay', function () {
         return view('users.modun-user.payment.payment');
     });
+    Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('applyCoupon');
+
     Route::get('/success', [CartController::class, 'cartsuccess'])->name('cart.success');
 });
 
@@ -91,8 +94,10 @@ Route::prefix('admin')->middleware('user-role:editor,admin')->group(function () 
     Route::get('/chart/totalChart', [AdminController::class, 'totalChart'])->name('totalChart');
     Route::get('/chart/ordersChart', [AdminController::class, 'ordersChart'])->name('ordersChart');
     Route::get('/chart/soldChart', [AdminController::class, 'soldChart'])->name('soldChart');
+    Route::get('/chart/dailyRevenueChart', [AdminController::class, 'dailyRevenueChart'])->name('dailyRevenueChart');
     Route::get('/getSoldCount', [AdminController::class, 'getSoldCount'])->name('getSoldCount');
     Route::resource('categories', CategoryController::class);
+    Route::resource('coupons', CouponController::class);
 
     //----------------Acount----------------
     Route::prefix('account')->group(function () {
