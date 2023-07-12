@@ -72,25 +72,6 @@
         });
     </script>
     <script>
-        var userRole = "{{ Auth::user()->role }}"; // get the user's role
-
-        $(document).ready(function() {
-            // all buttons and a tags that need permission checking
-            var elements = document.querySelectorAll("a.check-permission");
-
-            for (var i = 0; i < elements.length; i++) {
-                // Ensure the click event is only attached once
-                if (!elements[i].hasAttribute('data-click-bound')) {
-                    elements[i].addEventListener("click", function(e) {
-                        // check editor's permission
-                        if (userRole == "editor") {
-                            e.preventDefault();
-                            alert("Bạn không có quyền thực hiện chức năng này");
-                        }
-                    });
-                    elements[i].setAttribute('data-click-bound', 'true');
-                }
-            }
-        });
+       
     </script>
 @endsection

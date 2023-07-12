@@ -34,6 +34,8 @@ class UserRoleMiddleware
             if ($userRole == 'user' && $role == 'user') {
                 return $next($request);
             }
+        }else {
+            return redirect()->route('home1');
         }
         return response()->view('home', ['error' => 'Bạn không có quyền thực hiện chức năng này!'])
             ->cookie('cookie_name', 'cookie_value');

@@ -30,21 +30,39 @@
                         @endforeach
                     </tbody>
                 </table>
-                @if ($order->status == 'cancel')
-                    <p class="btn btn-danger btn-fw check-permission" style="margin-top: 1rem;">Đã Hủy</p>
-                @elseif($order->status == 'pending')
-                    <a class="btn btn-primary btn-fw check-permission" style="margin-top: 1rem"
-                        href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'processing']) }}"> Xử Lý </a>
-                @elseif($order->status == 'processing')
-                    <a class="btn btn-info btn-fw check-permission" style="margin-top: 1rem"
-                        href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'shipping']) }}"> Giao Hàng </a>
-                @elseif($order->status == 'shipping')
-                    <a class="btn btn-success btn-fw check-permission" style="margin-top: 1rem"
-                        href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'completed']) }}"> Hoàn Thành </a>
-                @endif
-                @if ($order->status == 'pending' & $order->status != 'cancel')
-                    <a class="btn btn-danger btn-fw check-permission" style="margin-top: 1rem"
-                        href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'cancel']) }}"> Hủy Đơn </a>
+                @if(Auth::user()->role == 'admin')
+                    @if ($order->status == 'cancel')
+                        <p class="btn btn-danger btn-fw check-permission" style="margin-top: 1rem;">Đã Hủy</p>
+                    @else
+                        <a class="btn btn-primary btn-fw check-permission" style="margin-top: 1rem"
+                            href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'processing']) }}"> Xử Lý </a>
+                        <a class="btn btn-info btn-fw check-permission" style="margin-top: 1rem"
+                            href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'shipping']) }}"> Giao Hàng </a>
+                        <a class="btn btn-success btn-fw check-permission" style="margin-top: 1rem"
+                            href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'completed']) }}"> Hoàn Thành </a>
+                        <a class="btn btn-danger btn-fw check-permission" style="margin-top: 1rem"
+                            href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'cancel']) }}"> Hủy Đơn </a>
+                    @endif
+
+
+
+                @else
+                    @if ($order->status == 'cancel')
+                        <p class="btn btn-danger btn-fw check-permission" style="margin-top: 1rem;">Đã Hủy</p>
+                    @elseif($order->status == 'pending')
+                        <a class="btn btn-primary btn-fw check-permission" style="margin-top: 1rem"
+                            href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'processing']) }}"> Xử Lý </a>
+                    @elseif($order->status == 'processing')
+                        <a class="btn btn-info btn-fw check-permission" style="margin-top: 1rem"
+                            href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'shipping']) }}"> Giao Hàng </a>
+                    @elseif($order->status == 'shipping')
+                        <a class="btn btn-success btn-fw check-permission" style="margin-top: 1rem"
+                            href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'completed']) }}"> Hoàn Thành </a>
+                    @endif
+                    @if ($order->status == 'pending' & $order->status != 'cancel')
+                        <a class="btn btn-danger btn-fw check-permission" style="margin-top: 1rem"
+                            href="{{ route('admin.updatestatus', ['id' => $order->order_id, 'cancel']) }}"> Hủy Đơn </a>
+                    @endif
                 @endif
             </div>
         </div>
@@ -55,23 +73,6 @@
     <script>
         var userRole = "{{ Auth::user()->role }}"; // get the user's role
 
-        $(document).ready(function() {
-            // all buttons and a tags that need permission checking
-            var elements = document.querySelectorAll("a.check-permission");
-
-            for (var i = 0; i < elements.length; i++) {
-                // Ensure the click event is only attached once
-                if (!elements[i].hasAttribute('data-click-bound')) {
-                    elements[i].addEventListener("click", function(e) {
-                        // check editor's permission
-                        if (userRole == "editor") {
-                            e.preventDefault();
-                            alert("Bạn không có quyền thực hiện chức năng này");
-                        }
-                    });
-                    elements[i].setAttribute('data-click-bound', 'true');
-                }
-            }
-        });
+        
     </script>
 @endsection

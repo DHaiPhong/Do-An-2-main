@@ -21,12 +21,9 @@
                     <input type="email" name="email" class="form-control" id="exampleInputEmail1"
                         value="{{ $user->email }} " placeholder="email" required>
                 </div>
-
-
-
-                <div class="form-group">
+                                <div class="form-group">
                     <label for="">Số Điện Thoại</label>
-                    <input type="text" name="phone" class="form-control" id="" value="{{ $user->phone }} "
+                    <input type="text" name="phone" class="form-control" id="phone_number" value="{{ $user->phone }} "
                         placeholder="phone number" required>
                 </div>
 
@@ -36,17 +33,20 @@
                         placeholder="Address" required>
                 </div>
                 <div class="form-group">
-
-                    @if (Auth::user()->id != $user->id)
-                        <label for="exampleFormControlSelect2">Level</label>
-                        <select class="form-control" id="example FormControlSelect2" name="level">
-                            <option value="2" @if ($user->role == 2) selected @endif>Admin</option>
-                            <option value="1" @if ($user->role == 1) selected @endif>Editor</option>
-                            <option value="0" @if ($user->role == 0) selected @endif>Người Dùng</option>
-                        </select>
+                    @if(Auth::user()->role == 'admin')
+                        @if (Auth::user()->id != $user->id)
+                            <label for="exampleFormControlSelect2">Level</label>
+                            <select class="form-control" id="example FormControlSelect2" name="role">
+                                
+                                <option value="1" @if ($user->role == 1) selected @endif>Editor</option>
+                                <option value="0" @if ($user->role == 0) selected @endif>Người Dùng</option>
+                            </select>
+                        @else
+                            <input type="hidden" name="role" class="form-control" id=""
+                                value="{{ $user->role }} ">
+                        @endif
                     @else
-                        <input type="hidden" name="role" class="form-control" id=""
-                            value="{{ $user->role }} ">
+                    <input type="hidden" name="role" value="{{ $user->role }}">
                     @endif
                 </div>
                 <button type="submit" href="{{ route('account.edit', ['id' => $user->id]) }}" class="btn btn-light"
@@ -56,4 +56,20 @@
             </form>
         </div>
     </div>
+    <script>
+        var input = document.getElementById('phone_number');
+        input.addEventListener('input', function() {
+            if (this.value.includes("+")) {
+                this.value = this.value.replace(/[^0-9+]/, '');
+                if (this.value.length > 12) {
+                    this.value = this.value.slice(0, 12);
+                }
+            } else {
+                this.value = this.value.replace(/[^0-9]/, '');
+                if (this.value.length > 10) {
+                    this.value = this.value.slice(0, 10);
+                }
+            }
+        });
+    </script>
 @stop

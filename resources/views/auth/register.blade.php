@@ -63,15 +63,15 @@
                                     </div>
                                     <div class="form-group">
 
-                                        <input id="name" type="text"
+                                        <input  type="text"
                                             class="form-control @error('name') is-invalid @enderror" name="address"
                                             value="" placeholder="Địa Chỉ">
 
                                     </div>
 
                                     <div class="form-group">
-                                        <input id="name" type="number"
-                                            class="form-control @error('name') is-invalid @enderror" name="phone"
+                                        <input type="text"
+                                            class="form-control @error('name') is-invalid @enderror" name="phone" id="phone_number"
                                             value="" placeholder="Số Điện Thoại">
 
                                     </div>
@@ -128,5 +128,20 @@
                 </div>
             </div>
 </body>
-
+<script>
+    var input = document.getElementById('phone_number');
+        input.addEventListener('input', function() {
+            if (this.value.includes("+")) {
+                this.value = this.value.replace(/[^0-9+]/, '');
+                if (this.value.length > 12) {
+                    this.value = this.value.slice(0, 12);
+                }
+            } else {
+                this.value = this.value.replace(/[^0-9]/, '');
+                if (this.value.length > 10) {
+                    this.value = this.value.slice(0, 10);
+                }
+            }
+        });
+</script>
 </html>
