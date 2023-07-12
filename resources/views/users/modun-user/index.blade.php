@@ -7,7 +7,7 @@
             @foreach ($sells as $sell)
                 <div class="box">
                     <div class="content" style="position:relative">
-                        <a href="{{ route('users.productdetail', $sell->slug )}}"><img src="/anh/{{ $sell->prd_image }}"
+                        <a href="{{ route('users.productdetail', $sell->slug) }}"><img src="/anh/{{ $sell->prd_image }}"
                                 width=" " alt=""></a>
                         <h3>{{ \Illuminate\Support\Str::limit($sell->prd_name, '43') }}</h3>
                         <div style="height: 80px"></div>
@@ -57,7 +57,7 @@
             @foreach ($views as $view)
                 <div class="box">
                     <div class="content" style="position:relative">
-                        <a href="{{ route('users.productdetail', $view->prd_id) }}"><img src="/anh/{{ $view->prd_image }}"
+                        <a href="{{ route('users.productdetail', $view->slug) }}"><img src="/anh/{{ $view->prd_image }}"
                                 width=" " alt=""></a>
                         <h3>{{ \Illuminate\Support\Str::limit($view->prd_name, '43') }}</h3>
                         <div style="height: 80px"></div>

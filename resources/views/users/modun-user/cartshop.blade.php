@@ -15,6 +15,12 @@
                         Thêm sản phẩm thành công!
                     </div>
                 @endif
+                @if (session('message'))
+                    <div class="alert alert-success text-center m-0" style="font-size: 2rem; margin-bottom: 1rem"
+                        role="alert">
+                        {{ session('message') }}
+                    </div>
+                @endif
                 @if (session('fail'))
                     <div class="alert alert-danger text-center m-0" style="font-size: 2rem; margin-bottom: 1rem"
                         role="alert">
@@ -62,6 +68,16 @@
                         </div>
                         <div class="card col-md-3" style="width: 300px; margin-left: 1rem">
                             <h2>Thanh Toán</h2>
+                            <form action="{{ route('applyCoupon') }}" method="post">
+                                @csrf
+                                <div class="inputBox" style="margin-bottom: 1rem">
+                                    <span style="font-size: 1.5rem">Mã Giảm Giá:</span>
+                                    <input name="code" id="coupon-code" type="text" value=""
+                                        placeholder="Nhập mã giảm giá">
+                                    <button type="submit" class="btn btn-success">Xác Nhận</button>
+                                </div>
+                            </form>
+
                             <div class="total-price">
                                 <table>
                                     <form method="post" action="{{ route('users.payment') }}">
@@ -70,25 +86,36 @@
                                             <td>Tạm Tính</td>
                                             <td style="color: red">{{ number_format(Cart::total()) }} đ</td>
                                         </tr>
-
+                                        @if (session('amount'))
+                                            <tr>
+                                                <td>Giảm giá</td>
+                                                <td style="color: red">
+                                                    <h6 style="font-size: 16px" class="coupon-div"
+                                                        data-price="{{ session('amount') }}">
+                                                        {{ number_format(session('amount')) }} đ</h6>
+                                                </td>
+                                            </tr>
+                                        @endif
                                         <tr>
                                             <td>Tổng</td>
-                                            <td style="color: red">{{ number_format(Cart::total()) }} đ
-                                                <input name="total_price" type="hidden" value="5000">
-                                                {{-- <input name="total_price" type="hidden"
-                                    value="{{ Cart::total() - 15000 - Cart::total() * (5 / 100) }}"> --}}
+                                            <td style="color: red">
+                                                {{ number_format(Cart::total() - session('amount')) }} đ
+                                                <input name="total_price" type="hidden"
+                                                    value="{{ Cart::total() - session('amount') }}">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 <button class="btn"
                                                     style="background-color: orangered; width: 100%; color: #fff">
-                                                    Thanh toán </button>
+                                                    Thanh toán
+                                                </button>
                                             </td>
                                         </tr>
-                                        <form>
+                                    </form>
                                 </table>
                             </div>
+
                         </div>
                     </div>
                 @else

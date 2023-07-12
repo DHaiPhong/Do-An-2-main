@@ -74,6 +74,8 @@ Route::prefix('account')->group(function () {
     Route::get('/pay', function () {
         return view('users.modun-user.payment.payment');
     });
+    Route::post('/applyCoupon', [CartController::class, 'applyCoupon'])->name('applyCoupon');
+
     Route::get('/success', [CartController::class, 'cartsuccess'])->name('cart.success');
 });
 
@@ -147,8 +149,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/productt/add', [AdminController::class, 'addprdform'])->name('admin.add_prd')->middleware('user-role:admin');
     Route::post('/productt/add', [AdminController::class, 'prd_add'])->name('admin.prd_add')->middleware('user-role:admin');
 });
-
-Route::get('/applyCoupon', [CartController::class, 'applyCoupon'])->name('applyCoupon');
 
 Auth::routes();
 

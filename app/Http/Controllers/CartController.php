@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
@@ -97,30 +98,51 @@ class CartController extends Controller
     }
     public function applyCoupon(Request $request)
     {
+        $messages = [
+            'code.required' => 'Tên không được để trống',
+        ];
+
+        $this->validate($request, [
+            'code' => 'required'
+        ], $messages);
+
         $coupon = Coupon::where('code', $request->code)->first();
-
-        if (!$coupon || $coupon->expires_at->lt(now())) {
-            return redirect()->back()->withErrors('Invalid coupon code. Please try again');
+        if ($coupon) {
+            $message = 'Áp Dụng Mã Giảm Giá Thành Công!';
+            Session::put('id', $coupon->id);
+            Session::put('amount', $coupon->amount);
+            Session::put('code', $coupon->code);
+        } else {
+            Session::forget(['id', 'amount', 'code']);
+            $message = 'Mã giảm giá sai hoặc đã hết hạn';
         }
 
-        $cart = Cart::content();
-        $total = Cart::total();
+        return redirect()->route('users.cartshop')->with(['message' => $message]);
+        // if (!$coupon || $coupon->expires_at->lt(now())) {
+        //     return response()->json(['error' => 'Sai mã giảm giá. Hoặc mã đã hết hạn']);
+        // }
 
-        // Tính tổng giảm giá
-        if ($coupon->type == 'fixed') {
-            $discount = $total - $coupon->amount;
-        } else if ($coupon->type == 'percent') {
-            $discount = $total - ($total * ($coupon->amount / 100));
-        }
-        dd($discount);
-        // Thêm vào phiên
-        session()->put('coupon', [
-            'name' => $coupon->code,
-            'discount' => $discount
-        ]);
+        // $cart = Cart::content();
+        // $total = Cart::total();
 
-        return redirect()->back()->with(['message', 'Coupon applied successfully.']);
+        // // Tính tổng giảm giá
+        // if ($coupon->type == 'fixed') {
+        //     $discount = $total - $coupon->amount;
+        // } else if ($coupon->type == 'percent') {
+        //     $discount = $total - ($total * ($coupon->amount / 100));
+        // }
+
+        // // dd($discount);
+
+        // // Thêm vào phiên
+        // session()->put('coupon', [
+        //     'name' => $coupon->code,
+        //     'discount' => $discount
+        // ]);
+
+        // return response()->json(['success' => 'Áp dụng mã giảm giá thành công!', 'discount' => $discount]);
     }
+
 
 
     function cartsuccess()

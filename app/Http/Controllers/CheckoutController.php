@@ -7,6 +7,7 @@ use App\Http\Requests\PaymentRequest;
 use Illuminate\Http\Request;
 use App\Contracts\OrderContract;
 use Cart;
+use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
 {
@@ -24,16 +25,19 @@ class CheckoutController extends Controller
 
     public function placeOrder(PaymentRequest $request)
     {
-        
-        $order = $this->orderRepository->storeOrderDetails(["_token" => "zuJ3DkjU1IoZG9sAijoruC9PPbWY6tYUme68MOID",
-        "name" => $request->name,
-        "email" => $request->email,
-        "city" => $request->city,
-        "address" => $request->address,
-        "phone" => $request->phone,
-        "district" => $request->district,
-        "total" => $request->ship]);
 
+        $order = $this->orderRepository->storeOrderDetails([
+            "_token" => "zuJ3DkjU1IoZG9sAijoruC9PPbWY6tYUme68MOID",
+            "name" => $request->name,
+            "email" => $request->email,
+            "city" => $request->city,
+            "address" => $request->address,
+            "phone" => $request->phone,
+            "district" => $request->district,
+            "total" => $request->ship
+        ]);
+
+        Session::forget(['id', 'amount', 'code']);
 
         return redirect()->route('cart.success');
     }
