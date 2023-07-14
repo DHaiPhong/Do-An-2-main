@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentRequest;
 use Illuminate\Http\Request;
 use App\Contracts\OrderContract;
-use Cart;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
