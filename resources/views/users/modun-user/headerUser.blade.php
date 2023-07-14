@@ -90,6 +90,7 @@
 
                     if (data.length > 0) { // check if any item is returned
                         data.forEach(item => {
+                            
                             let suggestionItem = document.createElement('li');
                             suggestionItem.classList.add('suggestion-item');
 
@@ -108,8 +109,9 @@
                             suggestionItem.appendChild(prdPrice);
 
                             suggestionItem.addEventListener('click', function() {
-                                document.getElementById('searchInput').value = item
-                                    .prd_name;
+                                link = "http://127.0.0.1:8000/productdetail/"+item.slug;
+                                    location.href = link;    
+
                                 suggestionList.style.display = 'none';
                             });
 
