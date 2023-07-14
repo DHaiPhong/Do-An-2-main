@@ -46,7 +46,7 @@ class userController extends Controller
             ->where('orders.user_id', Auth::user()->id)
             ->groupBy('orders.id')
             ->paginate(5);
-
+        
         return view('users.modun-user.order', ['orders' => $orders, 'title' => 'Account']);
     }
 
@@ -69,8 +69,11 @@ class userController extends Controller
             ->where('orders.user_id', Auth::user()->id)
             ->where('orders.id', $id)
             ->get();
-
-        return view('users.modun-user.orderdetail', ['orders' => $orders, 'title' => 'Chi Tiết Đơn Hàng']);
+            $odnb = DB::table('orders')
+            ->where('orders.user_id', Auth::user()->id)
+            ->where('orders.id', $id)
+            ->first();
+        return view('users.modun-user.orderdetail', ['orders' => $orders,'odnb' => $odnb, 'title' => 'Chi Tiết Đơn Hàng']);
     }
 
     function ordercancel($id)

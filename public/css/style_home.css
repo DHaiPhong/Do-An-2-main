@@ -23,7 +23,9 @@ html{
     scroll-padding-top: 6rem;
     scroll-behavior: smooth;
 }
-
+.page-item.active .page-link{
+    z-index: 1 !important;
+}
 header{
     position: fixed;
     top: 0;

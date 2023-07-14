@@ -32,12 +32,12 @@ Route::middleware(['auth', 'user-role:editor'])->group(function () {
 Route::middleware(['auth', 'user-role:admin'])->group(function () {
     Route::get('/role-test/admin', [HomeController::class, 'roleTestAdmin'])->name('role.test.admin');
 });
-
-Route::get('/order', [userController::class, 'order'])->name('users.order');
-Route::get('/order/detail/{id}', [userController::class, 'orderdetail'])->name('users.orderdetail');
-Route::get('/order/cancel/{id}', [userController::class, 'ordercancel'])->name('users.ordercancel');
-Route::post('user/update', [userController::class, 'updateacc'])->name('users.updateacc');
-
+Route::prefix('order')->group(function (){
+Route::get('/', [userController::class, 'order'])->middleware('CheckLogin')->name('users.order');
+Route::get('/detail/{id}', [userController::class, 'orderdetail'])->middleware('CheckLogin')->name('users.orderdetail');
+Route::get('/cancel/{id}', [userController::class, 'ordercancel'])->name('users.ordercancel');
+Route::post('/user/update', [userController::class, 'updateacc'])->name('users.updateacc');
+});
 //
 //------------------------------product----------------------------
 Route::get(
