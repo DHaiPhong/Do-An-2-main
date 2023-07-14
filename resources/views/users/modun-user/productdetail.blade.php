@@ -119,7 +119,25 @@
                                 <div id="boxo" style="height:50px;border-radius: 8px; text-align: center;">
                                     <p id="stock_message" style="display:none;font-size:18px;">Size này đã hết hàng</p>
                                 </div>
-
+                                <ul class="list-inline" style="display: flex">
+                                    @for ($count = 1; $count <= 5; $count++)
+                                        @php
+                                            if ($count <= $rating) {
+                                                $color = 'color: #ffcc00;';
+                                            } else {
+                                                $color = 'color: #ccc;';
+                                            }
+                                        @endphp
+                                        <li class="rating"
+                                            style="cursor:pointer; font-size: 3rem; {{ $color }} margin-bottom: 2rem; margin-right: 0.5rem; margin-top: 2rem"
+                                            title="Đánh Giá" id="{{ $prd->prd_id }}-{{ $count }}"
+                                            data-index="{{ $count }}" data-product_id="{{ $prd->prd_id }}"
+                                            data-rating="{{ $rating }}">
+                                            &#9733;
+                                        </li>
+                                    @endfor
+                                    <p style="margin-top: 1.3rem">{{ $rating_count }} lượt đã đánh giá </p>
+                                </ul>
                                 <div class="btn-and-quantity-wrap">
                                     <button id="order_button" type="submit">Mua Ngay</button>
                                 </div>
@@ -206,89 +224,21 @@
             </div>
 
         </section>
-        <div style="flex-wrap:wrap;padding:10px 50px;" class="d-flex justify-content-center">
-            <table class="table1">
-                <tr>
-                    <td class="image-column1"><img src="/anh/qq1.png" alt="placeholder"></td>
-                    <td class="text-column1">
-                        <h2>Chất lượng sản phẩm?</h2>
-                        <p>Sản phẩm luôn được VNSneakers kiểm tra và đánh giá chất lượng cao nhất trước khi đạt
-                            khách hàng!</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="image-column1"><img src="/anh/qq2.png" alt="placeholder"></td>
-                    <td class="text-column1">
-                        <h2>Thời gian giao hàng?</h2>
-                        <p>Chúng tôi sử dụng đơn vị vận chuyển uy tín nhất, nhanh nhất, thời gian ước tính từ 1-4 ngày
-                            tùy thuộc vào khu vực.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="image-column1"><img src="/anh/qq3.png" alt="placeholder"></td>
-                    <td class="text-column1">
-                        <h2>Màu sắc sản phẩm sai?</h2>
-                        <p>Do một số yếu tố khách quan như độ sáng màn hình, chất lượng màn hình nên sản phẩm có thể không
-                            được như ý.
-                            đúng màu.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="image-column1"><img src="/anh/qq4.png" alt="placeholder"></td>
-                    <td class="text-column1">
-                        <h2>Thời gian làm việc?</h2>
-                        <p>Hệ thống cửa hàng và Online làm việc từ 8h30 đến 22h hàng ngày.</p>
-                    </td>
-                </tr>
 
-            </table>
-            <table class="table1">
-                <tr>
-                    <td class="image-column1"><img src="/anh/qq5.png" alt="placeholder"></td>
-                    <td class="text-column1">
-                        <h2>Hàng có sẵn không?</h2>
-                        <p>Sản phẩm có bán tại hệ thống cửa hàng VNSneakers và online tại website.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="image-column1"><img src="/anh/qq6.png" alt="placeholder"></td>
-                    <td class="text-column1">
-                        <h2>Đổi hàng như thế nào?</h2>
-                        <p>Trao đổi rất dễ dàng và chúng tôi luôn muốn khách hàng hài lòng. Vui lòng liên hệ fanpage để
-                            thay đổi!</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="image-column1"><img src="/anh/qq7.png" alt="placeholder"></td>
-                    <td class="text-column1">
-                        <h2>Bảo hành sản phẩm</h2>
-                        <p>Sản phẩm được bảo hành 30 ngày đối với bất kỳ lỗi nào. Hàng SALE không bảo hành.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="image-column1"><img src="/anh/qq8.png" alt="placeholder"></td>
-                    <td class="text-column1">
-                        <h2>Cỡ giày sai?</h2>
-                        <p>Bạn có thể đến cửa hàng hoặc gửi lại để đổi với sản phẩm mới 100%. Vẫn còn thẻ
-                            và hóa đơn mua hàng.</p>
-                    </td>
-                </tr>
-            </table>
-        </div>
         <div style="background-color: orange;height: 2px; margin:0px 350px"></div>
         <div class="title-content">
             Đánh
             <span><b style="color: orange; font-size: 25px;">Giá</b></span>
         </div>
         <style>
-            ul li {
+            .col-md-12 .icon {
                 display: inline-block;
                 margin-right: 10px;
             }
 
             .style-comment {
                 border: 1px solid #000;
-                border-radius: 10px;
+                border-radius: 5px;
                 width: 65%;
                 margin-left: 1rem
             }
@@ -303,32 +253,6 @@
 
             <div id="comment_show"></div>
         </form>
-        {{-- <div class="row justify-content-center">
-            <div class="col-md-8">
-                <ul>
-                    <li><a style="font-size: 2rem" href=""><i class="fa fa-user"></i>Admin</a></li>
-                    <li><a style="font-size: 2rem" href=""><i class="fa fa-clock-o"></i>12:41 PM</a></li>
-                    <li><a style="font-size: 2rem" href=""><i class="fa fa-calendar-o"></i>12/07/2023</a></li>
-                </ul>
-            </div>
-            <div class="style-comment">
-                <div class="col-md-12">
-                    <input type="hidden" name="product_id" class="product_id" value="{{ $prd->prd_id }}">
-                    <p style="font-size: 1.8rem">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ut suscipit
-                        minima ipsam tempore dicta
-                        doloribus voluptatum repellendus vel quae, modi hic, facilis amet recusandae voluptatibus explicabo,
-                        odit in illum reprehenderit.</p>
-                    <p style="font-size: 1.8rem">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ut suscipit
-                        minima ipsam tempore dicta
-                        doloribus voluptatum repellendus vel quae, modi hic, facilis amet recusandae voluptatibus explicabo,
-                        odit in illum reprehenderit.</p>
-                    <p style="font-size: 1.8rem">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ut suscipit
-                        minima ipsam tempore dicta
-                        doloribus voluptatum repellendus vel quae, modi hic, facilis amet recusandae voluptatibus explicabo,
-                        odit in illum reprehenderit.</p>
-                </div>
-            </div>
-        </div> --}}
 
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -339,7 +263,7 @@
             <style>
                 .comment_content {
                     border: 1px solid #000;
-                    border-radius: 10px;
+                    border-radius: 5;
                     height: 100px;
                     width: 100%;
                     margin-left: 1rem;
@@ -366,7 +290,7 @@
                                 {{ auth()->user()->name }}</h2>
                         @else
                             <button style="margin-left: 1rem; margin-bottom: 1rem; display: inline-block;" disabled
-                                type="submit" class="btn btn-success send-comment">Đăng</button>
+                                type="submit" class="btn btn-success">Đăng</button>
                             <h2 style="margin-left: 1rem; display: inline-block; color: red" class="not-logged-in">Bạn
                                 chưa đăng nhập. Hãy đăng nhập để đánh giá sản phẩm.
                             </h2>
@@ -430,6 +354,101 @@
             }
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        //Đánh Giá Sao
+        function remove_background(product_id) {
+            for (var count = 1; count <= 5; count++) {
+                $('#' + product_id + '-' + count).css('color', '#ccc');
+            }
+        }
+        $(document).on('mouseenter', '.rating', function() {
+            var index = $(this).data('index');
+            var product_id = $(this).data('product_id');
+
+            remove_background(product_id);
+            for (var count = 1; count <= index; count++) {
+                $('#' + product_id + '-' + count).css('color', '#ffcc00');
+            }
+        });
+        $(document).on('mouseleave', '.rating', function() {
+            var index = $(this).data('index');
+            var product_id = $(this).data('product_id');
+            var rating = $(this).data('rating');
+
+            remove_background(product_id);
+            for (var count = 1; count <= rating; count++) {
+                $('#' + product_id + '-' + count).css('color', '#ffcc00');
+            }
+        });
+        // import Swal from 'sweetalert2';
+        $(document).on('click', '.rating', function() {
+            var index = $(this).data('index');
+            var product_id = $(this).data('product_id');
+            var _token = $('input[name="_token"]').val();
+
+            $.ajax({
+                url: "{{ url('insert-rating') }}",
+                type: "POST",
+                data: {
+                    index: index,
+                    product_id: product_id,
+                    _token: _token,
+                },
+                success: function(data) {
+                    if (data == 'done') {
+                        Swal.fire({
+                            title: 'Thành Công!',
+                            text: 'Bạn đã đánh giá ' + index + ' sao thành công!',
+                            icon: 'success',
+                            showConfirmButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            customClass: {
+                                title: 'swal-title-class',
+                                content: 'swal-content-class',
+                                confirmButton: 'swal-button-class',
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Lỗi! Đánh giá thất bại',
+                            icon: 'error',
+                            showConfirmButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            customClass: {
+                                title: 'swal-title-class',
+                                content: 'swal-content-class',
+                                confirmButton: 'swal-button-class',
+                            }
+                        });
+                    }
+                },
+                error: function(error) {
+                    var message = error.responseJSON.error;
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: message,
+                        icon: 'error',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        customClass: {
+                            title: 'swal-title-class',
+                            content: 'swal-content-class',
+                            confirmButton: 'swal-button-class',
+                        }
+                    });
+                }
+            });
+        })
+    </script>
     <script>
         $(document).ready(function() {
             // alert(product_id);
@@ -481,7 +500,60 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            // Khi nút "Trả Lời" được bấm
+            $(document).on('click', '.reply-btn', function(e) {
+                // Đặt biến $replyBox là đối tượng div.reply-box gần nhất của nút được bấm
+                var $replyBox = $(this).closest('.row').find('.reply-box');
 
+                // Kiểm tra nếu reply box đang hiển thị thì ẩn nó, ngược lại hiển thị
+                if ($replyBox.is(":visible")) {
+                    $replyBox.hide();
+                } else {
+                    $replyBox.show();
+                }
+            });
+            // $('.reply-submit').click(function() {
+            $(document).on('click', '.reply-submit', function(e) {
+                // e.preventDefault();
+
+                var product_id = $('.product_id').val();
+                var user_id = $(this).data('user_id');
+                var comment_id = $(this).data('comment_id');
+                var reply_content = $('.reply_content_' + comment_id).val();
+                var _token = $('input[name="_token"]').val();
+
+                // alert(product_id)
+                // alert(user_id)
+                // alert(comment_id)
+                // alert(reply_content)
+                // alert(_token)
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url('/reply-comment/') }}",
+                    // headers: {
+                    //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    // },
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        product_id: product_id,
+                        reply_content: reply_content,
+                        comment_id: comment_id,
+                        user_id: user_id,
+                    },
+                    success: function(data) {
+                        location.reload();
+                        $('.reply_content_' + comment_id).val('');
+                    },
+                    error: function(error) {
+                        var message = error.responseJSON.error;
+                        alert(message);
+                    }
+                });
+            });
+        });
+    </script>
     <script>
         const imgPositon = document.querySelectorAll(".small-image img")
         // console.log(imgPositon)
@@ -514,14 +586,8 @@
             indexx--;
             if (indexx <= 0) {
                 indexx = 0
-
-
             }
-
             slider(indexx)
-
-
-
         }
         // nxt[index].addEventListener("click", function imgslide() {
 

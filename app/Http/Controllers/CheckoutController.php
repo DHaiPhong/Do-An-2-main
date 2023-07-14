@@ -7,6 +7,7 @@ use App\Http\Requests\PaymentRequest;
 use Illuminate\Http\Request;
 use App\Contracts\OrderContract;
 use Cart;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
@@ -46,7 +47,6 @@ class CheckoutController extends Controller
             "pay_method" => 'Tiền mặt',
             'status' => 'pending',
             "total" => $total
-
         ]);
 
 
@@ -80,7 +80,15 @@ class CheckoutController extends Controller
 
     public function online(Request $request)
     {
+        if ($request->coupon_type == 'fixed') {
+            $total = Cart::total() + $request->ship - $request->coupon_amount;
+        } else {
+            $total = Cart::total() + $request->ship - (Cart::total() * $request->coupon_amount / 100);
+        }
 
+        if ($total < 0) {
+            $total = 0;
+        }
         $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
 
 
@@ -89,7 +97,7 @@ class CheckoutController extends Controller
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $orderInfo = $request->city;
 
-        $amount = Cart::total() + $request->ship;
+        $amount = $total;
 
         $orderId = time() . "";
         $redirectUrl = "http://127.0.0.1:8000/momo/success";
@@ -116,8 +124,6 @@ class CheckoutController extends Controller
             'redirectUrl' => $redirectUrl,
             'ipnUrl' => $ipnUrl,
             'lang' => 'vi',
-
-
             'extraData' => $extraData,
             'requestType' => $requestType,
             'signature' => $signature
@@ -145,10 +151,7 @@ class CheckoutController extends Controller
                 'phone' => auth()->user()->phone,
                 'status' => 'processing',
                 'pay_method' => 'MoMo',
-
-
                 'district' => $request->extraData,
-
                 'total' => $request->get('amount')
             ];
             $order = $this->orderRepository->storeOrderDetails($orderData);

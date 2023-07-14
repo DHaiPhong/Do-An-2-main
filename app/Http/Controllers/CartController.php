@@ -114,46 +114,27 @@ class CartController extends Controller
         ], $messages);
 
         $coupon = Coupon::where('code', $request->code)->first();
-        $expiresAt = Carbon::parse($coupon->expires_at);
-        if ($coupon && $expiresAt->isFuture()) {
-            $message = 'Áp Dụng Mã Giảm Giá Thành Công!';
-            Session::put('id', $coupon->id);
-            Session::put('amount', $coupon->amount);
-            Session::put('expires_at', $coupon->expires_at);
-            Session::put('type', $coupon->type);
-            Session::put('code', $coupon->code);
+
+        if (!$coupon) {
+            $message = 'Nhập sai mã';
         } else {
-            Session::forget(['id', 'amount', 'code', 'expires_at', 'type']);
-            $message = 'Mã giảm giá sai hoặc đã hết hạn';
+            $expiresAt = Carbon::parse($coupon->expires_at);
+            if ($expiresAt->isFuture()) {
+                $message = 'Áp Dụng Mã Giảm Giá Thành Công!';
+                Session::put('id', $coupon->id);
+                Session::put('amount', $coupon->amount);
+                Session::put('expires_at', $coupon->expires_at);
+                Session::put('type', $coupon->type);
+                Session::put('code', $coupon->code);
+            } else {
+                Session::forget(['id', 'amount', 'code', 'expires_at', 'type']);
+                $message = 'Mã giảm giá đã hết hạn';
+            }
         }
 
-
-
         return redirect()->route('users.cartshop')->with(['message' => $message]);
-        // if (!$coupon || $coupon->expires_at->lt(now())) {
-        //     return response()->json(['error' => 'Sai mã giảm giá. Hoặc mã đã hết hạn']);
-        // }
-
-        // $cart = Cart::content();
-        // $total = Cart::total();
-
-        // // Tính tổng giảm giá
-        // if ($coupon->type == 'fixed') {
-        //     $discount = $total - $coupon->amount;
-        // } else if ($coupon->type == 'percent') {
-        //     $discount = $total - ($total * ($coupon->amount / 100));
-        // }
-
-        // // dd($discount);
-
-        // // Thêm vào phiên
-        // session()->put('coupon', [
-        //     'name' => $coupon->code,
-        //     'discount' => $discount
-        // ]);
-
-        // return response()->json(['success' => 'Áp dụng mã giảm giá thành công!', 'discount' => $discount]);
     }
+
 
 
 
@@ -175,6 +156,7 @@ class CartController extends Controller
             DB::table('product_details')
                 ->where('prd_detail_id', $item->id)
                 ->update(['prd_amount' =>  $product - $item->qty]);
+
             // DB::table('product_details')
             //     ->where('prd_detail_id', $item->id)
             //     ->update(['sold' => $sold + $item->qty]);

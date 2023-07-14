@@ -11,6 +11,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CouponController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -46,8 +47,13 @@ Route::get(
 )->name('users.productdetail');
 Route::get('/product', [ProductController::class, 'product'])->name('users.product');
 Route::get('/product/{slug}', [ProductController::class, 'prdbyCategory'])->name('product.category');
+
+// comment in Product Detail
 Route::post('/load-comment', [ProductController::class, 'loadComment'])->name('loadComment');
 Route::post('/send-comment', [ProductController::class, 'sendComment'])->name('sendComment');
+Route::post('/reply-comment', [ProductController::class, 'replyComment']);
+
+Route::post('/insert-rating', [ProductController::class, 'insertRating']);
 
 //------------------------------Blog----------------------------
 Route::prefix('blog')->group(function () {
@@ -101,6 +107,9 @@ Route::prefix('admin')->middleware('user-role:editor,admin')->group(function () 
     Route::get('/getSoldCount', [AdminController::class, 'getSoldCount'])->name('getSoldCount');
     Route::resource('categories', CategoryController::class);
     Route::resource('coupons', CouponController::class);
+    Route::resource('comments', CommentController::class);
+    Route::post('/reply-comment', [CommentController::class, 'replyComment'])->name('replyComment');
+
 
     //----------------Acount----------------
     Route::prefix('account')->group(function () {

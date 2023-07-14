@@ -293,7 +293,7 @@ class AdminController extends Controller
             ->orderBy('product_details.prd_id')
             ->paginate(5);
 
-        return view('Admin.modun.product', ['products' => $products,'cats' => $cats]);
+        return view('Admin.modun.product', ['products' => $products, 'cats' => $cats]);
     }
     public function loadMoreProducts(Request $request)
     {
@@ -339,53 +339,16 @@ class AdminController extends Controller
     }
 
     function productorderby(Request $request)
-    {   
+    {
         $cats = Category::all();
         $temp = DB::table('products')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->select('products.prd_id', 'prd_img.prd_image')
             ->groupBy('products.prd_id');
-   
-        if($request->filter == 'all'){
-        if ($request->sort == 'quantity-desc') {
-            $products = DB::table('products')
-            ->joinSub($temp, 'temp', function (JoinClause $join) {
-                $join->on('products.prd_id', '=', 'temp.prd_id');
-            })
-            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-            ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->select(
-                'products.*',
-                'categories.name as category',
-                'temp.prd_image',
-                'product_details.prd_detail_id',
 
-                DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
-            )
-            ->groupBy('products.prd_id')
-                ->orderBy('product_details.prd_amount', 'desc')
-                ->paginate(8);
-        }else if ($request->sort == 'quantity-asc') {
-            $products = DB::table('products')
-            ->joinSub($temp, 'temp', function (JoinClause $join) {
-                $join->on('products.prd_id', '=', 'temp.prd_id');
-            })
-            ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-            ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->select(
-                'products.*',
-                'categories.name as category',
-                'temp.prd_image',
-                'product_details.prd_detail_id',
-
-                DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
-            )
-            ->groupBy('products.prd_id')
-                ->orderBy('product_details.prd_amount', 'asc')
-                ->paginate(8); 
-            }
-                elseif ($request->sort == 'sold-asc') {
-                    $products = DB::table('products')
+        if ($request->filter == 'all') {
+            if ($request->sort == 'quantity-desc') {
+                $products = DB::table('products')
                     ->joinSub($temp, 'temp', function (JoinClause $join) {
                         $join->on('products.prd_id', '=', 'temp.prd_id');
                     })
@@ -396,15 +359,51 @@ class AdminController extends Controller
                         'categories.name as category',
                         'temp.prd_image',
                         'product_details.prd_detail_id',
-        
+
+                        DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
+                    )
+                    ->groupBy('products.prd_id')
+                    ->orderBy('product_details.prd_amount', 'desc')
+                    ->paginate(8);
+            } else if ($request->sort == 'quantity-asc') {
+                $products = DB::table('products')
+                    ->joinSub($temp, 'temp', function (JoinClause $join) {
+                        $join->on('products.prd_id', '=', 'temp.prd_id');
+                    })
+                    ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->select(
+                        'products.*',
+                        'categories.name as category',
+                        'temp.prd_image',
+                        'product_details.prd_detail_id',
+
+                        DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
+                    )
+                    ->groupBy('products.prd_id')
+                    ->orderBy('product_details.prd_amount', 'asc')
+                    ->paginate(8);
+            } elseif ($request->sort == 'sold-asc') {
+                $products = DB::table('products')
+                    ->joinSub($temp, 'temp', function (JoinClause $join) {
+                        $join->on('products.prd_id', '=', 'temp.prd_id');
+                    })
+                    ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->select(
+                        'products.*',
+                        'categories.name as category',
+                        'temp.prd_image',
+                        'product_details.prd_detail_id',
+
                         DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
                     )
                     ->groupBy('products.prd_id')
                     ->orderBy('product_details.sold', 'asc')
-                        
-                        ->paginate(8); 
-        } elseif ($request->sort == 'soldd-esc') {
-            $products = DB::table('products')
+
+                    ->paginate(8);
+            } elseif ($request->sort == 'soldd-esc') {
+                $products = DB::table('products')
                     ->joinSub($temp, 'temp', function (JoinClause $join) {
                         $join->on('products.prd_id', '=', 'temp.prd_id');
                     })
@@ -415,15 +414,15 @@ class AdminController extends Controller
                         'categories.name as category',
                         'temp.prd_image',
                         'product_details.prd_detail_id',
-        
+
                         DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
                     )
                     ->groupBy('products.prd_id')
                     ->orderBy('product_details.sold', 'desc')
-                        
-                        ->paginate(8); 
-        } else {
-            $products = DB::table('products')
+
+                    ->paginate(8);
+            } else {
+                $products = DB::table('products')
                     ->joinSub($temp, 'temp', function (JoinClause $join) {
                         $join->on('products.prd_id', '=', 'temp.prd_id');
                     })
@@ -434,114 +433,115 @@ class AdminController extends Controller
                         'categories.name as category',
                         'temp.prd_image',
                         'product_details.prd_detail_id',
-        
+
                         DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
                     )
                     ->groupBy('products.prd_id')
-                        
-                        ->paginate(8); 
-        }}else{
+
+                    ->paginate(8);
+            }
+        } else {
             if ($request->sort == 'quantity-desc') {
                 $products = DB::table('products')
-                ->joinSub($temp, 'temp', function (JoinClause $join) {
-                    $join->on('products.prd_id', '=', 'temp.prd_id');
-                })
-                ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->select(
-                    'products.*',
-                    'categories.name as category',
-                    'temp.prd_image',
-                    'product_details.prd_detail_id',
-    
-                    DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
-                )
-                ->groupBy('products.prd_id')
+                    ->joinSub($temp, 'temp', function (JoinClause $join) {
+                        $join->on('products.prd_id', '=', 'temp.prd_id');
+                    })
+                    ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->select(
+                        'products.*',
+                        'categories.name as category',
+                        'temp.prd_image',
+                        'product_details.prd_detail_id',
+
+                        DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
+                    )
+                    ->groupBy('products.prd_id')
                     ->orderBy('product_details.prd_amount', 'desc')
-                    ->where('categories.id',$request->filter)
+                    ->where('categories.id', $request->filter)
                     ->paginate(8);
-            }else if ($request->sort == 'quantity-asc') {
+            } else if ($request->sort == 'quantity-asc') {
                 $products = DB::table('products')
-                ->joinSub($temp, 'temp', function (JoinClause $join) {
-                    $join->on('products.prd_id', '=', 'temp.prd_id');
-                })
-                ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->select(
-                    'products.*',
-                    'categories.name as category',
-                    'temp.prd_image',
-                    'product_details.prd_detail_id',
-    
-                    DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
-                )
-                ->groupBy('products.prd_id')
+                    ->joinSub($temp, 'temp', function (JoinClause $join) {
+                        $join->on('products.prd_id', '=', 'temp.prd_id');
+                    })
+                    ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->select(
+                        'products.*',
+                        'categories.name as category',
+                        'temp.prd_image',
+                        'product_details.prd_detail_id',
+
+                        DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
+                    )
+                    ->groupBy('products.prd_id')
                     ->orderBy('product_details.prd_amount', 'asc')
-                    ->where('categories.id',$request->filter)
-                    ->paginate(8); 
-                }
-                    elseif ($request->sort == 'sold-asc') {
-                        $products = DB::table('products')
-                        ->joinSub($temp, 'temp', function (JoinClause $join) {
-                            $join->on('products.prd_id', '=', 'temp.prd_id');
-                        })
-                        ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                        ->join('categories', 'products.category_id', '=', 'categories.id')
-                        ->select(
-                            'products.*',
-                            'categories.name as category',
-                            'temp.prd_image',
-                            'product_details.prd_detail_id',
-            
-                            DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
-                        )
-                        ->groupBy('products.prd_id')
-                        ->orderBy('product_details.sold', 'asc')
-                        ->where('categories.id',$request->filter)
-                            
-                            ->paginate(8); 
+                    ->where('categories.id', $request->filter)
+                    ->paginate(8);
+            } elseif ($request->sort == 'sold-asc') {
+                $products = DB::table('products')
+                    ->joinSub($temp, 'temp', function (JoinClause $join) {
+                        $join->on('products.prd_id', '=', 'temp.prd_id');
+                    })
+                    ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->select(
+                        'products.*',
+                        'categories.name as category',
+                        'temp.prd_image',
+                        'product_details.prd_detail_id',
+
+                        DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
+                    )
+                    ->groupBy('products.prd_id')
+                    ->orderBy('product_details.sold', 'asc')
+                    ->where('categories.id', $request->filter)
+
+                    ->paginate(8);
             } elseif ($request->sort == 'soldd-esc') {
                 $products = DB::table('products')
-                        ->joinSub($temp, 'temp', function (JoinClause $join) {
-                            $join->on('products.prd_id', '=', 'temp.prd_id');
-                        })
-                        ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                        ->join('categories', 'products.category_id', '=', 'categories.id')
-                        ->select(
-                            'products.*',
-                            'categories.name as category',
-                            'temp.prd_image',
-                            'product_details.prd_detail_id',
-            
-                            DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
-                        )
-                        ->groupBy('products.prd_id')
-                        ->orderBy('product_details.sold', 'desc')
-                        ->where('categories.id',$request->filter)
-                            
-                            ->paginate(8); 
+                    ->joinSub($temp, 'temp', function (JoinClause $join) {
+                        $join->on('products.prd_id', '=', 'temp.prd_id');
+                    })
+                    ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->select(
+                        'products.*',
+                        'categories.name as category',
+                        'temp.prd_image',
+                        'product_details.prd_detail_id',
+
+                        DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
+                    )
+                    ->groupBy('products.prd_id')
+                    ->orderBy('product_details.sold', 'desc')
+                    ->where('categories.id', $request->filter)
+
+                    ->paginate(8);
             } else {
                 $products = DB::table('products')
-                        ->joinSub($temp, 'temp', function (JoinClause $join) {
-                            $join->on('products.prd_id', '=', 'temp.prd_id');
-                        })
-                        ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                        ->join('categories', 'products.category_id', '=', 'categories.id')
-                        ->select(
-                            'products.*',
-                            'categories.name as category',
-                            'temp.prd_image',
-                            'product_details.prd_detail_id',
-            
-                            DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
-                        )
-                        ->groupBy('products.prd_id')
-                        ->where('categories.id',$request->filter)
-                            
-                            ->paginate(8); 
-        }}
+                    ->joinSub($temp, 'temp', function (JoinClause $join) {
+                        $join->on('products.prd_id', '=', 'temp.prd_id');
+                    })
+                    ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->select(
+                        'products.*',
+                        'categories.name as category',
+                        'temp.prd_image',
+                        'product_details.prd_detail_id',
 
-        return view('Admin.modun.product', ['products' => $products,'cats' => $cats]);
+                        DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
+                    )
+                    ->groupBy('products.prd_id')
+                    ->where('categories.id', $request->filter)
+
+                    ->paginate(8);
+            }
+        }
+
+        return view('Admin.modun.product', ['products' => $products, 'cats' => $cats]);
     }
 
     //---sua account---
@@ -912,18 +912,27 @@ class AdminController extends Controller
 
     function orderdetail($id)
     {
+        $order_st = DB::table('orders')
+            ->where('orders.id', $id)
+            ->select('orders.status as order_status')
+            ->first();
+
         $orders = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->join('product_details', 'order_items.product_id', '=', 'product_details.prd_detail_id')
             ->join('products', 'products.prd_id', '=', 'product_details.prd_id')
-            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
-            ->groupBy('products.prd_id')
+            ->leftJoinSub('select min(id) as id, prd_id from prd_img group by prd_id', 'first_prd_img', function ($join) {
+                $join->on('products.prd_id', '=', 'first_prd_img.prd_id');
+            })
+            ->join('prd_img', 'first_prd_img.id', '=', 'prd_img.id')
             ->where('orders.id', $id)
-            ->select('orders.*', 'order_items.*', 'product_details.*', 'prd_img.*', 'products.prd_name')
+            ->select('orders.*', 'order_items.*', 'product_details.*', 'prd_img.*', 'products.prd_name', 'orders.status as order_status')
             ->get();
 
-        return view('Admin.modun.orderdetail', compact('orders'));
+        return view('Admin.modun.orderdetail', compact('orders', 'order_st'));
     }
+
+
 
     function updateStatus($id, $value)
     {
@@ -947,12 +956,28 @@ class AdminController extends Controller
             return redirect()->route('admin.order')->with('error', 'Không thể hủy đơn hàng đang xử lý!');
         }
 
+        if ($order->status == 'shipping' && $value == 'cancel') {
+            return redirect()->route('admin.order')->with('error', 'Không thể hủy đơn hàng đang giao!');
+        }
+
         $updateData = [
             'status' => $value,
             'updated_by' => Auth::user()->name,
             'updated_at' => now()
         ];
 
+        if ($value == "cancel") {
+            $updateData['status'] = 'cancel';
+
+            $order_items = DB::table('order_items')->where('order_id', $id)->get();
+            foreach ($order_items as $item) {
+                $product = DB::table('product_details')->where('prd_detail_id', $item->product_id)->first();
+                $amount = $product->prd_amount;
+                DB::table('product_details')
+                    ->where('prd_detail_id', $item->product_id)
+                    ->update(['prd_amount' =>  $amount + $item->quantity]);
+            }
+        }
         if ($value == "completed") {
             $updateData['status'] = 'completed';
 

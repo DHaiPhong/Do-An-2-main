@@ -271,6 +271,17 @@ section{
     color: orangered;
 }
 /* end product  */
+
+.swal-title-class {
+    font-size: 2.5rem !important;
+}
+.swal-content-class {
+    font-size: 2rem !important;
+}
+.swal-button-class {
+    font-size: 2rem !important;
+}
+
 .featured .row{
     display: flex;
     flex-wrap: wrap;

@@ -117,9 +117,14 @@
                                             <td>Tổng</td>
                                             <td style="color: red">
                                                 @if (session('type') == 'fixed')
-                                                    {{ number_format(Cart::total() - session('amount')) }} đ
-                                                    <input name="total_price" type="hidden"
-                                                        value="{{ Cart::total() - session('amount') }}">
+                                                    @if (Cart::total() - session('amount') < 0)
+                                                        0đ
+                                                        <input name="total_price" type="hidden" value="0">
+                                                    @else
+                                                        {{ number_format(Cart::total() - session('amount')) }} đ
+                                                        <input name="total_price" type="hidden"
+                                                            value="{{ Cart::total() - session('amount') }}">
+                                                    @endif
                                                 @elseif(session('type') == 'percent')
                                                     {{ number_format(Cart::total() - (Cart::total() * session('amount')) / 100) }}
                                                     đ

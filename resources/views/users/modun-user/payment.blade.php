@@ -85,6 +85,12 @@
                                             đ </dd>
                                         <input type="hidden" id="total" name="total"
                                             value="{{ Cart::total() - (Cart::total() * session('amount')) / 100 }}">
+                                    @else
+                                        <dt style="font-size: 1.8rem; font-weight: bold">Tổng tiền : </dt>
+                                        <dd class="text-right h3 b" id="totalht">
+                                            {{ number_format(Cart::total()) }}
+                                            đ </dd>
+                                        <input type="hidden" id="total" name="total" value="{{ Cart::total() }}">
                                     @endif
                                     <input type="hidden" name="coupon_amount" value="{{ session('amount') }}">
                                     <input type="hidden" name="coupon_type" value="{{ session('type') }}">

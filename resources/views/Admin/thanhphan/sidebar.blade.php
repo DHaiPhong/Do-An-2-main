@@ -127,6 +127,18 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link  " href="{{ route('comments.index') }}">
+                        <i class="fa-solid fa-circle-c"></i>
+                        <p>
+                            Đánh Giá
+                            <span class="badge badge-success right">
+                                <?php $count = DB::table('comments')->count();
+                                echo $count; ?>
+                            </span>
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
