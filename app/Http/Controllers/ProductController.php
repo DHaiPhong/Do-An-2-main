@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\Rating;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,12 +58,13 @@ class ProductController extends Controller
             ->limit(5)
             ->get();
 
+        $commentCount = DB::table('comments')->where('product_id', $prdd->prd_id)->count();
 
         $rating = Rating::where('product_id', $prdd->prd_id)->avg('rating');
         $rating_count = Rating::where('product_id', $prdd->prd_id)->count();
         $rating = round($rating);
 
-        return view('users.modun-user.productdetail', ['products' => $products, 'prdsize' => $prdsize, 'prd' => $prd, 'prdimg' => $prdimg, 'rating' => $rating, 'rating_count' => $rating_count, 'otherprd'  => $otherprd, 'title' => 'Product']);
+        return view('users.modun-user.productdetail', ['products' => $products, 'prdsize' => $prdsize, 'prd' => $prd, 'prdimg' => $prdimg, 'rating' => $rating, 'rating_count' => $rating_count, 'commentCount' => $commentCount, 'otherprd'  => $otherprd, 'title' => 'Product']);
     }
 
     function product()
@@ -176,47 +178,69 @@ class ProductController extends Controller
         return $output;
     }
 
-    private function formatComment($comment, $isReply = false)
+    function formatComment($comment, $isReply = false)
     {
-        $offset = $isReply ? '2rem' : '0';
-        $backgroundColor = $isReply ? '#eee' : '#ffffff'; // Change as needed
-        $iconColor = $isReply ? '#007f3f' : 'orangered'; // Change as needed
+        $offset = $isReply ? '5rem' : '0px';
+        $background = $isReply ? '#f9f9f9' : '#fff';
+        $iconColor = $isReply ? 'red' : 'blue';
+        $timestamp = Carbon::parse($comment['updated_at']);
+
+        $daysAgo = $timestamp->diffInDays(Carbon::now());
+        if ($daysAgo < 1) {
+            Carbon::setLocale('vi'); // Đặt ngôn ngữ hiện tại là tiếng Việt
+            if ($timestamp->diffInMinutes(Carbon::now()) < 60) {
+                $timeAgo = $timestamp->diffInMinutes(Carbon::now()) . ' phút trước';
+            } else {
+                $timeAgo = $timestamp->diffForHumans(['parts' => 1]);
+            }
+        } elseif ($daysAgo < 2) {
+            $timeAgo = '1 ngày trước';
+        } else {
+            $timeAgo = $daysAgo . ' ngày trước';
+        }
 
         $userId = auth()->check() ? auth()->user()->id : null;
 
-        $replyButtonAndBox = $isReply || !$userId ? '' : '
-        <a href="javascript:void(0)" data-id="' . $comment->id . '" class="reply-btn" style="margin-left: 57rem; margin-top: 0; font-size: 1.5rem"><i class="fa fa-comment" style="color: ' . $iconColor . ';"></i>Trả Lời</a>
-        <div class="reply-box" style="display: none; margin-left: ' . $offset . ';">
-            <textarea class="mt-2 form-control reply_content_' . $comment->id . '" style="width: 65%; font-size: 1.5rem; padding: 1rem; margin-left: 28rem; border-radius: 5px" rows="2"></textarea>
-            <button data-comment_id="' . $comment->id . '" data-user_id="' . $userId . '" class="btn btn-primary mt-2 reply-submit" style="margin-left: 28rem">Trả Lời</button>
+        $replyButton = '';
+        $replyBox = '';
+
+        // Determine whether to display reply button and reply box
+        if (!$isReply && $userId) {
+            $replyButton = '<small><a href="javascript:void(0)" data-id="' . $comment->id . '" class="reply-btn" style="font-size: 1.5rem; color: #777">Trả Lời</a>
+</small>';
+            $replyBox =
+                '<div class="reply-box" style="display: none; margin-left: ' . $offset . ';">
+                <textarea class="mt-2 form-control reply_content_' . $comment->id . '" style="width: 100%; font-size: 1.5rem; padding: 1rem; border-radius: 5px" rows="1"></textarea>
+                <button data-comment_id="' . $comment->id . '" data-user_id="' . $userId . '" class="btn btn-primary mt-2 reply-submit" style="margin-left: 0rem; font-size: 1.2rem; width: 100px">Trả Lời</button>
+            </div>';
+        }
+
+        $commentContent = '
+        <div class="container mt-5">
+            <div class="row d-flex justify-content-center" style="font-size: 2rem">
+                    <div class="card p-3" style="background-color: ' . $background . '; margin-left: ' . $offset . ';     border: 1px solid #00000015;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="user d-flex flex-row align-items-center">
+                                <span><small class="font-weight-bold" style="color: ' . $iconColor . '">' . $comment->user->name . '</small>
+                                <br>
+                                    <small class="font-weight-bold" style="margin-top: 1rem">' . $comment->comment . '</small></span>
+                            </div>
+                            <small>' . $timeAgo . '</small>
+                        </div>
+                        <div class="action d-flex justify-content-between mt-2 align-items-center">
+                            <div class="reply px-4">
+                            </div>
+                            <div class="icons align-items-center">
+
+                            </div>
+                        </div>
+                </div>
+                ' . $replyButton . '
+                ' . $replyBox . '
+            </div>
         </div>';
 
-        return '
-        <div class="row justify-content-center" style="margin-left: ' . $offset . '">
-            <div class="col-md-8" >
-                <ul>
-                    <li>
-                        <a style="font-size: 2rem" href="">
-                            <i class="fa fa-user" style="color: ' . $iconColor . ';margin-right: 1rem;"></i>' . $comment->user->name . '
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="style-comment" style="background-color: ' . $backgroundColor . ';margin-left: ' . $offset . ';">                
-                <div class="col-md-12">
-                    <p style="font-size: 1.8rem" class="icon">
-                        <i class="fa fa-clock-o" style="color: ' . $iconColor . '; "></i>' . $comment->updated_at->format('H:i:s') . '
-                    </p>
-                    <p style="font-size: 1.8rem" class="icon">
-                        <i class="fa fa-calendar-o" style="color: ' . $iconColor . ';"></i>' . $comment->updated_at->format('Y-m-d') . '
-                    </p>
-                    <p style="font-size: 1.8rem; margin-left: 1rem">' . $comment->comment . '</p>
-                </div>
-            </div>
-            <br>
-            <p></p>
-            ' . $replyButtonAndBox . '
-        </div>';
+        return $commentContent;
     }
 
     public function sendComment(Request $request)
@@ -224,6 +248,11 @@ class ProductController extends Controller
         $product_id = $request->product_id;
         $user_id = $request->user_id;
         $comment_content = $request->comment_content;
+
+        if (!$user_id) {
+            // Nếu người dùng không tồn tại, trả về lỗi
+            return response()->json(['error' => 'Người dùng không tồn tại']);
+        }
 
         // Kiểm tra xem người dùng có đơn hàng nào hoàn thành hay không
         $order = Order::where('user_id', $user_id)

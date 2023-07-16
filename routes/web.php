@@ -10,6 +10,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CouponController;
@@ -33,11 +34,11 @@ Route::middleware(['auth', 'user-role:editor'])->group(function () {
 Route::middleware(['auth', 'user-role:admin'])->group(function () {
     Route::get('/role-test/admin', [HomeController::class, 'roleTestAdmin'])->name('role.test.admin');
 });
-Route::prefix('order')->group(function (){
-Route::get('/', [userController::class, 'order'])->middleware('CheckLogin')->name('users.order');
-Route::get('/detail/{id}', [userController::class, 'orderdetail'])->middleware('CheckLogin')->name('users.orderdetail');
-Route::get('/cancel/{id}', [userController::class, 'ordercancel'])->name('users.ordercancel');
-Route::post('/user/update', [userController::class, 'updateacc'])->name('users.updateacc');
+Route::prefix('order')->group(function () {
+    Route::get('/', [userController::class, 'order'])->middleware('CheckLogin')->name('users.order');
+    Route::get('/detail/{id}', [userController::class, 'orderdetail'])->middleware('CheckLogin')->name('users.orderdetail');
+    Route::get('/cancel/{id}', [userController::class, 'ordercancel'])->name('users.ordercancel');
+    Route::post('/user/update', [userController::class, 'updateacc'])->name('users.updateacc');
 });
 //
 //------------------------------product----------------------------
@@ -104,6 +105,7 @@ Route::prefix('admin')->middleware('user-role:editor,admin')->group(function () 
     Route::get('/chart/ordersChart', [AdminController::class, 'ordersChart'])->name('ordersChart');
     Route::get('/chart/soldChart', [AdminController::class, 'soldChart'])->name('soldChart');
     Route::get('/chart/dailyRevenueChart', [AdminController::class, 'dailyRevenueChart'])->name('dailyRevenueChart');
+    Route::get('/chart/revenue-chart', [ChartController::class, 'showChart'])->name('revenue.chart');
     Route::get('/getSoldCount', [AdminController::class, 'getSoldCount'])->name('getSoldCount');
     Route::resource('categories', CategoryController::class);
     Route::resource('coupons', CouponController::class);

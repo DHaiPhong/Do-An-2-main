@@ -20,6 +20,7 @@
         "sass-loader": "^11.0.1"
     },
     "dependencies": {
+        "chart.js": "^4.3.0",
         "jquery-slugify": "^1.2.5",
         "sweetalert": "^2.1.2"
     }

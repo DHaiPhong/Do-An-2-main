@@ -64,7 +64,7 @@
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
 
-                                <h4 class="font-weight-normal mb-3">Doanh Thu <i
+                                <h4 class="font-weight-normal mb-3">Doanh Thu Tổng <i
                                         class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-3">{{ number_format($revenue) }} Đ</h2>
@@ -81,7 +81,8 @@
                     {{-- <div id="chart"></div> --}}
                     <div class="stretch-card">
                         <div class="card">
-                            <form method="get" action="{{ route('dailyRevenueChart') }}">
+                            @include('Admin.modun.chart')
+                            {{-- <form method="get" action="{{ route('dailyRevenueChart') }}">
                                 <select style="margin-top: 0.5rem; margin-left: 1rem" name="month"
                                     onchange="this.form.submit()">
                                     <option style="display: none" value="">Chọn Tháng</option>
@@ -99,7 +100,7 @@
                                 </div>
                                 <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left">
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="stretch-card">
@@ -108,30 +109,6 @@
                                 <h4 class="card-title">Danh Thu Theo Tháng</h4>
                                 <div>
                                     <canvas id="totalChart"></canvas>
-                                </div>
-                                <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Đã Bán</h4>
-                                <div>
-                                    <canvas id="soldChart"></canvas>
-                                </div>
-                                <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Số Lượng Đơn Hàng</h4>
-                                <div>
-                                    <canvas id="ordersChart"></canvas>
                                 </div>
                                 <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left">
                                 </div>
@@ -212,14 +189,12 @@
             </div>
         </div>
     </div>
-@endsection
-@section('js')
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const createChart = (elementId, route) => {
+        const dailyRevenueChart = (elementId, route) => {
             const ctx = document.getElementById(elementId);
             fetch(route)
                 .then(response => response.json())
@@ -240,10 +215,30 @@
                     });
                 })
         }
-
-        createChart('totalChart', "{{ route('totalChart') }}");
-        createChart('soldChart', "{{ route('soldChart') }}");
-        createChart('ordersChart', "{{ route('ordersChart') }}");
-        createChart('dailyRevenueChart', "{{ route('dailyRevenueChart') }}");
+        dailyRevenueChart('dailyRevenueChart', "{{ route('dailyRevenueChart') }}");
+    </script>
+    <script>
+        const totalChart = (elementId, route) => {
+            const ctx = document.getElementById(elementId);
+            fetch(route)
+                .then(response => response.json())
+                .then(json => {
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: json.labels,
+                            datasets: json.datasets
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+        }
+        totalChart('totalChart', "{{ route('totalChart') }}");
     </script>
 @endsection
