@@ -35,6 +35,10 @@ class CheckoutController extends Controller
         if ($total < 0) {
             $total = 0;
         }
+        session()->put([
+            'ship' => $request->ship,
+            
+        ]);
 
         $order = $this->orderRepository->storeOrderDetails([
             "_token" => $request->_token,
@@ -55,37 +59,40 @@ class CheckoutController extends Controller
         return redirect()->route('cart.success');
     }
 
-    public function execPostRequest($url, $data)
-    {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt(
-            $ch,
-            CURLOPT_HTTPHEADER,
-            array(
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($data)
-            )
-        );
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        //execute post
-        $result = curl_exec($ch);
-        //close connection
-        curl_close($ch);
-        return $result;
-    }
+    function execPostRequest($url, $data)
+{
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data))
+    );
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    //execute post
+    $result = curl_exec($ch);
+    
+    //close connection
+    curl_close($ch);
+    return $result;
+}
 
     public function online(Request $request)
     {
         if ($request->coupon_type == 'fixed') {
             $total = Cart::total() + $request->ship - $request->coupon_amount;
+            
         } else {
             $total = Cart::total() + $request->ship - (Cart::total() * $request->coupon_amount / 100);
         }
-
+            session()->put([
+                'ship' => $request->ship,
+                
+            ]);
+            
+           
         if ($total < 0) {
             $total = 0;
         }
@@ -103,6 +110,22 @@ class CheckoutController extends Controller
         $redirectUrl = "http://127.0.0.1:8000/momo/success";
         $ipnUrl = "http://127.0.0.1:8000/momo/success";
         $extraData = $request->district;
+        $ship = $request->ship;
+        
+        $items = [
+            'id' => "204727",  
+            'name'=> "YOMOST Bac Ha&Viet Quat 170ml",  
+            'description' => "YOMOST Sua Chua Uong Bac Ha&Viet Quat 170ml/1 Hop",
+            'category' => "beverage",
+            'imageUrl' => "https://momo.vn/uploads/product1.jpg",
+            'manufacturer' => "Vinamilk",
+            'price' =>  11000,               
+            'quantity' => 5,
+            'currency' => 50000,
+            'totalPrice' =>  55000,
+            
+        ];
+        
 
 
 
@@ -110,9 +133,9 @@ class CheckoutController extends Controller
         $requestType = "payWithATM";
         // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
         //before sign HMAC SHA256 signature
-        $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+        $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType  ;
         $signature = hash_hmac("sha256", $rawHash, $secretKey);
-        // dd($signature);
+        
         $data = array(
             'partnerCode' => $partnerCode,
             'partnerName' => "Test",
@@ -124,14 +147,20 @@ class CheckoutController extends Controller
             'redirectUrl' => $redirectUrl,
             'ipnUrl' => $ipnUrl,
             'lang' => 'vi',
+            
             'extraData' => $extraData,
             'requestType' => $requestType,
-            'signature' => $signature
-        );
-        $result = $this->execPostRequest($endpoint, json_encode($data));
-        // dd($result);
-        $jsonResult = json_decode($result, true);  // decode json
+            'signature' => $signature,
+            
 
+            
+        );
+        
+        
+        $result = $this->execPostRequest($endpoint,json_encode($data) );
+        
+        $jsonResult = json_decode($result, true);  // decode json
+        
         $payUrl = $jsonResult['payUrl'];
         // return redirect()->route('cart.success');
         return redirect()->to($payUrl);
@@ -142,7 +171,7 @@ class CheckoutController extends Controller
         // kiểm tra xem thanh toán có thành công hay không bằng cách kiểm tra statusCode từ MOMO
         if ($request->get('errorCode') == 0) { // nếu errorCode = 0, thanh toán thành công 
             // Thanh toán thành công, lưu đơn hàng vào CSDL
-
+            
             $orderData = [
                 'name' => auth()->user()->name,
                 'address' => auth()->user()->address,
@@ -152,8 +181,10 @@ class CheckoutController extends Controller
                 'status' => 'processing',
                 'pay_method' => 'MoMo',
                 'district' => $request->extraData,
-                'total' => $request->get('amount')
+                'total' => $request->get('amount'),
+                
             ];
+            
             $order = $this->orderRepository->storeOrderDetails($orderData);
         }
         return redirect()->route('cart.success');

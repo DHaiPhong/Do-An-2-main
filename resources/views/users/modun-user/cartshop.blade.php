@@ -44,7 +44,7 @@
                                             <div class="cart-info">
                                                 <img src="/anh/{{ $item->options->img }}">
                                                 <div>
-                                                    <p>{{ $item->name }}</p>
+                                                    <p style="width:260px">{{ $item->name }}</p>
                                                     <a href="{{ route('cart.delete', ['id' => $item->rowId]) }}"
                                                         style="font-size: 2rem"><i class="fas fa-trash-alt"></i></a>
                                                 </div>
@@ -160,6 +160,7 @@
 
 @stop
 @section('js')
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         function updateCart(qty, rowId) {
             $.get(

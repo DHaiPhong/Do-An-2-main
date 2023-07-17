@@ -24,7 +24,8 @@ Route::middleware(['auth', 'user-role:user'])->group(function () {
     // Route::get('/role-test/user', [HomeController::class, 'roleTestUser'])->name('role.test.user');
 
 });
-
+// reset pass
+Route::post('/change-password', [App\Http\Controllers\userController::class, 'resetpassword'])->name('resetpassword');
 // Editor Route
 Route::middleware(['auth', 'user-role:editor'])->group(function () {
     Route::get('/role-test/editor', [HomeController::class, 'roleTestEditor'])->name('role.test.editor');

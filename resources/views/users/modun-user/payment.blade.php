@@ -31,7 +31,7 @@
                             </div>
                             <div class="inputBox">
                                 <span>Thành phố :</span>
-                                <select class="select_city" name="city" id="city" onchange="getSelectedOptionId()">
+                                <select class="select_city" name="city" id="city" onchange="getSelectedOptionId()" required>
                                 </select>
 
                             </div>
@@ -49,7 +49,7 @@
                             </div>
                             <div class="inputBox">
                                 <span>Quận Huyện :</span>
-                                <select class="select_city" name="district" id="district">
+                                <select class="select_city" name="district" id="district" required>
                                     <option value="" selected>Chọn quận huyện</option>
                                 </select>
                             </div>

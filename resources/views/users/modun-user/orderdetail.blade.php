@@ -3,9 +3,9 @@
 @section('css')
 @stop
 @section('content')
-    <section class="h-100 gradient-custom" style="padding:0;font-size:17px;margin-bottom:200px">
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
+    <section class=" gradient-custom" style="padding:0;font-size:17px;margin-bottom:20px">
+  <div class="container py-5 ">
+    <div class="row d-flex justify-content-center align-items-center ">
     @if (session('message'))
                 <h1 class="text-primary">{{ session('message') }}</h1>
             @endif
@@ -49,13 +49,15 @@
             @endforeach
 
             <div class="d-flex justify-content-between pt-2">
-              <!-- <p class="fw-bold mb-0">Order Details</p>
-              <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> {{number_format($odnb->grand_total)}} đ</p> -->
+               <p class="fw-bold mb-0">Order Details</p>
+              
+              <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> {{number_format($odnb->total)}} đ</p> 
+             
             </div>
 
             <div class="d-flex justify-content-between pt-2">
               <p class="text-muted mb-0">Ngày đặt hàng : {{$odnb->created_at}}</p>
-              <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> $19.00</p> -->
+              <p class="text-muted mb-0"><span class="fw-bold me-4">Phí vận chuyển</span> {{ number_format($odnb->shipfee)}} đ</p>
             </div>
 
             <div class="d-flex justify-content-between">
@@ -66,18 +68,26 @@
                 @else
                 <p class="text-muted mb-0">Ngày nhận hàng : chưa có</p>
                 @endif
-              <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p> -->
+               @if($coupon == null) 
+               <p class="text-muted mb-0"><span class="fw-bold me-4">Mã giảm giá</span> Không có
+              </p> 
+              @else
+              <p class="text-muted mb-0"><span class="fw-bold me-4">Mã giảm giá</span> {{$coupon->code}}
+              </p> 
+              @endif
             </div>
 
             <div class="d-flex justify-content-between mb-5">
               <p class="text-muted mb-0">Trạng thái đơn hàng : {{ $odnb->status }}</p>
-              <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p> -->
+              @if($coupon != null)
+              <p class="text-muted mb-0"><span class="fw-bold me-4">Giảm giá</span> {{number_format($coupon->amount )}} đ
+              </p> 
+              @endif
             </div>
           </div>
           <div class="card-footer border-0 px-4 py-5"
             style="background-color: #a8729a; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-            <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0" style="font-size:17px;">Total
-              paid: <span class="h2 mb-0 ms-2">{{number_format($odnb->grand_total)}} đ</span></h5>
+            <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0" style="font-size:17px;">Tổng tiền phải trả: <span class="h2 mb-0 ms-2">{{number_format($odnb->grand_total)}} đ</span></h5>
           </div>
         </div>
       </div>
