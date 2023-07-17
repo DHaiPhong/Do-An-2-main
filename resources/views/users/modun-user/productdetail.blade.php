@@ -254,7 +254,17 @@
             @csrf
             <input type="hidden" name="prd_id" class="product_id" value="{{ $prd->prd_id }}">
 
-            <div id="comment_show"></div>
+            <div class="container mt-5">
+                <div class="row d-flex justify-content-center" style="margin-left: ' . $offset . '; font-size: 2rem">
+                    <div class="col-md-8">
+                        <div class="headings d-flex justify-content-between align-items-center mb-3">
+                            <p>Bình luận ({{ $commentCount }})</p>
+                        </div>
+                        <div id="comment_show">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
 
         <div class="row justify-content-center">
@@ -285,7 +295,7 @@
 
                         <textarea class="comment_content" name="content" placeholder="Nhập bình luận"></textarea>
                         @if (auth()->check())
-                            <button style="margin-left: 1rem; margin-bottom: 1rem; display: inline-block;" type="submit"
+                            <button style="margin-left: 1rem; margin-bottom: 1rem; display: inline-block;" type="button"
                                 class="btn btn-success send-comment">Đăng</button>
                             <h2 style="margin-left: 1rem; display: inline-block; color: red" class="logged-in-as">Bình
                                 luận với tài
@@ -298,171 +308,6 @@
                                 chưa đăng nhập. Hãy đăng nhập để đánh giá sản phẩm.
                             </h2>
                         @endif
-                        <div class="container mt-5">
-
-            <div class="row  d-flex justify-content-center">
-
-                <div class="col-md-8">
-
-                    <div class="headings d-flex justify-content-between align-items-center mb-3">
-                        <h5>Bình luận (6)</h5>
-                    </div>
-                    <div class="card p-3">
-
-                        <div class="d-flex justify-content-between align-items-center">
-
-                      <div class="user d-flex flex-row align-items-center">
-
-                        <img src="https://i.imgur.com/hczKIze.jpg" width="30" class="user-img rounded-circle mr-2">
-                        <span><small class="font-weight-bold text-primary">james_olesenn</small> <small class="font-weight-bold">Hmm, This poster looks cool</small></span>
-                          
-                      </div>
-
-
-                      <small>2 days ago</small>
-
-                      </div>
-
-
-                      <div class="action d-flex justify-content-between mt-2 align-items-center">
-
-                        <div class="reply px-4">
-                            <small>Remove</small>
-                            <span class="dots"></span>
-                            <small>Reply</small>
-                            <span class="dots"></span>
-                            <small>Translate</small>
-                           
-                        </div>
-
-                        <div class="icons align-items-center">
-
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-check-circle-o check-icon"></i>
-                            
-                        </div>
-                          
-                      </div>
-                    </div>
-                    <div class="card p-3 mt-2">
-
-                        <div class="d-flex justify-content-between align-items-center">
-
-                      <div class="user d-flex flex-row align-items-center">
-
-                        <img src="https://i.imgur.com/C4egmYM.jpg" width="30" class="user-img rounded-circle mr-2">
-                        <span><small class="font-weight-bold text-primary">olan_sams</small> <small class="font-weight-bold">Loving your work and profile! </small></span>
-                          
-                      </div>
-
-
-                      <small>3 days ago</small>
-
-                      </div>
-
-
-                      <div class="action d-flex justify-content-between mt-2 align-items-center">
-
-                        <div class="reply px-4">
-                            <small>Remove</small>
-                            <span class="dots"></span>
-                            <small>Reply</small>
-                            <span class="dots"></span>
-                            <small>Translate</small>
-                           
-                        </div>
-
-                        <div class="icons align-items-center">
-                            <i class="fa fa-check-circle-o check-icon text-primary"></i>
-                            
-                        </div>
-
-                      </div>
-                    </div>
-                    <div class="card p-3 mt-2">
-
-                        <div class="d-flex justify-content-between align-items-center">
-
-                      <div class="user d-flex flex-row align-items-center">
-
-                        <img src="https://i.imgur.com/0LKZQYM.jpg" width="30" class="user-img rounded-circle mr-2">
-                        <span><small class="font-weight-bold text-primary">rashida_jones</small> <small class="font-weight-bold">Really cool Which filter are you using? </small></span>
-                          
-                      </div>
-
-
-                      <small>3 days ago</small>
-
-                      </div>
-
-
-                      <div class="action d-flex justify-content-between mt-2 align-items-center">
-
-                        <div class="reply px-4">
-                            <small>Remove</small>
-                            <span class="dots"></span>
-                            <small>Reply</small>
-                            <span class="dots"></span>
-                            <small>Translate</small>
-                           
-                        </div>
-
-                        <div class="icons align-items-center">
-                            <i class="fa fa-user-plus text-muted"></i>
-                            <i class="fa fa-star-o text-muted"></i>
-                            <i class="fa fa-check-circle-o check-icon text-primary"></i>
-                            
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="card p-3 mt-2">
-
-                        <div class="d-flex justify-content-between align-items-center">
-
-                      <div class="user d-flex flex-row align-items-center">
-
-                        <img src="https://i.imgur.com/ZSkeqnd.jpg" width="30" class="user-img rounded-circle mr-2">
-                        <span><small class="font-weight-bold text-primary">simona_rnasi</small> <small class="font-weight-bold text-primary">@macky_lones</small> <small class="font-weight-bold text-primary">@rashida_jones</small> <small class="font-weight-bold">Thanks </small></span>
-                          
-                      </div>
-
-
-                      <small>3 days ago</small>
-
-                      </div>
-
-
-                      <div class="action d-flex justify-content-between mt-2 align-items-center">
-
-                        <div class="reply px-4">
-                            <small>Remove</small>
-                            <span class="dots"></span>
-                            <small>Reply</small>
-                            <span class="dots"></span>
-                            <small>Translate</small>
-                           
-                        </div>
-
-                        <div class="icons align-items-center">
-                           
-                            <i class="fa fa-check-circle-o check-icon text-primary"></i>
-                            
-                        </div>
-                          
-                      </div>
-
-
-                        
-                    </div>
-
-
-                    
-                </div>
-                
-            </div>
-            
-        </div>
                         <div id="notify_comment"></div>
                     </form>
                 </div>
@@ -620,7 +465,7 @@
     <script>
         $(document).ready(function() {
             // alert(product_id);
-            load_comment();
+            // load_comment();
 
             function load_comment() {
                 var product_id = $('.product_id').val();
@@ -640,11 +485,16 @@
                 });
             }
             $('.send-comment').click(function() {
+
                 var product_id = $('.product_id').val();
                 var user_id = $('.user_id').val();
                 var comment_content = $('.comment_content').val();
                 var _token = $('input[name="_token"]').val();
 
+                // alert(product_id)
+                // alert(user_id)
+                // alert(comment_content)
+                // alert(_token)
                 $.ajax({
                     type: "POST",
                     url: "{{ url('/send-comment') }}",
@@ -657,7 +507,7 @@
                     success: function(data) {
                         $('#notify-comment').html(
                             '<p class="text text-success">Thêm bình luận thành công! </p>');
-                        load_comment();
+                        // load_comment();
                         $('.comment_content').val('');
                     },
                     error: function(error) {

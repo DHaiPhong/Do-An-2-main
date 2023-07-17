@@ -7,6 +7,7 @@ use App\Http\Requests\AddprdRequest;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\User;
+use Carbon\Carbon;
 use Encore\Admin\Grid\Filter\Where;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
@@ -73,145 +74,45 @@ class AdminController extends Controller
             ->orderBy('sold', 'desc')
             ->paginate(5);
 
-        return view('Admin/modun/dashboard', ['sold' => $sold, 'revenue' => $revenue, 'out_of_stocks' => $out_of_stocks, 'orders' => $orders, 'sells' => $sells]);
-    }
+        $month = $request->get('month', date('m')); // Lấy tháng từ request hoặc mặc định là tháng hiện tại.
 
-    function soldChart(Request $request)
-    {
-        $entries =
-            DB::table('orders')
-            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->select([
-                DB::raw('MONTH(orders.created_at) as month'),
-                DB::raw('SUM(order_items.quantity) as quantity'),
-            ])
-            ->whereYear('orders.created_at', 2023)
-            ->whereIn('orders.status', ['completed'])
-            ->groupBy([
-                'month'
-            ])
-            ->orderBy('month')
-            ->get();
-
-        $labels = [
-            1 => 'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
-        ];
-        //        $dataset = [];
-        $sold = [];
-        foreach ($entries as $entry) {
-            $sold[$entry->month] = $entry->quantity;
-        }
-        foreach ($labels as $month => $name) {
-            if (!array_key_exists($month, $sold)) {
-                $sold[$month] = 0;
-            }
-        }
-        ksort($sold);
-
-        return [
-            'labels' => array_values($labels),
-            'datasets' => [
-                [
-                    'label' => 'Đơn Hàng Đã Hoàn Thành',
-                    'borderWidth' => 1,
-                    'data' => array_values($sold),
-                ],
-            ]
-        ];
-    }
-
-    function ordersChart(Request $request)
-    {
-        $entries =
-            DB::table('orders')
-            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->select([
-                DB::raw('MONTH(orders.created_at) as month'),
-                DB::raw('SUM(order_items.quantity) as quantity'),
-            ])
-            ->whereYear('orders.created_at', 2023)
-            ->whereIn('orders.status', ['pending', 'completed', 'processing', 'shipping'])
-            ->groupBy([
-                'month'
-            ])
-            ->orderBy('month')
-            ->get();
-
-        $labels = [
-            1 => 'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
-        ];
-        //        $dataset = [];
-        $orders = [];
-        foreach ($entries as $entry) {
-            $orders[$entry->month] = $entry->quantity;
-        }
-        foreach ($labels as $month => $name) {
-            if (!array_key_exists($month, $orders)) {
-                $orders[$month] = 0;
-            }
-        }
-        ksort($orders);
-
-        return [
-            'labels' => array_values($labels),
-            'datasets' => [
-                [
-                    'label' => 'Đơn Hàng',
-                    'borderWidth' => 1,
-                    'data' => array_values($orders),
-                ],
-            ]
-        ];
-    }
-    function dailyRevenueChart(Request $request)
-    {
-        // Get month from request parameters. If not given, use current month
-        $currentMonth = $request->input('month', date('m'));
-
-        $entries = Order::select([
+        // Nhận doanh thu dưới dạng Collection của Objects từ DB.
+        $revenuesFromDB = Order::select([
             DB::raw('DATE(updated_at) as date'),
             DB::raw('SUM(grand_total) as grand_total'),
         ])
-            ->whereYear('created_at', 2023)
-            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('updated_at', 2023)
+            ->whereMonth('updated_at', $month)
             ->where('status', 'completed')
             ->groupBy('date')
             ->orderBy('date')
             ->get();
 
-        $daysInMonth = date('t', strtotime("2023-$currentMonth-01"));
-        $labels = [];
+        // Chuyển đổi Collection of Objects thành một mảng với keys là ngày và values là grand_total.
+        $revenues = $revenuesFromDB->mapWithKeys(function ($item) {
+            return [$item['date'] => $item['grand_total']];
+        })->toArray();
 
-        for ($day = 1; $day <= $daysInMonth; $day++) {
-            $labels[$day] = $day;
-        }
+        $year = date('Y'); // Get current year.
 
-        $grand_total = [];
-        foreach ($entries as $entry) {
-            $dayOfMonth = date('j', strtotime($entry->date));
-            $grand_total[$dayOfMonth] = $entry->grand_total;
-        }
+        $revenuesForEachDay = collect(range(1, 31))->mapWithKeys(function ($day) use ($revenues, $month, $year) {
+            // Use $year for the calculation.
+            $date = Carbon::createFromFormat('Y-m-j', $year . '-' . $month . '-' . $day)->format('Y-m-d');
 
-        foreach ($labels as $day => $name) {
-            if (!array_key_exists($day, $grand_total)) {
-                $grand_total[$day] = 0;
-            }
-        }
+            // Get revenue for the full date.
+            $revenue = $revenues[$date] ?? 0;
 
-        ksort($grand_total);
+            // Format the date to 'm-d' for output.
+            $displayDate = Carbon::createFromFormat('Y-m-d', $date)->format('d');
 
-        return [
-            'labels' => array_values($labels),
-            'datasets' => [
-                [
-                    'label' => 'Doanh Thu(đ) của tháng ' . $currentMonth,
-                    'borderWidth' => 1,
-                    'data' => array_values($grand_total),
-                ],
-            ],
-        ];
+            // Return the result with the updated displayDate as keys.
+            return [$displayDate => $revenue];
+        })->toArray();
+
+
+
+        return view('Admin/modun/dashboard', ['sold' => $sold, 'revenuesForEachDay' => $revenuesForEachDay, 'revenue' => $revenue, 'revenues' => $revenues, 'month' => $month, 'out_of_stocks' => $out_of_stocks, 'orders' => $orders, 'sells' => $sells]);
     }
-
 
     function totalChart(Request $request)
     {

@@ -9,7 +9,7 @@
     <div class="card" style="float: right; width: 72%; margin-right: 7%">
         <div class="card-body">
             <div style="box-sizing: border-box; margin-bottom: 1rem">
-                <h4 class="card-title">Edit Category</h4>
+                <h4 class="card-title">Chỉnh Sửa Danh Mục</h4>
                 <br>
             </div>
             <form method="post" action="{{ route('categories.update', $category->id) }}" class="forms-sample">
@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="slug-source">Name</label>
+                            <label for="slug-source">Tên</label>
                             <input type="text" name="name" class="form-control" id="slug-source"
                                 value="{{ $category->name }}" required placeholder="Enter Category Name"
                                 onkeyup="generateSlug()">
@@ -27,21 +27,19 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label>Parent</label>
-                            <select class="form-control" name="parent_id" id="parent_id">
-                                <option value="">-- Sellect Category Parent --</option>
-                                @foreach ($categories as $id => $name)
-                                    @foreach ($categories as $id => $name)
-                                        <option value="{{ $id }}"
-                                            {{ $id == $category->parent_id ? 'selected' : '' }}>{{ $name }}
-                                        </option>
-                                    @endforeach
-                                @endforeach
-                            </select>
+                            <label for="slug-target">Slug</label>
+                            <input type="text" name="slug" class="form-control" id="slug-target"
+                                value="{{ $category->slug }}">
                         </div>
                         <div class="form-group">
-                            <label for="">Description</label>
-                            <textarea type="text" name="description" class="form-control" id="" value="" style="height: 10rem ;">{{ $category->description }} </textarea>
+                            <label>Cha</label>
+                            <select class="form-control" name="parent_id" id="parent_id">
+                                <option value="">-- Chọn Cha --</option>
+                                @foreach ($categories as $id => $name)
+                                    <option value="{{ $id }}" {{ $id == $category->parent_id ? 'selected' : '' }}>
+                                        {{ $name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <button type="submit" href="" class="btn btn-light"
