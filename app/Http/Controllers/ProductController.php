@@ -292,8 +292,12 @@ class ProductController extends Controller
         $user_id = $request->user_id;
         $reply_content = $request->reply_content;
 
-
         $user = User::find($user_id);
+
+        if (!$user) {
+            // Nếu người dùng không tồn tại, trả về lỗi
+            return response()->json(['error' => 'Người dùng không tồn tại']);
+        }
 
         if ($user->role != 0) {
             // Allow reply and skip other checks
@@ -307,6 +311,11 @@ class ProductController extends Controller
             return response()->json(['success' => 'Trả lời bình luận thành công!']);
         }
 
+        if (!$user_id) {
+            // Nếu người dùng không tồn tại, trả về lỗi
+            return response()->json(['error' => 'Người dùng không tồn tại']);
+        }
+
         // Kiểm tra xem người dùng có đơn hàng nào hoàn thành hay không
         $order = Order::where('user_id', $user_id)
             ->where('status', 'completed')
@@ -314,7 +323,7 @@ class ProductController extends Controller
 
         if (!$order) {
             // Nếu không có đơn hàng hoàn thành, trả về lỗi
-            return response()->json(['error' => 'Bạn chỉ có thể trả lời sau khi mua sản phẩm và đơn hàng đã hoàn thành. Bạn chưa có đơn hàng nào được hoàn thành!'], 403);
+            return response()->json(['error' => 'Bạn chỉ có thể đánh giá sau khi mua sản phẩm và đơn hàng đã hoàn thành. Bạn chưa có đơn hàng nào được hoàn thành!'], 403);
         }
 
         // Kiểm tra xem đơn hàng đã mua sản phẩm chưa
@@ -326,7 +335,7 @@ class ProductController extends Controller
 
         if (!$orderItem) {
             // Nếu không có sản phẩm trong đơn hàng hoàn thành, trả về lỗi
-            return response()->json(['error' => 'Bạn chỉ có thể trả lời sau khi mua sản phẩm này và đơn hàng đã hoàn thành.'], 403);
+            return response()->json(['error' => 'Bạn chỉ có thể đánh giá sau khi mua sản phẩm này và đơn hàng đã hoàn thành.'], 403);
         }
 
         // Nếu tất cả điều kiện đều đúng, tiếp tục tạo bình luận

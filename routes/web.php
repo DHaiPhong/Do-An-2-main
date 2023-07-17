@@ -53,7 +53,7 @@ Route::get('/product/{slug}', [ProductController::class, 'prdbyCategory'])->name
 // comment in Product Detail
 Route::post('/load-comment', [ProductController::class, 'loadComment'])->name('loadComment');
 Route::post('/send-comment', [ProductController::class, 'sendComment'])->name('sendComment');
-Route::post('/reply-comment', [ProductController::class, 'replyComment']);
+Route::post('/replycomment', [ProductController::class, 'replyComment']);
 
 Route::post('/insert-rating', [ProductController::class, 'insertRating']);
 

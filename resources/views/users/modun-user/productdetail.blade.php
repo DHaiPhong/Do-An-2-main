@@ -260,8 +260,7 @@
                         <div class="headings d-flex justify-content-between align-items-center mb-3">
                             <p>Bình luận ({{ $commentCount }})</p>
                         </div>
-                        <div id="comment_show">
-                        </div>
+                        <div id="comment_show"></div>
                     </div>
                 </div>
             </div>
@@ -465,7 +464,7 @@
     <script>
         $(document).ready(function() {
             // alert(product_id);
-            // load_comment();
+            load_comment();
 
             function load_comment() {
                 var product_id = $('.product_id').val();
@@ -507,7 +506,7 @@
                     success: function(data) {
                         $('#notify-comment').html(
                             '<p class="text text-success">Thêm bình luận thành công! </p>');
-                        // load_comment();
+                        load_comment();
                         $('.comment_content').val('');
                     },
                     error: function(error) {
@@ -532,9 +531,8 @@
                     $replyBox.show();
                 }
             });
-            // $('.reply-submit').click(function() {
             $(document).on('click', '.reply-submit', function(e) {
-                // e.preventDefault();
+                e.preventDefault();
 
                 var product_id = $('.product_id').val();
                 var user_id = $(this).data('user_id');
@@ -549,10 +547,7 @@
                 // alert(_token)
                 $.ajax({
                     type: "POST",
-                    url: "{{ url('/reply-comment/') }}",
-                    // headers: {
-                    //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    // },
+                    url: "{{ url('/replycomment') }}",
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         product_id: product_id,
