@@ -163,6 +163,7 @@ class CartController extends Controller
         }
 
         Cart::destroy();
+        session()->flush();
 
         return view('users.modun-user.Cartsuccess', ['title' => 'Thành Công']);
     }

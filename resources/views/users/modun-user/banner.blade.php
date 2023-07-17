@@ -1,7 +1,7 @@
 <section class="home" id="home">
     <div class="slide-container active">
 
-        <a class="slide" style="background:white;color:none;text-decoration:none;" href="http://127.0.0.1:8000/product">
+        <a class="slide" style="background:white;color:none;text-decoration:none;" href="http://127.0.0.1:8000/productdetail/nike-jordan-1-high-den-trang-rep">
             <div class="content">
 
                 <span>Giày Nike thể thao</span>
@@ -17,7 +17,7 @@
     </div>
     <div class="slide-container">
         <a class="slide" style="background:white;color:none;text-decoration:none;"
-            href="http://127.0.0.1:8000/productdetail/79">
+            href="http://127.0.0.1:8000/productdetail/nike-jordan-1-low-trang-xam-e-en-rep">
             <div class="content">
                 <span>Nike Sport Shoes</span>
                 <h3>Nike Jordan 1 Low Trắng Xám Đế Đen</h3>
@@ -31,7 +31,7 @@
     </div>
     <div class="slide-container">
         <a class="slide" style="background:white;color:none;text-decoration:none;"
-            href="http://127.0.0.1:8000/productdetail/67">
+            href="http://127.0.0.1:8000/productdetail/converse-1970s-en-cao-co-rep">
             <div class="content">
                 <span>Nike Sport Shoes</span>
                 <h3>Converse 1970s Đen Cao Cổ REP</h3>
@@ -45,7 +45,7 @@
     </div>
     <div class="slide-container">
         <a class="slide" style="background:white;color:none;text-decoration:none;"
-            href="http://127.0.0.1:8000/productdetail/71">
+            href="http://127.0.0.1:8000/productdetail/new-balance-m5740-en-trang-rep">
             <div class="content">
                 <span></span>
                 <h3>New Balance M5740 Đen Trắng</h3>

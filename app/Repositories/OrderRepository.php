@@ -33,8 +33,12 @@ class OrderRepository extends BaseRepository implements OrderContract
             'city'              =>  $params['city'],
             'district'          =>  $params['district'],
             'pay_method'        =>  $params['pay_method'],
-            'phone_number'      =>  $params['phone']
+            'phone_number'      =>  $params['phone'],
+            'shipfee' => session()->get('ship'),
+            'coupon' => session()->get('id'),
+            'total' => Cart::total(),
         ]);
+        
 
         
         if ($order) {

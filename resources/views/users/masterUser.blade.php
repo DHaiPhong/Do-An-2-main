@@ -11,7 +11,6 @@
     <link href="{{ url('font-awesome/css/font-awesome.css') }}" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/041cb6b55e.js" crossorigin="anonymous"></script>
     <script src="{{ url('js/search.js') }}" crossorigin="anonymous"></script>
-    <link href="{{ url('css/productcss/prd.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="{{ url('css/sidebarcss/sd.css') }}" rel="stylesheet"type="text/css">
     

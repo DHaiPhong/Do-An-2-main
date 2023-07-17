@@ -1,5 +1,8 @@
 @extends('users.masterUser')
+@section('css')
+<link href="{{ url('css/productcss/prd.css') }}" rel="stylesheet" type="text/css">
 
+@stop
 @section('content')
 
     <link href="{{ url('css/detailprdcss/detailprd.css') }}" rel="stylesheet" type="text/css">
@@ -486,7 +489,7 @@
                         @endif
                         <img src="/anh/{{ $oprd->prd_image }}" alt="Product 1">
                         <a style="font-size:16px;line-height: 1.1;"
-                            href="{{ route('users.productdetail', ['id' => $oprd->prd_id]) }}">{{ $oprd->prd_name }} </a>
+                            href="{{ route('users.productdetail', ['id' => $oprd->slug]) }}">{{ $oprd->prd_name }} </a>
                         <div style=" height: 30px"></div>
                         @if ($oprd->prd_sale != 0)
                             <div style="text-wrap: nowrap;">
