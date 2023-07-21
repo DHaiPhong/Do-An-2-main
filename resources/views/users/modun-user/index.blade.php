@@ -6,7 +6,7 @@
 @stop
 @section('content')
     <section class="producth" id="producth">
-        <h1 class="heading"><span>TOP 5</span> Sản Phẩm Bán Chạy</h1>
+        <h1 class="heading"><span>TOP</span> Sản Phẩm Bán Chạy</h1>
         <div class="box-container">
             @foreach ($sells as $sell)
                 <div class="box">
@@ -53,6 +53,8 @@
                 </div>
             @endforeach
         </div>
+        <div style="width:100% ;padding: 0 25%;  margin-top:30px " > <div style="width:100% ; height:2px; background-color:orange"></div> </div>
+
         {{-- </section>
     <!--end product-->
     <section class="featured" id="fearured"> --}}
@@ -106,13 +108,24 @@
             @endforeach
         </div>
     </section>
+    <div id="banner" >
+        <img src="img/slide/giayslide5.png" style="left:54%; height:680px;width:auto" alt="Shoe" id="animatedShoe">
+        <div id="animatedtext" style="right:50%;">
+        <h1  style="color:white; text-wrap:nowrap" >Chào mứng đến với cửa hàng chúng tôi</h1>
+        <p style="color:white; text-wrap:nowrap">Hãy click vào đây để khám phá những mẫu giày mới nhất </p>
+        <a href="{{ route('users.product') }}"><button   class="sketch-button"> Nhấn vào đây</button></a>
+        </div>
+        
 
-    <section > 
+    </div>
+          <div style="width:100% ;padding: 0 25%; height:1px; " > <div style="width:100% ; height:2px; background-color:orange"></div> </div>
+    <section style="background-color:#d1d1d14f " > 
     <h1 class="heading"><span>TOP 3</span> Sản Phẩm được đánh giá cao nhất</h1>
     <div class="container d-flex justify-content-center">
           @foreach($rates as $rate)
      <figure class="card card-product-grid card-lg">
        <a href="{{ route('users.productdetail', $rate->slug) }}" class="img-wrap" data-abc="true"> <img src="anh/{{$rate->prd_image}}"> </a>
+       
          <figcaption class="info-wrap">
              <div class="row">
                  <div class="col-xs-9" style="height:110px"> <a href="{{ route('users.productdetail', $rate->slug) }}" class="title" data-abc="true">{{$rate->prd_name}}</a> </div>
@@ -127,7 +140,20 @@
          <div class="bottom-wrap-payment">
              <figcaption class="info-wrap">
                  <div class="row">
-                 <div class="col-md-9 col-xs-9"> <a href="#" class="title" data-abc="true">{{number_format($rate->price)}} đ</a></div>
+                 <div class="col-md-9 col-xs-9" style="display:flex">
+                  @if($rate->prd_sale == 0)
+                  <p style="text-transform: none; font-size: 20px;text-wrap:nowrap ; font-weight:600;">{{number_format($rate->price)}} đ</p>
+                  @else
+                  <p href="#" style="text-decoration: line-through;font-size: 20px; color: red; text-transform: none; margin-right: 1rem ;text-wrap:nowrap; font-weight:600;"
+ class="title" data-abc="true">{{number_format($rate->price)}} đ</p>
+ <p style="text-transform: none; font-size: 20px;text-wrap:nowrap ; font-weight:600;">
+                                            {{ number_format($rate->price - ($rate->price * $rate->prd_sale) / 100) }} đ
+                                        </p>
+                                        <p style="color: red; font-size: 1.2rem; margin-left: 0.8rem;text-wrap:nowrap ;"> -
+                                            {{ $rate->prd_sale }}%
+                                        </p>
+                  @endif
+                  </div>
 
                      <div class="bottom-wrap"> <a href="{{ route('users.productdetail', $rate->slug) }}" class="btn btn-primary float-right" data-abc="true"> Mua </a>
                  </div>
@@ -137,16 +163,18 @@
      @endforeach
  </div>
     </section>
+    <div style="width:100% ;padding: 0 25%;  margin-top:30px " > <div style="width:100% ; height:2px; background-color:orange"></div> </div>
+
     <section style="" class="why_section layout_padding">
     <div class="container">
       <div class="heading_center">
-        <h2>
+        <h2 style="font-size: 25px;font-weight:600">
         Tại sao mua sắm với chúng tôi
         </h2>
       </div>
       <div class="row">
         <div class="col-md-4">
-          <div class="box ">
+          <div class="box " style=" box-shadow: 5px 6px 6px 2px #b8b4b4;">
             <div class="img-box">
               <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
                 <g>
@@ -216,7 +244,7 @@
           </div>
         </div>
         <div class="col-md-4">
-          <div class="box ">
+          <div class="box " style=" box-shadow: 5px 6px 6px 2px #b8b4b4;">
             <div class="img-box">
             <img style="width:50px" src ="/anh/discount.png">
             </div>
@@ -231,7 +259,7 @@
           </div>
         </div>
         <div class="col-md-4">
-          <div class="box ">
+          <div class="box " style=" box-shadow: 5px 6px 6px 2px #b8b4b4;">
             <div class="img-box">
               <svg id="_30_Premium" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg" data-name="30_Premium">
                 <g id="filled">
@@ -256,5 +284,30 @@
 
 
     <!--end news-->
+<script>
+var animationPlayed = false;
+var animatedBanner = document.getElementById('animatedShoe');
+var animatedtext = document.getElementById('animatedtext');
 
+window.addEventListener('scroll', function(){
+    var windowPosition = window.scrollY + window.innerHeight;
+    var bannerPosition = animatedBanner.getBoundingClientRect().top + window.scrollY;
+
+    if(windowPosition >= bannerPosition && !animationPlayed){
+        animationPlayed = true;
+        animatedBanner.style.animation = 'slideShoe 2s linear forwards';
+        animatedBanner.style.opacity = '1';
+        animatedtext.style.animation = 'slidetext 2s linear forwards';
+        animatedtext.style.opacity = '1';
+    }
+});
+
+
+
+
+
+
+
+
+</script>
 @stop

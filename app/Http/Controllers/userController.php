@@ -60,6 +60,7 @@ class userController extends Controller
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->where('orders.user_id', Auth::user()->id)
             ->groupBy('orders.id')
+            ->orderBy('orders.id','desc')
             ->paginate(5);
         
         return view('users.modun-user.order', ['orders' => $orders, 'title' => 'Account']);
@@ -135,14 +136,14 @@ class userController extends Controller
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
             ->groupBy('products.prd_id')
             ->orderBy('sold', 'desc')
-            ->paginate(10);
+            ->paginate(8);
 
         $views = DB::table('products')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
             ->groupBy('products.prd_id')
             ->orderBy('views', 'desc')
-            ->paginate(10);
+            ->paginate(8);
         $rate = DB::table('products')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->join('rating', 'products.prd_id', '=', 'rating.product_id')

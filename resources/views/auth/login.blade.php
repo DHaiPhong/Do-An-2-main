@@ -23,7 +23,7 @@
             <div class="row flex-grow">
                 <div class="col-lg-4 mx-auto">
                     <div class="auth-form-light text-left p-5">
-                        <h3 style="margin-left:38%">Đăng Nhập</h3>
+                        <h3 style="text-align:center">Đăng Nhập</h3>
                         @if (Session::has('error'))
                             <div class="alert alert-danger">{{ Session::get('error') }}</div>
                         @endif

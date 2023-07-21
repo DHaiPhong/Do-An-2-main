@@ -3467,7 +3467,7 @@ footer .socials {
   font-family: monospace;
 }
 section {
-  padding: 4rem 9%;
+  padding: 4rem 3%;
   
   padding-bottom: 1px;
 }
@@ -3722,7 +3722,7 @@ input.boxcolor{
 a {
     color: #000;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 15px;
     margin-top: 1rem;
     display: inline-block;
 }
@@ -3747,7 +3747,8 @@ a:hover {
   text-align: center;
 }
 .card {
-    
+  width: 100% !important;
+  margin-top: 0 !important;
   border: none;
   box-shadow: 5px 6px 6px 2px #e9ecef;
   border-radius: 4px;

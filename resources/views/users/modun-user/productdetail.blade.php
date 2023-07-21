@@ -274,13 +274,14 @@
             </div>
             <style>
                 .comment_content {
-                    border: 1px solid #000;
-                    border-radius: 5;
+                    border: 2px solid #89898978;
+                    border-radius: 5px;
                     height: 100px;
                     width: 100%;
                     margin-left: 1rem;
                     font-size: 1.8rem;
                     padding: 1rem;
+                    box-shadow: 5px 6px 6px 2px #e9ecef;
                 }
             </style>
             <div class="col-md-8">
@@ -312,6 +313,9 @@
                 </div>
             </div>
         </div>
+
+                        <!-- <div class="container mt-5"> -->
+
         <div style="background-color: orange;height: 2px; margin:0px 350px"></div>
         <div class="title-content">
             Sản phẩm
