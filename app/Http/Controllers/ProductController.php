@@ -69,18 +69,25 @@ class ProductController extends Controller
 
     function product()
     {
-
-        $product = DB::table('products')
-
+        $products = DB::table('products')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->groupBy('products.prd_id')
-            ->inRandomOrder()
-            ->paginate(12);
+            ->orderBy('products.prd_id')
+            ->paginate(15);
+
+        $productIds = $products->pluck('prd_id');
+
+        $ratings = Rating::whereIn('product_id', $productIds)
+            ->selectRaw('avg(rating) as avg_rating, count(*) as count_rating, product_id')
+            ->groupBy('product_id')
+            ->get()
+            ->keyBy('product_id');
+
         $categories = $this->getCategoriesWithSub();
 
-
-        return view('users.modun-user.product', ['prds' => $product, 'categories' => $categories, 'title' => 'Sản Phẩm', 'cat' => 'Sản Phẩm']);
+        return view('users.modun-user.product', ['prds' => $products, 'ratings' => $ratings, 'categories' => $categories, 'title' => 'Sản Phẩm', 'cat' => 'Sản Phẩm']);
     }
+
 
     public function getCategoriesWithSub()
     {
@@ -92,6 +99,19 @@ class ProductController extends Controller
         });
 
         return $categories;
+    }
+
+    protected function getSubCategories($category_id)
+    {
+        $subCategories = DB::table('categories')->where('parent_id', $category_id)->get();
+
+        // recurse for any sub categories
+        $subCategories->map(function ($subCategory) {
+            $subCategory->subCategories = $this->getSubCategories($subCategory->id);
+            return $subCategory;
+        });
+
+        return $subCategories;
     }
 
     public function insertRating(Request $request)
@@ -114,25 +134,28 @@ class ProductController extends Controller
 
         if ($already_rated) {
             // If the user has already rated, return an error
-            return response()->json(['error' => 'Bạn đã đánh giá sản phẩm này rồi và không thể đánh giá thêm nữa.'], 403);
+            return response()->json(['error' => 'Bạn đã đánh giá sản phẩm này rồi!'], 403);
         }
 
 
-        if (!$order) {
-            // Nếu không có đơn hàng hoàn thành, trả về lỗi
-            return response()->json(['error' => 'Bạn chỉ có thể đánh giá sau khi mua sản phẩm và đơn hàng đã hoàn thành. Bạn chưa có đơn hàng nào được hoàn thành!'], 403);
+        if (!$user_id) {
+            // Nếu người dùng không tồn tại, trả về lỗi
+            return response()->json(['error' => 'Người dùng không tồn tại']);
         }
 
-        // Kiểm tra xem đơn hàng đã mua sản phẩm chưa
-        $orderItem = OrderItem::where('order_id', $order->id)
-            ->whereHas('productDetail', function ($q) use ($product_id) {
-                $q->where('prd_id', $product_id);
+        // Kiểm tra xem người dùng có đơn hàng nào hoàn thành chứa sản phẩm đang xem hay không
+        $order = Order::where('user_id', $user_id)
+            ->where('status', 'completed')
+            ->whereHas('items', function ($query) use ($product_id) {
+                $query->whereHas('productDetail', function ($q) use ($product_id) {
+                    $q->where('prd_id', $product_id);
+                });
             })
             ->first();
 
-        if (!$orderItem) {
-            // Nếu không có sản phẩm trong đơn hàng hoàn thành, trả về lỗi
-            return response()->json(['error' => 'Bạn chỉ có thể đánh giá sau khi mua sản phẩm này và đơn hàng đã hoàn thành.'], 403);
+        if (!$order) {
+            // Nếu không có đơn hàng hoàn thành nào chứa sản phẩm, trả về lỗi
+            return response()->json(['error' => 'Bạn chỉ có thể bình luận sau khi mua sản phẩm này và đơn hàng đã hoàn thành.'], 403);
         }
 
 
@@ -218,7 +241,7 @@ class ProductController extends Controller
         $commentContent = '
         <div class="container mt-5">
             <div class="row d-flex justify-content-center" style="font-size: 2rem">
-                    <div class="card p-3" style="background-color: ' . $background . '; margin-left: ' . $offset . ';     border: 1px solid #00000015;">
+                    <div class="card p-3" style="background-color: ' . $background . '; margin-left: ' . $offset . ';     border: 1px solid #00000015; margin-top: 0; width: 100%">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="user d-flex flex-row align-items-center">
                                 <span><small class="font-weight-bold" style="color: ' . $iconColor . '">' . $comment->user->name . '</small>
@@ -254,26 +277,19 @@ class ProductController extends Controller
             return response()->json(['error' => 'Người dùng không tồn tại']);
         }
 
-        // Kiểm tra xem người dùng có đơn hàng nào hoàn thành hay không
+        // Kiểm tra xem người dùng có đơn hàng nào hoàn thành chứa sản phẩm đang xem hay không
         $order = Order::where('user_id', $user_id)
             ->where('status', 'completed')
-            ->first();
-
-        if (!$order) {
-            // Nếu không có đơn hàng hoàn thành, trả về lỗi
-            return response()->json(['error' => 'Bạn chỉ có thể đánh giá sau khi mua sản phẩm và đơn hàng đã hoàn thành. Bạn chưa có đơn hàng nào được hoàn thành!'], 403);
-        }
-
-        // Kiểm tra xem đơn hàng đã mua sản phẩm chưa
-        $orderItem = OrderItem::where('order_id', $order->id)
-            ->whereHas('productDetail', function ($q) use ($product_id) {
-                $q->where('prd_id', $product_id);
+            ->whereHas('items', function ($query) use ($product_id) {
+                $query->whereHas('productDetail', function ($q) use ($product_id) {
+                    $q->where('prd_id', $product_id);
+                });
             })
             ->first();
 
-        if (!$orderItem) {
-            // Nếu không có sản phẩm trong đơn hàng hoàn thành, trả về lỗi
-            return response()->json(['error' => 'Bạn chỉ có thể đánh giá sau khi mua sản phẩm này và đơn hàng đã hoàn thành.'], 403);
+        if (!$order) {
+            // Nếu không có đơn hàng hoàn thành nào chứa sản phẩm, trả về lỗi
+            return response()->json(['error' => 'Bạn chỉ có thể bình luận sau khi mua sản phẩm này và đơn hàng đã hoàn thành.'], 403);
         }
 
         // Nếu tất cả điều kiện đều đúng, tiếp tục tạo bình luận
@@ -285,6 +301,7 @@ class ProductController extends Controller
 
         return response()->json(['success' => 'Thêm bình luận thành công!']);
     }
+
 
     public function replyComment(Request $request)
     {
@@ -316,26 +333,19 @@ class ProductController extends Controller
             return response()->json(['error' => 'Người dùng không tồn tại']);
         }
 
-        // Kiểm tra xem người dùng có đơn hàng nào hoàn thành hay không
+        // Kiểm tra xem người dùng có đơn hàng nào hoàn thành chứa sản phẩm đang xem hay không
         $order = Order::where('user_id', $user_id)
             ->where('status', 'completed')
-            ->first();
-
-        if (!$order) {
-            // Nếu không có đơn hàng hoàn thành, trả về lỗi
-            return response()->json(['error' => 'Bạn chỉ có thể đánh giá sau khi mua sản phẩm và đơn hàng đã hoàn thành. Bạn chưa có đơn hàng nào được hoàn thành!'], 403);
-        }
-
-        // Kiểm tra xem đơn hàng đã mua sản phẩm chưa
-        $orderItem = OrderItem::where('order_id', $order->id)
-            ->whereHas('productDetail', function ($q) use ($product_id) {
-                $q->where('prd_id', $product_id);
+            ->whereHas('items', function ($query) use ($product_id) {
+                $query->whereHas('productDetail', function ($q) use ($product_id) {
+                    $q->where('prd_id', $product_id);
+                });
             })
             ->first();
 
-        if (!$orderItem) {
-            // Nếu không có sản phẩm trong đơn hàng hoàn thành, trả về lỗi
-            return response()->json(['error' => 'Bạn chỉ có thể đánh giá sau khi mua sản phẩm này và đơn hàng đã hoàn thành.'], 403);
+        if (!$order) {
+            // Nếu không có đơn hàng hoàn thành nào chứa sản phẩm, trả về lỗi
+            return response()->json(['error' => 'Bạn chỉ có thể bình luận sau khi mua sản phẩm này và đơn hàng đã hoàn thành.'], 403);
         }
 
         // Nếu tất cả điều kiện đều đúng, tiếp tục tạo bình luận
@@ -350,18 +360,7 @@ class ProductController extends Controller
     }
 
 
-    protected function getSubCategories($category_id)
-    {
-        $subCategories = DB::table('categories')->where('parent_id', $category_id)->get();
 
-        // recurse for any sub categories
-        $subCategories->map(function ($subCategory) {
-            $subCategory->subCategories = $this->getSubCategories($subCategory->id);
-            return $subCategory;
-        });
-
-        return $subCategories;
-    }
 
     protected function getSubCategoriesIds($id)
     {
@@ -387,21 +386,174 @@ class ProductController extends Controller
 
         $categoryIds = $this->getSubCategoriesIds($id);
 
-        $product = DB::table('products')
+        $products = DB::table('products')
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->whereIn('products.category_id', $categoryIds)
             ->groupBy('products.prd_id')
             ->orderBy('products.prd_name')
             ->paginate(12);
 
+        $productIds = $products->pluck('prd_id');
+
+        $ratings = Rating::whereIn('product_id', $productIds)
+            ->selectRaw('avg(rating) as avg_rating, count(*) as count_rating, product_id')
+            ->groupBy('product_id')
+            ->get()
+            ->keyBy('product_id');
+
         $categories = $this->getCategoriesWithSub();
 
         return view('users.modun-user.product', [
-            'prds' => $product,
-            'title' => 'Product',
+            'prds' => $products,
+            'title' => 'Sản Phẩm',
+            'ratings' => $ratings,
             'categories' => $categories, // Add this line
             'cat' => $cat
+        ]);
+    }
 
+    public function productsByViews()
+    {
+        $products = DB::table('products')
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->groupBy('products.prd_id')
+            ->orderBy('products.views', 'desc') // Sort by views
+            ->paginate(12);
+
+        $productIds = $products->pluck('prd_id');
+
+        $ratings = Rating::whereIn('product_id', $productIds)
+            ->selectRaw('avg(rating) as avg_rating, count(*) as count_rating, product_id')
+            ->groupBy('product_id')
+            ->get()
+            ->keyBy('product_id');
+
+        $categories = $this->getCategoriesWithSub();
+
+        $categories = $this->getCategoriesWithSub();
+
+        return view('users.modun-user.product', [
+            'prds' => $products,
+            'title' => 'Sản Phẩm',
+            'ratings' => $ratings,
+            'categories' => $categories,
+            'cat' => 'Sản Phẩm',
+
+        ]);
+    }
+
+    public function productsBySales()
+    {
+        $products = DB::table('products')
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->where('products.prd_sale', '!=', 0)
+            ->groupBy('products.prd_id')
+            ->orderBy('products.views', 'desc')
+            ->paginate(12);
+
+        $productIds = $products->pluck('prd_id');
+
+        $ratings = Rating::whereIn('product_id', $productIds)
+            ->selectRaw('avg(rating) as avg_rating, count(*) as count_rating, product_id')
+            ->groupBy('product_id')
+            ->get()
+            ->keyBy('product_id');
+
+        $categories = $this->getCategoriesWithSub();
+
+        return view('users.modun-user.product', [
+            'prds' => $products,
+            'title' => 'Sản Phẩm',
+            'ratings' => $ratings,
+            'categories' => $categories,
+            'cat' => 'Sản Phẩm',
+        ]);
+    }
+
+    public function productsByRating()
+    {
+        $productIds = DB::table('products')
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->groupBy('products.prd_id')
+            ->pluck('products.prd_id');
+
+        $ratings = Rating::whereIn('product_id', $productIds)
+            ->selectRaw('avg(rating) as avg_rating, count(*) as count_rating, product_id')
+            ->groupBy('product_id')
+            ->get()
+            ->keyBy('product_id');
+
+        $sortedProductIds = $ratings->pluck('product_id');
+
+        $products = DB::table('products')
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->groupBy('products.prd_id')
+            ->whereIn('products.prd_id', $sortedProductIds)
+            ->orderByRaw('FIELD(products.prd_id, ' . implode(',', $sortedProductIds->toArray()) . ')')
+            ->paginate(12);
+
+        $categories = $this->getCategoriesWithSub();
+
+        return view('users.modun-user.product', [
+            'prds' => $products,
+            'title' => 'Sản phẩm',
+            'ratings' => $ratings,
+            'categories' => $categories,
+            'cat' => 'Sản phẩm',
+        ]);
+    }
+
+    public function productsByPriceHighToLow()
+    {
+        $products = DB::table('products')
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->groupBy('products.prd_id')
+            ->orderByRaw('products.price * (1 - products.prd_sale / 100) desc') // Sort by sale price high to low
+            ->paginate(12);
+
+        $productIds = $products->pluck('prd_id');
+
+        $ratings = Rating::whereIn('product_id', $productIds)
+            ->selectRaw('avg(rating) as avg_rating, count(*) as count_rating, product_id')
+            ->groupBy('product_id')
+            ->get()
+            ->keyBy('product_id');
+
+        $categories = $this->getCategoriesWithSub();
+
+        return view('users.modun-user.product', [
+            'prds' => $products,
+            'title' => 'Sản Phẩm',
+            'ratings' => $ratings,
+            'categories' => $categories,
+            'cat' => 'Sản Phẩm',
+        ]);
+    }
+
+    public function productsByPriceLowToHigh()
+    {
+        $products = DB::table('products')
+            ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
+            ->groupBy('products.prd_id')
+            ->orderByRaw('products.price * (1 - products.prd_sale / 100) asc') // Sort by sale price low to high
+            ->paginate(12);
+
+        $productIds = $products->pluck('prd_id');
+
+        $ratings = Rating::whereIn('product_id', $productIds)
+            ->selectRaw('avg(rating) as avg_rating, count(*) as count_rating, product_id')
+            ->groupBy('product_id')
+            ->get()
+            ->keyBy('product_id');
+
+        $categories = $this->getCategoriesWithSub();
+
+        return view('users.modun-user.product', [
+            'prds' => $products,
+            'title' => 'Sản Phẩm',
+            'ratings' => $ratings,
+            'categories' => $categories,
+            'cat' => 'Sản Phẩm',
         ]);
     }
 }

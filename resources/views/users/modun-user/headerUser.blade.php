@@ -1,4 +1,14 @@
 <section>
+    <style>
+        .cate-background {
+            background-color: #cccccc20;
+        }
+
+        .cate-background a {
+            background-color: #cccccc20;
+            color: #fff;
+        }
+    </style>
     <header>
         <div id="menu-bar" class="fa fa-bars"></div>
         <a href="{{ url('') }}" class="logo">
@@ -6,21 +16,49 @@
         </a>
         <nav style="flex:3 ;justify-content: space-around;" class="navbar">
             <a href="{{ url('') }}">Trang chủ</a>
-            <a href="{{ route('users.product') }}">Mua Hàng</a>
-            {{-- <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                    aria-expanded="false">Bài viết</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="{{ route('users.product') }}"
+                    role="button" aria-expanded="false">Mua Hàng</a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" style="width: 120px; background-color: #fff"
-                            href="{{ route('users.blogs') }}">Mới</a>
+                    <li style="width: 200px;"><a class="dropdown-item" style="width: 200px; margin: 0"
+                            href="{{ route('users.product') }}">Sản Phẩm</a>
                     </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    https://shoegazing.com/topics/
+                    <hr>
+                    @if (isset($categories))
+                        @foreach ($categories as $category)
+                            <li class="cate-background" style="width: 200px;"><a class="dropdown-item"
+                                    style="width: 200px; margin: 0"
+                                    href="{{ route('product.category', $category->slug) }}">{{ $category->name }}</a>
+                            </li>
+                            <li class="list-item">
+                                @if ($category->children->isNotEmpty())
+                                    <ul class="child-list">
+                                        @foreach ($category->children as $sub)
+                                            <li class="child-item">
+                                                <a href="{{ route('product.category', $sub->slug) }}">
+                                                    {{ $sub->name }}
+                                                </a>
+                                                @if ($sub->children->isNotEmpty())
+                                                    <ul>
+                                                        @foreach ($sub->children as $sub2)
+                                                            <li>
+                                                                <a href="{{ route('product.category', $sub2->slug) }}">
+                                                                    {{ $sub2->name }}
+                                                                </a>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                @endif
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </li>
+                            <hr>
+                        @endforeach
+                    @endif
                 </ul>
-            </li> --}}
+            </li>
             <a href="{{ route('users.about') }}">Thông Tin</a>
         </nav>
         <div style="flex:2" class="search-container">
@@ -90,7 +128,7 @@
 
                     if (data.length > 0) { // check if any item is returned
                         data.forEach(item => {
-                            
+
                             let suggestionItem = document.createElement('li');
                             suggestionItem.classList.add('suggestion-item');
 
@@ -109,8 +147,8 @@
                             suggestionItem.appendChild(prdPrice);
 
                             suggestionItem.addEventListener('click', function() {
-                                link = "http://127.0.0.1:8000/productdetail/"+item.slug;
-                                    location.href = link;    
+                                link = "http://127.0.0.1:8000/productdetail/" + item.slug;
+                                location.href = link;
 
                                 suggestionList.style.display = 'none';
                             });
