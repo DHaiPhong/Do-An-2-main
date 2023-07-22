@@ -50,11 +50,11 @@
                                         {{ Auth::user()->name }} <i class="fa fa-user"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-white">
-                                        <li><a class="dropdown-item" style="margin-left:0"
+                                        <li><a class="dropdown-item" style="margin-left:0;color:black"
                                                 href="{{ route('users.order') }}">Tài Khoản</a></li>
                                         <form method="post" action="{{ route('logout') }}">
                                             @csrf
-                                            <button type="submit"> <a class="dropdown-item" style="margin-left:0">Đăng
+                                            <button type="submit"> <a class="dropdown-item" style="margin-left:0;color:black">Đăng
                                                     Xuất</a>
                                             </button>
                                         </form>
