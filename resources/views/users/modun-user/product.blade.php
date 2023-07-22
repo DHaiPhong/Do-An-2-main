@@ -58,7 +58,7 @@
                                         <a href="{{ route('product.category', $category->slug) }}">
                                             <strong>{{ $category->name }}</strong> 
                                             @if ($category->children->isNotEmpty())
-                                            <p style="position: absolute;right: 13px;top: 30%;background-color: #dcdcdc;border-radius: 21px;width: 19px;height: 15px;text-align: center;padding-bottom: 19px;color: black;"> {{count($category->->children)}}</p>
+                                            <p style="position: absolute;right: 13px;top: 30%;background-color: #dcdcdc;border-radius: 21px;width: 19px;height: 15px;text-align: center;padding-bottom: 19px;color: black;"> {{count($category->children)}}</p>
                                             @endif
                                         </a>
 
