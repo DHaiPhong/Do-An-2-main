@@ -56,14 +56,19 @@
                                 @foreach ($categories as $category)
                                     <li class="list-item">
                                         <a href="{{ route('product.category', $category->slug) }}">
-                                            <strong>{{ $category->name }}</strong>
+                                            <strong>{{ $category->name }}</strong> 
+                                            @if ($category->children->isNotEmpty())
+                                            <p style="position: absolute;right: 13px;top: 30%;background-color: #dcdcdc;border-radius: 21px;width: 19px;height: 15px;text-align: center;padding-bottom: 19px;color: black;"> {{count($category->->children)}}</p>
+                                            @endif
                                         </a>
+
                                         @if ($category->children->isNotEmpty())
                                             <ul class="child-list">
                                                 @foreach ($category->children as $sub)
                                                     <li class="child-item">
                                                         <a href="{{ route('product.category', $sub->slug) }}">
                                                             <strong>{{ $sub->name }}</strong>
+                                                            
                                                         </a>
                                                         @if ($sub->children->isNotEmpty())
                                                             <ul>

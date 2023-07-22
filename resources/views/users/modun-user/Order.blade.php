@@ -1,104 +1,104 @@
 @extends('users.masterUser')
 @section('css')
 
-    <style>
-        th {
-            text-align: center;
+<style>
+th {
+    text-align: center;
 
 
-        }
+}
 
-        td {
-            vertical-align: middle;
-            text-align: center;
-        }
+td {
+    vertical-align: middle;
+    text-align: center;
+}
 
-        .profile-page .profile {
-            text-align: center;
-        }
+.profile-page .profile {
+    text-align: center;
+}
 
-        .profile-page .profile img {
-            max-width: 160px;
-            width: 100%;
-            margin: 0 auto;
-            -webkit-transform: translate3d(0, -50%, 0);
-            -moz-transform: translate3d(0, -50%, 0);
-            -o-transform: translate3d(0, -50%, 0);
-            -ms-transform: translate3d(0, -50%, 0);
-            transform: translate3d(0, -50%, 0);
-        }
+.profile-page .profile img {
+    max-width: 160px;
+    width: 100%;
+    margin: 0 auto;
+    -webkit-transform: translate3d(0, -50%, 0);
+    -moz-transform: translate3d(0, -50%, 0);
+    -o-transform: translate3d(0, -50%, 0);
+    -ms-transform: translate3d(0, -50%, 0);
+    transform: translate3d(0, -50%, 0);
+}
 
-        .img-raised {
-            box-shadow: 0 5px 15px -8px rgba(0, 0, 0, .24), 0 8px 10px -5px rgba(0, 0, 0, .2);
-        }
+.img-raised {
+    box-shadow: 0 5px 15px -8px rgba(0, 0, 0, .24), 0 8px 10px -5px rgba(0, 0, 0, .2);
+}
 
-        .rounded-circle {
-            border-radius: 50% !important;
-        }
+.rounded-circle {
+    border-radius: 50% !important;
+}
 
-        .img-fluid,
-        .img-thumbnail {
-            max-width: 100%;
-            height: auto;
-        }
+.img-fluid,
+.img-thumbnail {
+    max-width: 100%;
+    height: auto;
+}
 
-        .main {
-            background: #FFF;
-            position: relative;
-            z-index: 3;
-        }
+.main {
+    background: #FFF;
+    position: relative;
+    z-index: 3;
+}
 
-        .main-raised {
-            margin: 30px 0;
-            border-radius: 6px;
-            box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2);
-        }
+.main-raised {
+    margin: 30px 0;
+    border-radius: 6px;
+    box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2);
+}
 
 
-        .profile-page .description {
-            margin: 1.071rem auto 0;
-            max-width: 600px;
-            color: #999;
-            font-weight: 300;
-        }
+.profile-page .description {
+    margin: 1.071rem auto 0;
+    max-width: 600px;
+    color: #999;
+    font-weight: 300;
+}
 
-        .header-filter:after,
-        .header-filter:before {
-            position: absolute;
-            z-index: 1;
-            width: 100%;
-            height: 100%;
-            display: block;
-            left: 0;
-            top: 0;
-            content: "";
-        }
+.header-filter:after,
+.header-filter:before {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: block;
+    left: 0;
+    top: 0;
+    content: "";
+}
 
-        .fixed-top {
-            position: fixed;
-            z-index: 1030;
-            left: 0;
-            right: 0;
-        }
+.fixed-top {
+    position: fixed;
+    z-index: 1030;
+    left: 0;
+    right: 0;
+}
 
-        .profile-page .page-header {
-            height: 380px;
-            background-position: center;
-        }
+.profile-page .page-header {
+    height: 380px;
+    background-position: center;
+}
 
-        #popup {
-            display: none;
-            position: fixed;
-            z-index: 999;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            font-size: 15px;
-        }
+#popup {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+}
 
         #popup2 {
             display: none;
@@ -159,6 +159,7 @@
 @stop
 
 @section('content')
+
 
     <div style="margin-bottom: 180px;">
         <div class="container-fluid pt-5">
@@ -276,6 +277,7 @@
                                                         </div>
 
                                                     </div>
+
                                                     <div style="height:20px">
                                                         <p id="error-text"
                                                             style="text-align: center;color: red; display: none;">Mật khẩu
@@ -376,10 +378,11 @@
 
                                             </div>
 
+
                                         </div>
 
-
                                     </div>
+
                                 </div>
                             </div>
 
@@ -561,13 +564,17 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
+
             </div>
         </div>
     </div>
-    <script>
-        document.getElementById("backbtn").addEventListener("click", function() {
-            document.getElementById("popup").style.display = "none";
+</div>
+<script>
+document.getElementById("backbtn").addEventListener("click", function() {
+    document.getElementById("popup").style.display = "none";
+
 
         })
         document.getElementById("backbtn2").addEventListener("click", function() {
@@ -613,3 +620,4 @@
         }
     </script>
 @endsection
+

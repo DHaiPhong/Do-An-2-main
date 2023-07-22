@@ -6,7 +6,7 @@
 @stop
 @section('content')
     <section class="producth" id="producth">
-        <h1 class="heading"><span>TOP 5</span> Sản Phẩm Bán Chạy</h1>
+        <h1 class="heading"><span>TOP</span> Sản Phẩm Bán Chạy</h1>
         <div class="box-container">
             @foreach ($sells as $sell)
                 <div class="box">
@@ -53,6 +53,8 @@
                 </div>
             @endforeach
         </div>
+        <div style="width:100% ;padding: 0 25%;  margin-top:30px " > <div style="width:100% ; height:2px; background-color:orange"></div> </div>
+
         {{-- </section>
     <!--end product-->
     <section class="featured" id="fearured"> --}}
@@ -106,6 +108,15 @@
             @endforeach
         </div>
     </section>
+    <div id="banner" >
+        <img src="img/slide/giayslide5.png" style="left:54%; height:680px;width:auto" alt="Shoe" id="animatedShoe">
+        <div id="animatedtext" style="right:50%;">
+        <h1  style="color:white; text-wrap:nowrap" >Chào mứng đến với cửa hàng chúng tôi</h1>
+        <p style="color:white; text-wrap:nowrap">Hãy click vào đây để khám phá những mẫu giày mới nhất </p>
+        <a href="{{ route('users.product') }}"><button   class="sketch-button"> Nhấn vào đây</button></a>
+        </div>
+        
+
 
     <section>
         <h1 class="heading"><span>TOP 3</span> Sản Phẩm được đánh giá cao nhất</h1>
@@ -147,7 +158,10 @@
             @endforeach
         </div>
     </section>
+    <div style="width:100% ;padding: 0 25%;  margin-top:30px " > <div style="width:100% ; height:2px; background-color:orange"></div> </div>
+
     <section style="" class="why_section layout_padding">
+
         <div class="container">
             <div class="heading_center">
                 <h2>
@@ -165,6 +179,7 @@
                                     <g>
                                         <path
                                             d="M476.158,231.363l-13.259-53.035c3.625-0.77,6.345-3.986,6.345-7.839v-8.551c0-18.566-15.105-33.67-33.67-33.67h-60.392
+
                  V110.63c0-9.136-7.432-16.568-16.568-16.568H50.772c-9.136,0-16.568,7.432-16.568,16.568V256c0,4.427,3.589,8.017,8.017,8.017
                  c4.427,0,8.017-3.589,8.017-8.017V110.63c0-0.295,0.239-0.534,0.534-0.534h307.841c0.295,0,0.534,0.239,0.534,0.534v145.372
                  c0,4.427,3.589,8.017,8.017,8.017c4.427,0,8.017-3.589,8.017-8.017v-9.088h94.569c0.008,0,0.014,0.002,0.021,0.002
@@ -278,5 +293,30 @@
 
 
     <!--end news-->
+<script>
+var animationPlayed = false;
+var animatedBanner = document.getElementById('animatedShoe');
+var animatedtext = document.getElementById('animatedtext');
 
+window.addEventListener('scroll', function(){
+    var windowPosition = window.scrollY + window.innerHeight;
+    var bannerPosition = animatedBanner.getBoundingClientRect().top + window.scrollY;
+
+    if(windowPosition >= bannerPosition && !animationPlayed){
+        animationPlayed = true;
+        animatedBanner.style.animation = 'slideShoe 2s linear forwards';
+        animatedBanner.style.opacity = '1';
+        animatedtext.style.animation = 'slidetext 2s linear forwards';
+        animatedtext.style.opacity = '1';
+    }
+});
+
+
+
+
+
+
+
+
+</script>
 @stop

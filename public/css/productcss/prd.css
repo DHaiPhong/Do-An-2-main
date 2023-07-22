@@ -126,9 +126,7 @@
   color: red;
   font-size: 1.5em;
 }
-i{
-  color: red;
-}
+
 .child-list li:hover{
   background-color: #d7d7d7;
   border-right: 3px solid red;
