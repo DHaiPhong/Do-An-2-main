@@ -49,6 +49,11 @@ Route::get(
 )->name('users.productdetail');
 Route::get('/product', [ProductController::class, 'product'])->name('users.product');
 Route::get('/product/{slug}', [ProductController::class, 'prdbyCategory'])->name('product.category');
+Route::get('/product-by-view', [ProductController::class, 'productsByViews'])->name('product.by.view');
+Route::get('/product-by-sale', [ProductController::class, 'productsBySales'])->name('product.by.sale');
+Route::get('/product-by-rating', [ProductController::class, 'productsByRating'])->name('product.by.rating');
+Route::get('/product-by-highprice', [ProductController::class, 'productsByPriceHighToLow'])->name('product.by.highprice');
+Route::get('/product-by-lowprice', [ProductController::class, 'productsByPriceLowToHigh'])->name('product.by.lowprice');
 
 // comment in Product Detail
 Route::post('/load-comment', [ProductController::class, 'loadComment'])->name('loadComment');

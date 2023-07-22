@@ -1,6 +1,6 @@
 @extends('users.masterUser')
 @section('css')
-<link href="{{ url('css/productcss/prd.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url('css/productcss/prd.css') }}" rel="stylesheet" type="text/css">
 
 @stop
 @section('content')
@@ -218,7 +218,8 @@
                                 </div>
                         </div>
                         <button type="button" class="btn btn-danger">
-                            Tổng Đài Bán Hàng: <span class="badge bg-Warning" style="font-size: 1.5rem">123456789</span>
+                            Tổng Đài Bán Hàng: <span class="badge bg-Warning"
+                                style="font-size: 1.5rem; box-shadow: none">123456789</span>
                         </button>
                         </form>
                     </div>
@@ -510,7 +511,7 @@
                     success: function(data) {
                         $('#notify-comment').html(
                             '<p class="text text-success">Thêm bình luận thành công! </p>');
-                        load_comment();
+                        location.reload();
                         $('.comment_content').val('');
                     },
                     error: function(error) {

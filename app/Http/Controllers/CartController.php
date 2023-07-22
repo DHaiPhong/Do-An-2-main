@@ -78,9 +78,6 @@ class CartController extends Controller
         if ($data == 0) {
             return redirect()->route('home1');
         }
-
-
-
         return view('users.modun-user.payment', ['title' => 'Thanh Toán']);
     }
 
@@ -163,7 +160,7 @@ class CartController extends Controller
         }
 
         Cart::destroy();
-        session()->flush();
+        // session()->flush();
 
         return view('users.modun-user.Cartsuccess', ['title' => 'Thành Công']);
     }
