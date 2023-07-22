@@ -115,6 +115,7 @@
         <p style="color:white; text-wrap:nowrap">Hãy click vào đây để khám phá những mẫu giày mới nhất </p>
         <a href="{{ route('users.product') }}"><button   class="sketch-button"> Nhấn vào đây</button></a>
         </div>
+    </div>
         
 
 
