@@ -24,8 +24,8 @@
                             href="{{ route('users.product') }}">Sản Phẩm</a>
                     </li>
                     <hr>
-                    @if (isset($categories))
-                        @foreach ($categories as $category)
+                    @if (isset($category_main))
+                        @foreach ($category_main as $category)
                             <li class="cate-background" style="width: 200px;"><a class="dropdown-item"
                                     style="width: 200px; margin: 0"
                                     href="{{ route('product.category', $category->slug) }}">{{ $category->name }}</a>

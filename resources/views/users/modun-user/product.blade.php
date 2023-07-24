@@ -52,8 +52,8 @@
                                     <strong style="color: #fff">Danh Mục </strong>
                                 </a>
                             </li>
-                            @if (isset($categories))
-                                @foreach ($categories as $category)
+                            @if (isset($category_main))
+                                @foreach ($category_main as $category)
                                     <li class="list-item">
                                         <a href="{{ route('product.category', $category->slug) }}">
                                             <strong>{{ $category->name }}</strong> 

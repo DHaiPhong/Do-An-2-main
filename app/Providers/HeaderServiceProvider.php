@@ -26,10 +26,10 @@ class HeaderServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('*', function ($view) {
-            $categories = Category::whereNull('parent_id')
+            $category_main = Category::whereNull('parent_id')
                 ->with('children.children')
                 ->get();
-            $view->with('categories', $categories);
+            $view->with('category_main', $category_main);
         });
     }
 }

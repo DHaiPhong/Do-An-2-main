@@ -19,6 +19,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::orderBy('parent_id', 'asc')->latest()->paginate(9);
+        
         return view('Admin.modun.categories.index', ['title' => 'Category'], compact('categories'));
     }
 

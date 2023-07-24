@@ -265,7 +265,7 @@ class AdminController extends Controller
                     )
                     ->groupBy('products.prd_id')
                     ->orderBy('product_details.prd_amount', 'desc')
-                    ->paginate(8);
+                    ->get();
             } else if ($request->sort == 'quantity-asc') {
                 $products = DB::table('products')
                     ->joinSub($temp, 'temp', function (JoinClause $join) {
@@ -926,10 +926,14 @@ class AdminController extends Controller
     {
         $orders = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->select('orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
+            ->leftJoin('users','orders.updated_by','=' ,'users.id' )
+            ->select('users.name as editname','orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
             ->groupBy('orders.id')
             ->orderByDesc('orders.updated_at')
-            ->paginate(9);
+            ->get();
+        
+        
+        
 
         return view('Admin.modun.order', compact('orders'));
     }
@@ -986,7 +990,7 @@ class AdminController extends Controller
 
         $updateData = [
             'status' => $value,
-            'updated_by' => Auth::user()->name,
+            'updated_by' => Auth::user()->id,
             'updated_at' => now()
         ];
 
@@ -1032,34 +1036,34 @@ class AdminController extends Controller
                 ->groupBy('orders.id')
                 ->where('orders.status', $id)
                 ->orderByDesc('orders.id')
-                ->paginate(5);
+                ->get();
         } else if ($id == 'completed') {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
                 ->groupBy('orders.id')
                 ->where('orders.status', $id)
                 ->orderByDesc('orders.id')
-                ->paginate(6);
+                ->get();
         } else if ($id  == 'processing') {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
                 ->groupBy('orders.id')
                 ->where('orders.status', $id)
                 ->orderByDesc('orders.id')
-                ->paginate(6);
+                ->get();
         } else if ($id == 'cancel') {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
                 ->groupBy('orders.id')
                 ->where('orders.status', $id)
                 ->orderByDesc('orders.id')
-                ->paginate(6);
+                ->get();
         } else {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
                 ->groupBy('orders.id')
                 ->orderByDesc('orders.id')
-                ->paginate(6);
+                ->get();
         }
         return view('Admin.modun.order', compact('orders'));
     }

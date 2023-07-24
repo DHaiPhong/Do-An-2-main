@@ -35,7 +35,7 @@
                 </div>
                 <h3 id="no-results" style="display: none; color:red; margin-top: 1rem">Không có kết quả liên quan</h3>
 
-                <table class="table table-bordered">
+                <table id="productTable" class="table table-bordered">
                     <thead>
                         <tr>
                             <th> Id </th>
@@ -51,9 +51,9 @@
                             <th style="align-item: center"> Chi Tiết </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="productTableBody">
                         @foreach ($orders as $key => $order)
-                            <tr>
+                            <tr class="bangcu">
                                 <td scope="row">{{ ++$key }}</td>
                                 <td> {{ $order->order_number }}</td>
                                 <input type="hidden" value="{{ $order->id }} ">
@@ -76,7 +76,7 @@
                                 <td>{{ $order->address }}</td>
                                 <td> {{ $order->phone_number }} </td>
                                 <td> {{ $order->item_count }} </td>
-                                <td style="text-align: center"> {{ $order->updated_by }} </td>
+                                <td style="text-align: center"> {{ $order->editname }} </td>
                                 <td> {{ $order->created_at }}</td>
                                 <td> {{ $order->updated_at }}</td>
                                 <td style="text-align: center"><a style="text-align: center"
@@ -87,7 +87,8 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $orders->links() }}
+                
+                <div style="display:flex" id="pagination"></div>
             </div>
         </div>
     </div>
@@ -101,23 +102,88 @@
             location.href = url;
         }
     </script>
-    <script>
-        $(document).ready(function() {
-            $("#search-box").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
+    
+        <script>
+        
 
-                var visibleRows = $("table tbody tr").filter(function() {
-                    var match = $(this).text().toLowerCase().indexOf(value) > -1;
-                    $(this).toggle(match);
-                    return match;
-                }).length;
-
-                if (visibleRows === 0) {
-                    $("#no-results").show();
-                } else {
-                    $("#no-results").hide();
-                }
-            });
-        });
-    </script>
+        // Calculation for total pages
+        var table = $('.bangcu');
+        console.log(table)
+        var currentPage = 1;
+        var totalRows = table.length;
+        var totalPages = Math.ceil(totalRows / 8);
+    
+    // Clear the pagination links
+    $('#pagination').empty();
+    
+    // Create the pagination links
+    for (var i = 1; i <= totalPages; i++) {
+      var link = $('<a class="page-link" href="javascript:void(0);"></a>').text(i);
+      link.attr('data-page', i); // Set the 'data-page' attribute
+      console.log(link);
+      $('#pagination').append(link);
+    }
+    
+    // Display the rows for the first page
+    displayPage(currentPage);
+    
+    // Handle click event for pagination links
+    $('.page-link').on('click', function() {
+      var page = $(this).attr('data-page'); // Retrieve the 'data-page' attribute
+    
+      if (page === currentPage) {
+        return;
+      }
+    
+      displayPage(page);
+    });
+    
+    // Function to display rows for the given page
+    function displayPage(page) {
+      // Update current page
+      currentPage = page;
+      
+      // Hide all rows
+      $('#productTableBody tr').hide();
+    
+      // Calculate the index range for the selected page
+      var startIndex = (page - 1) * 8;
+      var endIndex = Math.min(startIndex + 8, totalRows);
+    
+      // Display the rows for the selected page
+      for (var i = startIndex; i < endIndex; i++) {
+        $('#productTableBody tr:eq(' + i + ')').show();
+      }
+    }
+    
+    
+    
+          $("#search-box").on("keyup", function() {
+             var value = $(this).val().toLowerCase();
+              var visibleRows = $("table tbody tr").filter(function() {
+                
+                var match = $(this).text().toLowerCase().indexOf(value) > -1;
+                $(this).toggle(match);
+                
+                return match;
+              }).length;
+    
+              if (visibleRows === 0) {
+                $("#no-results").show();
+                $("#pagination").hide();
+              }else if(value === ""){
+                $("#no-results").hide();
+                $("#pagination").show();
+                displayPage(currentPage);
+              }
+               else {
+                $("#no-results").hide();
+                $("#pagination").hide();
+              }
+     }); 
+     
+     
+    
+        </script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @endsection

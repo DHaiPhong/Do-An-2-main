@@ -28,7 +28,7 @@ class CartController extends Controller
             ->first();
 
 
-        if ($product->prd_amount == 0) {
+        if ($product->prd_amount <= 0) {
             return redirect()->route('users.cartshop')->with(['fail' => 'Lỗi sản phẩm đã hết hàng!']);
         } else {
             $data = Cart::content()

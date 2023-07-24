@@ -26,6 +26,17 @@ class CheckoutController extends Controller
 
     public function placeOrder(PaymentRequest $request)
     {
+         
+        foreach(Cart::content() as $item){
+            $data = DB::table('product_details')
+            ->where('prd_detail_id',$item->id)
+            ->first();
+           
+            if( $data->prd_amount == 0){
+                Cart::remove($item->rowId);
+                return redirect()->route('users.cartshop')->with(['message' => 'Xin lôi Quý khách sản phẩm bạn vừa đặt đã hết hàng!']);
+            }
+        }
         if ($request->coupon_type == 'fixed') {
             $total = Cart::total() + $request->ship - $request->coupon_amount;
         } else {
@@ -81,6 +92,16 @@ class CheckoutController extends Controller
 
     public function online(Request $request)
     {
+        foreach(Cart::content() as $item){
+            $data = DB::table('product_details')
+            ->where('prd_detail_id',$item->id)
+            ->first();
+           
+            if( $data->prd_amount == 0){
+                Cart::remove($item->rowId);
+                return redirect()->route('users.cartshop')->with(['message' => 'Xin lôi Quý khách sản phẩm bạn vừa đặt đã hết hàng!']);
+            }
+        }
         if ($request->coupon_type == 'fixed') {
             $total = Cart::total() + $request->ship - $request->coupon_amount;
             
