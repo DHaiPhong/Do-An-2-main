@@ -23,7 +23,9 @@
                         <option value="sold-asc">Số lượng đã bán tăng dần</option>
                         <option value="price-asc">Giá tăng dần</option>
                         <option value="price-desc">Giá giảm dần</option>
+                        <option value="view">Sản phẩm có lượt xem nhiều</option>
                         <option value="sale">Sản phẩm sale</option>
+                        
                     </select>
                     <select id="chon" name="filter" class="form-select" style="float: right"
                         aria-label="Default select example">
@@ -69,7 +71,7 @@
                         <th> Danh Mục</th>
                         <th> Size </th>
                         <th> Giảm </th>
-                        <th> Sửa </th>
+                        
                     </tr>
                 </thead>
                 <tbody id="productTableBody">
@@ -83,12 +85,7 @@
                         <td>{!! $product->new_prd_details !!}</td>
                         <td @if ($product->prd_sale > 0) style="color: red" @endif> {{ $product->prd_sale }}%
                         </td>
-                        <td style="">
-                            <a href="{{ route('admin.prd_detail', ['id' => $product->prd_detail_id]) }}">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true">
-                                </i>
-                            </a>
-                        </td>
+                        
                     </tr>
                     @endforeach
                 </tbody>

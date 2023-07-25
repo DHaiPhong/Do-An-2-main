@@ -379,7 +379,28 @@ class AdminController extends Controller
                     ->where('products.prd_sale', '>', 0)
 
                     ->get();
-            } else {
+            }elseif ($request->sort == 'view') {
+                $products = DB::table('products')
+                    ->joinSub($temp, 'temp', function (JoinClause $join) {
+                        $join->on('products.prd_id', '=', 'temp.prd_id');
+                    })
+                    ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->select(
+                        'products.*',
+                        'categories.name as category',
+                        'temp.prd_image',
+                        'product_details.prd_detail_id',
+
+                        DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
+                    )
+                    ->groupBy('products.prd_id')
+                    ->orderBy("products.views","desc")
+
+                    ->get();
+            }
+            
+            else {
                 $products = DB::table('products')
                     ->joinSub($temp, 'temp', function (JoinClause $join) {
                         $join->on('products.prd_id', '=', 'temp.prd_id');

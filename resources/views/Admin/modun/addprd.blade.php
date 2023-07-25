@@ -76,10 +76,10 @@
                                     <input type="number" name="prd_sale" class="form-control" id="" max="100" min="0" value="0"
                                         placeholder="">
                                 </div>
-                                <div class="form-group">
-                                    <label for="">Chi Tiết</label>
-                                    <textarea type="text" name="prd_details" class="form-control" id="" value="" style="height: 10rem ;"> </textarea>
-                                </div>
+                                
+                                    
+                                    <input type="hidden" name="prd_details" class="form-control" id="" value="" style="height: 10rem ;"> </input>
+                                
 
 
                                 <div class="form-group">

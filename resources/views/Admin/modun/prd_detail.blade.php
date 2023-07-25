@@ -6,8 +6,8 @@
     <div class="card" style="float: right; width: 72%; margin-right: 7%">
         <div class="card-body">
             <div style="box-sizing: border-box;">
-            <a href="{{ route('admin.product') }}">Go Back</a>
-                <h4 class="card-title">Sửa Sản Phẩm</h4>
+            
+                <h4 class="card-title"> <a  href="{{ route('admin.product') }}"><img src="/anh/arrow.png" style="width:15px ;margin-right:15px;"></a>Sửa Sản Phẩm</h4>
 
                 <br>
             </div>
@@ -48,22 +48,18 @@
                             <input type="number" name="prd_price" class="form-control" id="exampleInputEmail1"
                                 value="{{ $product->price }}"  placeholder="">
                         </div>
+                        
+                    </div>
+                    <div class="col">
+                        
+                            <input type="hidden" name="prd_details" class="form-control" id="" value="" style="height: 10rem ;">{{ $product->prd_details }} </input>
+
+                        
                         <div class="form-group">
 
                             <label for="exampleInputPassword1">Số Lượng</label>
                             <input type="number" name="prd_amount" class="form-control" id="exampleInputPassword1"
                                 value="{{ $product->prd_amount }}" min="0" placeholder="">
-                        </div>
-                        <div class="form-group">
-
-
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="">Mô Tả</label>
-                            <textarea type="text" name="prd_details" class="form-control" id="" value="" style="height: 10rem ;">{{ $product->prd_details }} </textarea>
-
                         </div>
 
                         <div class="form-group">
