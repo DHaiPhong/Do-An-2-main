@@ -67,14 +67,14 @@
                                     </td>
                                     <td>{{ $comment->created_at }}</td>
                                     <td>
-                                        <a href="{{ route('comments.edit', $comment->id) }}"
-                                            class="btn btn-sm btn-primary">Sửa</a>
+                                        {{-- <a href="{{ route('comments.edit', $comment->id) }}"
+                                            class="btn btn-sm btn-primary">Sửa</a> --}}
                                         <form action="{{ route('comments.destroy', $comment->id) }} " method="POST"
                                             class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Bạn có chắc chắn muốn xóa đánh giá này?')">Xóa</button>
+                                                onclick="return confirm('Bạn có chắc chắn muốn xóa bình luận này?')">Xóa</button>
                                         </form>
                                     </td>
 
