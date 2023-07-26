@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Coupon;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CouponController extends Controller
@@ -83,7 +84,8 @@ class CouponController extends Controller
     public function edit($id)
     {
         $coupons = Coupon::find($id);
-        return view('Admin.modun.coupons.edit', compact('coupons'));
+        $ex =  Carbon::parse($coupons->expires_at)->format('Y-m-d');
+        return view('Admin.modun.coupons.edit',['ex' => $ex] ,compact('coupons'));
     }
 
     /**

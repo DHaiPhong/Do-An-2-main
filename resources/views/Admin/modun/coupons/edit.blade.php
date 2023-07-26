@@ -36,7 +36,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Ngày Hết Hạn</label>
-                            <input type="date" name="expires_at" value="{{ $coupons->expires_at }}" class="form-control">
+                            <input type="date" name="expires_at" value="{{ $ex }}" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Loại</label>
