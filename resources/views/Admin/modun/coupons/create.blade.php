@@ -39,7 +39,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Số Lượng Giảm</label>
-                            <input type="text" name="amount" required class="form-control">
+                            <input type="number" name="amount" required class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="">Ngày Hết Hạn</label>
