@@ -56,6 +56,7 @@ class LoginController extends Controller
         if (auth()->attempt($credentials)) {
             if (auth()->user()->status == 1) {
                 Auth::logout();
+                
                 return redirect()->back()->with(['error' => 'Tài khoản của bạn đã bị khóa.']);
             }else if (auth()->user()->role == 'admin') {
                 return redirect()->route('admin.dashboard');
