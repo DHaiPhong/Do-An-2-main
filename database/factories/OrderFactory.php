@@ -16,16 +16,18 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            'order_number' => $this->faker->unique()->randomNumber(),
-            'user_id'       =>      function () {
-                return User::inRandomOrder()->first()->id;
-            },
-            'status' => $this->faker->randomElement(['pending', 'processing', 'completed', 'decline']),
-            'grand_total' => $this->faker->randomFloat(6, 0, 10000000), // any number between 0 and 10000
-            'item_count' => $this->faker->randomNumber(),
-            'name' => $this->faker->name,
-            'address' => $this->faker->address,
-            'phone_number' => $this->faker->phoneNumber,
+            'order_number' => 'ORD-' . substr(md5(uniqid(rand(), true)), 0, 12),
+            'user_id' => 22,
+            'status' => 'completed',
+            'updated_by' => 22,
+            'grand_total' => $this->faker->randomFloat(6, 5000000, 10000000),
+            'item_count' => $this->faker->numberBetween(0, 5),
+            'name' => $this->faker->name(),
+            'address' => $this->faker->address(),
+            'phone_number' => $this->faker->phoneNumber(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'created_at' => $this->faker->dateTimeBetween('2023-01-01', '2023-07-25'),
+            'updated_at' => $this->faker->dateTimeBetween('2023-01-01', '2023-07-25'),
         ];
     }
 

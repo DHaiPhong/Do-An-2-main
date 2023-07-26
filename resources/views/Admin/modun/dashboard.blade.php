@@ -36,7 +36,7 @@
                     </form>
                 </div>
                 <div class="row" style="margin-top: 1rem">
-                    <div class="col-md-4 stretch-card grid-margin">
+                    {{-- <div class="col-md-4 stretch-card grid-margin">
                         <div class="card bg-gradient-danger card-img-holder text-white">
                             <div class="card-body">
                                 <h4 class="font-weight-normal mb-3">Đã Bán <i
@@ -47,8 +47,8 @@
                                     Tiết</a>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 stretch-card grid-margin">
+                    </div> --}}
+                    <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-success card-img-holder text-white">
                             <div class="card-body">
                                 <h4 class="font-weight-normal mb-3">Đơn Hàng Chưa Hoàn Thành<i
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 stretch-card grid-margin">
+                    <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
 

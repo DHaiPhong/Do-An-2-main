@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Rating;
 use Illuminate\Database\Seeder;
 
-class UserTableSeeder extends Seeder
+class RatingTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()->count(50)->create();
+        Rating::factory()->count(100)->create();
     }
 }

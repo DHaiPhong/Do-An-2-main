@@ -47,6 +47,9 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-header ">
+                    Quản Lý
+                </li>
                 <li class="nav-item">
                     <a class="nav-link  " href="{{ route('admin.account') }}">
                         <i class="fas fa-fw fa-user "></i>
@@ -61,9 +64,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-header ">
-                    Quản Lý
-                </li>
+
                 <li class="nav-item">
                     <a class="nav-link  " href="{{ route('admin.product') }}">
                         <p>
@@ -81,11 +82,14 @@
                         <p>
                             Đơn Hàng
                             <span class="badge badge-warning right" style="">
-                                <?php $count = DB::table('orders')->where('status','!=','completed')->where('status','!=','cancel')->count();
+                                <?php $count = DB::table('orders')
+                                    ->where('status', '!=', 'completed')
+                                    ->where('status', '!=', 'cancel')
+                                    ->count();
                                 echo $count; ?>
                             </span>
-                            
-                            
+
+
                         </p>
                     </a>
                 </li>
