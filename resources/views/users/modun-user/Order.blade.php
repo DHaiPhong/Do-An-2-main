@@ -1,104 +1,104 @@
 @extends('users.masterUser')
 @section('css')
 
-<style>
-th {
-    text-align: center;
+    <style>
+        th {
+            text-align: center;
 
 
-}
+        }
 
-td {
-    vertical-align: middle;
-    text-align: center;
-}
+        td {
+            vertical-align: middle;
+            text-align: center;
+        }
 
-.profile-page .profile {
-    text-align: center;
-}
+        .profile-page .profile {
+            text-align: center;
+        }
 
-.profile-page .profile img {
-    max-width: 160px;
-    width: 100%;
-    margin: 0 auto;
-    -webkit-transform: translate3d(0, -50%, 0);
-    -moz-transform: translate3d(0, -50%, 0);
-    -o-transform: translate3d(0, -50%, 0);
-    -ms-transform: translate3d(0, -50%, 0);
-    transform: translate3d(0, -50%, 0);
-}
+        .profile-page .profile img {
+            max-width: 160px;
+            width: 100%;
+            margin: 0 auto;
+            -webkit-transform: translate3d(0, -50%, 0);
+            -moz-transform: translate3d(0, -50%, 0);
+            -o-transform: translate3d(0, -50%, 0);
+            -ms-transform: translate3d(0, -50%, 0);
+            transform: translate3d(0, -50%, 0);
+        }
 
-.img-raised {
-    box-shadow: 0 5px 15px -8px rgba(0, 0, 0, .24), 0 8px 10px -5px rgba(0, 0, 0, .2);
-}
+        .img-raised {
+            box-shadow: 0 5px 15px -8px rgba(0, 0, 0, .24), 0 8px 10px -5px rgba(0, 0, 0, .2);
+        }
 
-.rounded-circle {
-    border-radius: 50% !important;
-}
+        .rounded-circle {
+            border-radius: 50% !important;
+        }
 
-.img-fluid,
-.img-thumbnail {
-    max-width: 100%;
-    height: auto;
-}
+        .img-fluid,
+        .img-thumbnail {
+            max-width: 100%;
+            height: auto;
+        }
 
-.main {
-    background: #FFF;
-    position: relative;
-    z-index: 3;
-}
+        .main {
+            background: #FFF;
+            position: relative;
+            z-index: 3;
+        }
 
-.main-raised {
-    margin: 30px 0;
-    border-radius: 6px;
-    box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2);
-}
+        .main-raised {
+            margin: 30px 0;
+            border-radius: 6px;
+            box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2);
+        }
 
 
-.profile-page .description {
-    margin: 1.071rem auto 0;
-    max-width: 600px;
-    color: #999;
-    font-weight: 300;
-}
+        .profile-page .description {
+            margin: 1.071rem auto 0;
+            max-width: 600px;
+            color: #999;
+            font-weight: 300;
+        }
 
-.header-filter:after,
-.header-filter:before {
-    position: absolute;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    display: block;
-    left: 0;
-    top: 0;
-    content: "";
-}
+        .header-filter:after,
+        .header-filter:before {
+            position: absolute;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            display: block;
+            left: 0;
+            top: 0;
+            content: "";
+        }
 
-.fixed-top {
-    position: fixed;
-    z-index: 1030;
-    left: 0;
-    right: 0;
-}
+        .fixed-top {
+            position: fixed;
+            z-index: 1030;
+            left: 0;
+            right: 0;
+        }
 
-.profile-page .page-header {
-    height: 380px;
-    background-position: center;
-}
+        .profile-page .page-header {
+            height: 380px;
+            background-position: center;
+        }
 
-#popup {
-    display: none;
-    position: fixed;
-    z-index: 999;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-}
+        #popup {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+        }
 
         #popup2 {
             display: none;
@@ -204,12 +204,13 @@ td {
                                     <div style="font-size:2rem; margin-top:20px ; ">
                                         <div>
                                             <span style="text-transform: none;">
-                                                Address: {{ Auth::user()->address }}
+                                                Địa chỉ: {{ Auth::user()->address }}
                                             </span>
 
                                         </div>
                                         <div style="margin-top:10px">
-                                            <span style="text-transform: none;">Phone: {{ Auth::user()->phone }}</span>
+                                            <span style="text-transform: none;">Số điện thoại:
+                                                {{ Auth::user()->phone }}</span>
 
                                         </div>
                                         <div style="margin-top:10px">
@@ -370,9 +371,9 @@ td {
                                                     <div
                                                         style="display:flex; flex-wrap:nowrap;justify-content: space-between;">
                                                         <button id="backbtn" type="button" class="btn btn-primary">
-                                                            quay lại
+                                                            Đóng
                                                         </button>
-                                                        <button type="submit" class="btn btn-primary"> Save </button>
+                                                        <button type="submit" class="btn btn-primary"> Lưu </button>
                                                     </div>
                                                 </form>
 
@@ -531,7 +532,7 @@ td {
                                                                             đã bị hủy</p>
                                                                     @elseif($item->status == 'pending')
                                                                         <a class="btn btn-danger btn-fw p-2"
-                                                                            style="  background-color: #ff375f; border-color: #ff375f; float: right; margin-top: 2px;width: 90px;padding: 0;margin-right: 50px;"
+                                                                            style="  background-color: #ff375f; border-color: #ff375f; color: #fff; float: right; margin-top: 2px;width: 90px;padding: 0;margin-right: 50px;"
                                                                             href="{{ route('users.ordercancel', $item->order_id) }}"
                                                                             onclick="return confirm('Bạn có chắc chắn muốn xóa đơn đặt hàng này?')">Hủy</a>
                                                                         <p class="  mt-1 mb-0 small ms-xl-5 p-2"
@@ -544,7 +545,7 @@ td {
                                                                     @elseif($item->status == 'shipping')
                                                                         <p class="  mt-1 mb-0 small ms-xl-5 p-2"
                                                                             style="font-size:15px;fload:right">Đơn hàng
-                                                                            đang vẫn chuyển</p>
+                                                                            đang vận chuyển</p>
                                                                     @elseif($item->status == 'completed')
                                                                         <p class="  mt-1 mb-0 small ms-xl-5 p-2"
                                                                             style="font-size:15px;fload:right">Đơn hàng đã
@@ -570,10 +571,10 @@ td {
             </div>
         </div>
     </div>
-</div>
-<script>
-document.getElementById("backbtn").addEventListener("click", function() {
-    document.getElementById("popup").style.display = "none";
+    </div>
+    <script>
+        document.getElementById("backbtn").addEventListener("click", function() {
+            document.getElementById("popup").style.display = "none";
 
 
         })
@@ -620,4 +621,3 @@ document.getElementById("backbtn").addEventListener("click", function() {
         }
     </script>
 @endsection
-

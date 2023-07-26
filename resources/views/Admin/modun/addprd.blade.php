@@ -38,21 +38,21 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="uncheck" class="checkme">Thêm
-                                    <input type="hidden" name="box" value="uncheck" class="hiden" >
+                                    <input type="hidden" name="box" value="uncheck" class="hiden">
                                 </label>
                             </div>
                             <div class="passport-box">
                                 <div class="form-group">
                                     <label for="slug-source">Tên</label>
                                     <input type="text" name="newprd" class="form-control" id="slug-source"
-                                        value="" placeholder="Nhập tên Danh Mục"  onkeyup="generateSlug()">
+                                        value="" placeholder="Nhập tên sản phẩm" onkeyup="generateSlug()">
                                     @error('newprd')
                                         <span class="text-danger"> {{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="slug-target">Slug</label>
-                                    <input type="text" name="slug"  class="form-control" id="slug-target">
+                                    <input type="text" name="slug" class="form-control" id="slug-target">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect2">Chọn Danh Mục</label>
@@ -66,20 +66,20 @@
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Giá</label>
 
-                                    <input type="number" name="prd_price" class="form-control" max="10000000" min="0" id="exampleInputEmail1"
-
-                                        value="" placeholder="">
+                                    <input type="number" name="prd_price" class="form-control" max="10000000"
+                                        min="0" id="exampleInputEmail1" value="" placeholder="">
 
                                 </div>
                                 <div class="form-group">
                                     <label for="">Giảm (%)</label>
-                                    <input type="number" name="prd_sale" class="form-control" id="" max="100" min="0" value="0"
-                                        placeholder="">
+                                    <input type="number" name="prd_sale" class="form-control" id="" max="100"
+                                        min="0" value="0" placeholder="">
                                 </div>
-                                
-                                    
-                                    <input type="hidden" name="prd_details" class="form-control" id="" value="" style="height: 10rem ;"> </input>
-                                
+
+
+                                <input type="hidden" name="prd_details" class="form-control" id="" value=""
+                                    style="height: 10rem ;"> </input>
+
 
 
                                 <div class="form-group">
@@ -93,14 +93,17 @@
                             <div class="apply-box">
                                 <label for="exampleFormControlSelect2">Thêm Size cho sản phẩm</label>
                                 <select class="product" id="example FormControlSelect2" name="prd_id">
-                                    <option value="0" hidden >chọn </option>
+                                    <option value="0" hidden>chọn </option>
                                     @foreach ($products as $product)
-                                        <option value="{{ $product->prd_id }}" data-size="{{$product->new_size}}"data-image-url="{{ $product->prd_image }}"> {{ $product->prd_name }}</option>
+                                        <option value="{{ $product->prd_id }}"
+                                            data-size="{{ $product->new_size }}"data-image-url="{{ $product->prd_image }}">
+                                            {{ $product->prd_name }}</option>
                                     @endforeach
                                 </select>
-                                <img style="width:200px;padding-top:20px" id="productImage" src="/anh/noimg.jpg" alt="Product Image">
+                                <img style="width:200px;padding-top:20px" id="productImage" src="/anh/noimg.jpg"
+                                    alt="Product Image">
                                 <p> Size hiện tại của sản phẩm: <span class="nbsize"></span></p>
-                                
+
 
 
                             </div>
@@ -192,53 +195,49 @@
         }
 
         document.getElementById('example FormControlSelect2').addEventListener('change', function() {
-    var selectedIndex = this.selectedIndex;
-    var selectedProduct = this.options[selectedIndex];
-    var imageUrl = "/anh/" + selectedProduct.getAttribute('data-image-url');
-    
-    document.getElementById('productImage').src = imageUrl;
-});
+            var selectedIndex = this.selectedIndex;
+            var selectedProduct = this.options[selectedIndex];
+            var imageUrl = "/anh/" + selectedProduct.getAttribute('data-image-url');
 
-const checkbox = document.querySelector('.checkme');
-const hiden = document.querySelector('.hiden');
+            document.getElementById('productImage').src = imageUrl;
+        });
 
-checkbox.addEventListener('change', function() {
-  if (this.checked) {
-    hiden.value = 'check';
-  } else {
-    hiden.value = 'uncheck';
-  }
-});
+        const checkbox = document.querySelector('.checkme');
+        const hiden = document.querySelector('.hiden');
+
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                hiden.value = 'check';
+            } else {
+                hiden.value = 'uncheck';
+            }
+        });
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    
- <script>
 
-$(document).ready(function() {
-    $('.product').change(function() {
-        var sizeData = $('option:selected', this).attr('data-size');
-        var sizes = sizeData.split(',');
-        
-        $('.nbsize').text(sizes) 
-        
-        $('.sosize option').each(function() {
-            $(this).show();
+    <script>
+        $(document).ready(function() {
+            $('.product').change(function() {
+                var sizeData = $('option:selected', this).attr('data-size');
+                var sizes = sizeData.split(',');
+
+                $('.nbsize').text(sizes)
+
+                $('.sosize option').each(function() {
+                    $(this).show();
+                });
+                for (var i = 38; i < 45; i++) {
+                    $('.sosize option[value="' + i + '"]').prop('disabled', false);
+                    $('.sosize option[value="' + i + '"]').css('background', 'white');
+                    $('.sosize option:eq(0)').prop('selected', true);
+                }
+                for (var i = 0; i < sizes.length; i++) {
+                    $('.sosize option[value="' + sizes[i] + '"]').prop('disabled', true);
+                    $('.sosize option[value="' + sizes[i] + '"]').css('background', '#d5d5d5');
+
+                }
+            });
         });
-        for (var i = 38; i < 45; i++) {
-            $('.sosize option[value="' + i + '"]').prop('disabled', false);
-            $('.sosize option[value="' + i + '"]').css('background', 'white');
-            $('.sosize option:eq(0)').prop('selected', true);
-        }
-        for (var i = 0; i < sizes.length; i++) {
-            $('.sosize option[value="' + sizes[i] + '"]').prop('disabled', true);
-            $('.sosize option[value="' + sizes[i] + '"]').css('background', '#d5d5d5');
-
-        }
-    });
-});
-
-
-
-</script>
+    </script>
 
 @endsection
