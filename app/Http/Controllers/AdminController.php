@@ -59,7 +59,7 @@ class AdminController extends Controller
             ->select('product_details.prd_amount', 'products.prd_name', 'prd_img.prd_image', 'product_details.prd_size', 'product_details.prd_detail_id')
             ->where('product_details.prd_amount', '<', 3)
             ->groupBy('products.prd_id')
-            ->orderBy('prd_amount', 'asc')
+            ->orderBy('prd_amount', 'desc')
             ->get();
 
         $sells = DB::table('products')
@@ -143,39 +143,40 @@ class AdminController extends Controller
 
     function totalChart(Request $request)
     {
+        $currentYear = date("Y");
+        $startYear = $currentYear - 5; // 5 years ago
+
         $entries = Order::select([
-            DB::raw('MONTH(created_at) as month'),
-            //            DB::raw('YEAR(created_at) as year'),
+            DB::raw('YEAR(created_at) as year'),
             DB::raw('SUM(grand_total) as grand_total'),
-
         ])
-            ->whereYear('created_at', 2023)
-            ->where('status', 'completed')
-            ->groupBy([
-                'month'
-            ])
-            ->orderBy('month')
+            ->where(
+                'status',
+                'completed'
+            )
+            ->whereBetween(DB::raw('YEAR(created_at)'), [$startYear, $currentYear])
+            ->groupBy('year')
+            ->orderBy(
+                'year',
+                'ASC'
+            )
             ->get();
-        $labels = [
-            1 => 'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
-        ];
-        //        $dataset = [];
-        $grand_total = [];
-        foreach ($entries as $entry) {
-            //            if ($entry->status == 'Gửi Thành Công') {
-            $grand_total[$entry->month] = $entry->grand_total;
-            //            }
-        }
-        foreach ($labels as $month => $name) {
 
-            if (!array_key_exists($month, $grand_total)) {
-                $grand_total[$month] = 0;
-            }
+        $labels = [];
+        for ($i = $startYear; $i <= $currentYear; $i++) {
+            $labels[] = 'Năm ' . $i;
         }
-        ksort($grand_total);
+
+        $grand_total = array_fill_keys(array_map(function ($label) {
+            return substr($label, -4);
+        }, $labels), 0);
+
+        foreach ($entries as $entry) {
+            $grand_total[$entry->year] = $entry->grand_total;
+        }
 
         return [
-            'labels' => array_values($labels),
+            'labels' => $labels,
             'datasets' => [
                 [
                     'label' => 'Doanh Thu(đ)',
@@ -186,12 +187,13 @@ class AdminController extends Controller
         ];
     }
 
+
     //---End Dashboard
 
     //---cac trang---
     function account()
     {
-        $users = DB::table('users')->where('status','0')->orderBy('role','desc')->orderBy('id')->get();
+        $users = DB::table('users')->get();
         return view('Admin.modun.account', ['user1' => $users]);
     }
 
@@ -406,28 +408,7 @@ class AdminController extends Controller
                     ->where('products.prd_sale', '>', 0)
 
                     ->get();
-            }elseif ($request->sort == 'view') {
-                $products = DB::table('products')
-                    ->joinSub($temp, 'temp', function (JoinClause $join) {
-                        $join->on('products.prd_id', '=', 'temp.prd_id');
-                    })
-                    ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
-                    ->join('categories', 'products.category_id', '=', 'categories.id')
-                    ->select(
-                        'products.*',
-                        'categories.name as category',
-                        'temp.prd_image',
-                        'product_details.prd_detail_id',
-
-                        DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
-                    )
-                    ->groupBy('products.prd_id')
-                    ->orderBy("products.views","desc")
-
-                    ->get();
-            }
-            
-            else {
+            } else {
                 $products = DB::table('products')
                     ->joinSub($temp, 'temp', function (JoinClause $join) {
                         $join->on('products.prd_id', '=', 'temp.prd_id');
@@ -977,7 +958,7 @@ class AdminController extends Controller
             ->leftJoin('users', 'orders.updated_by', '=', 'users.id')
             ->select('users.name as editname', 'orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
             ->groupBy('orders.id')
-            ->orderByDesc('orders.created_at')
+            ->orderByDesc('orders.updated_at')
             ->get();
 
 
@@ -990,8 +971,7 @@ class AdminController extends Controller
     {
         $order_st = DB::table('orders')
             ->where('orders.id', $id)
-            ->join('coupons','orders.coupon','=','coupons.id')
-            ->select('orders.*','orders.status as order_status','coupons.*')
+            ->select('orders.status as order_status')
             ->first();
 
         $orders = DB::table('orders')
@@ -1082,8 +1062,6 @@ class AdminController extends Controller
         if ($id == 'pending') {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-                ->leftJoin('users','orders.updated_by','=' ,'users.id' )
-            ->select('users.name as editname','orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
                 ->groupBy('orders.id')
                 ->where('orders.status', $id)
                 ->orderByDesc('orders.id')
@@ -1091,8 +1069,6 @@ class AdminController extends Controller
         } else if ($id == 'completed') {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-                ->leftJoin('users','orders.updated_by','=' ,'users.id' )
-            ->select('users.name as editname','orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
                 ->groupBy('orders.id')
                 ->where('orders.status', $id)
                 ->orderByDesc('orders.id')
@@ -1100,8 +1076,6 @@ class AdminController extends Controller
         } else if ($id  == 'processing') {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-                ->leftJoin('users','orders.updated_by','=' ,'users.id' )
-            ->select('users.name as editname','orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
                 ->groupBy('orders.id')
                 ->where('orders.status', $id)
                 ->orderByDesc('orders.id')
@@ -1109,8 +1083,6 @@ class AdminController extends Controller
         } else if ($id == 'cancel') {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-                ->leftJoin('users','orders.updated_by','=' ,'users.id' )
-            ->select('users.name as editname','orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
                 ->groupBy('orders.id')
                 ->where('orders.status', $id)
                 ->orderByDesc('orders.id')
@@ -1118,8 +1090,6 @@ class AdminController extends Controller
         } else {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-                ->leftJoin('users','orders.updated_by','=' ,'users.id' )
-            ->select('users.name as editname','orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
                 ->groupBy('orders.id')
                 ->orderByDesc('orders.id')
                 ->get();

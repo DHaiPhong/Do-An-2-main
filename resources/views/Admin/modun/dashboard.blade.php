@@ -108,6 +108,18 @@
                             @include('Admin.modun.chartYear')
                         </div>
                     </div>
+                    <div class="stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Danh Thu 5 Năm Gần Đây</h4>
+                                <div>
+                                    <canvas id="totalChart"></canvas>
+                                </div>
+                                <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <div class="stretch-card">
@@ -186,30 +198,6 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const dailyRevenueChart = (elementId, route) => {
-            const ctx = document.getElementById(elementId);
-            fetch(route)
-                .then(response => response.json())
-                .then(json => {
-                    new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: json.labels,
-                            datasets: json.datasets
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-                })
-        }
-        dailyRevenueChart('dailyRevenueChart', "{{ route('dailyRevenueChart') }}");
-    </script>
 
     <script>
         const totalChart = (elementId, route) => {
@@ -218,7 +206,7 @@
                 .then(response => response.json())
                 .then(json => {
                     new Chart(ctx, {
-                        type: 'line',
+                        type: 'bar',
                         data: {
                             labels: json.labels,
                             datasets: json.datasets
