@@ -109,9 +109,36 @@ class AdminController extends Controller
             return [$displayDate => $revenue];
         })->toArray();
 
+        $year_chart = $request->get('year', date('Y'));
+        // Nhận doanh thu dưới dạng Collection của Objects từ DB.
+        $revenuesFromDBYear = Order::select([
+            DB::raw('MONTH(updated_at) as month'),
+            DB::raw('SUM(grand_total) as grand_total'),
+        ])
+            ->whereYear('updated_at', $year_chart)
+            ->where('status', 'completed')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // Chuyển đổi Collection of Objects thành một mảng với keys là ngày và values là grand_total.
+        $revenuesYear = [$year_chart => $revenuesFromDBYear->keyBy('month')->toArray()];
+
+        $revenuesForEachMonth = collect(range(1, 12))->mapWithKeys(function ($month) use ($revenuesYear, $year_chart) {
+
+            // Kiểm tra xem có doanh thu cho tháng này không
+            $revenue = $revenuesYear[$year_chart][$month]['grand_total'] ?? 0;
+
+            // Định dạng tháng cho đầu ra. Nếu muốn định dạng khác, bạn có thể thay đổi ở đây.
+            $displayMonth = str_pad($month, 2, '0', STR_PAD_LEFT);
+
+            // Trả về kết quả với displayMonth đã cập nhật làm key.
+            return [$displayMonth => $revenue];
+        })->toArray();
 
 
-        return view('Admin/modun/dashboard', ['sold' => $sold, 'revenuesForEachDay' => $revenuesForEachDay, 'revenue' => $revenue, 'revenues' => $revenues, 'month' => $month, 'out_of_stocks' => $out_of_stocks, 'orders' => $orders, 'sells' => $sells]);
+
+        return view('Admin/modun/dashboard', ['sold' => $sold, 'revenuesForEachDay' => $revenuesForEachDay, 'revenuesForEachMonth' => $revenuesForEachMonth, 'revenue' => $revenue, 'revenues' => $revenues, 'month' => $month, 'year_chart' => $year_chart, 'out_of_stocks' => $out_of_stocks, 'orders' => $orders, 'sells' => $sells]);
     }
 
     function totalChart(Request $request)
@@ -926,14 +953,14 @@ class AdminController extends Controller
     {
         $orders = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->leftJoin('users','orders.updated_by','=' ,'users.id' )
-            ->select('users.name as editname','orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
+            ->leftJoin('users', 'orders.updated_by', '=', 'users.id')
+            ->select('users.name as editname', 'orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
             ->groupBy('orders.id')
             ->orderByDesc('orders.updated_at')
             ->get();
-        
-        
-        
+
+
+
 
         return view('Admin.modun.order', compact('orders'));
     }

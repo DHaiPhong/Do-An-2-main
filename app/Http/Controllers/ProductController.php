@@ -73,7 +73,7 @@ class ProductController extends Controller
             ->join('prd_img', 'products.prd_id', '=', 'prd_img.prd_id')
             ->groupBy('products.prd_id')
             ->orderBy('products.prd_id')
-            ->paginate(16);
+            ->paginate(15);
 
         $productIds = $products->pluck('prd_id');
 

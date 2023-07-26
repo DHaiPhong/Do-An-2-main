@@ -112,6 +112,7 @@ Route::prefix('admin')->middleware('user-role:editor,admin')->group(function () 
     Route::get('/chart/soldChart', [AdminController::class, 'soldChart'])->name('soldChart');
     Route::get('/chart/dailyRevenueChart', [AdminController::class, 'dailyRevenueChart'])->name('dailyRevenueChart');
     Route::get('/chart/revenue-chart', [ChartController::class, 'showChart'])->name('revenue.chart');
+    Route::get('/chart/revenue-chart-year', [ChartController::class, 'showChartYear'])->name('revenue.chartYear');
     Route::get('/getSoldCount', [AdminController::class, 'getSoldCount'])->name('getSoldCount');
     Route::resource('categories', CategoryController::class);
     Route::resource('coupons', CouponController::class);

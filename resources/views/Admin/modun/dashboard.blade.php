@@ -81,7 +81,7 @@
                     {{-- <div id="chart"></div> --}}
                     <div class="stretch-card">
                         <div class="card">
-                            @include('Admin.modun.chart')
+                            @include('Admin.modun.chartDaily')
                             {{-- <form method="get" action="{{ route('dailyRevenueChart') }}">
                                 <select style="margin-top: 0.5rem; margin-left: 1rem" name="month"
                                     onchange="this.form.submit()">
@@ -105,14 +105,7 @@
                     </div>
                     <div class="stretch-card">
                         <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Danh Thu Theo Tháng</h4>
-                                <div>
-                                    <canvas id="totalChart"></canvas>
-                                </div>
-                                <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left">
-                                </div>
-                            </div>
+                            @include('Admin.modun.chartYear')
                         </div>
                     </div>
                 </div>
@@ -217,6 +210,7 @@
         }
         dailyRevenueChart('dailyRevenueChart', "{{ route('dailyRevenueChart') }}");
     </script>
+
     <script>
         const totalChart = (elementId, route) => {
             const ctx = document.getElementById(elementId);

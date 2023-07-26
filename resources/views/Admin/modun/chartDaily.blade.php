@@ -1,4 +1,6 @@
 <div style="margin-left: 1rem">
+    <h4 class="card-title">Danh Thu Theo Ngày</h4>
+    <br>
     <label for="">Chọn tháng:</label>
     <form method="GET" action="{{ route('revenue.chart') }}">
         <select name="month" onchange="this.form.submit()">
