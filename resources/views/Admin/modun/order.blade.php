@@ -8,7 +8,7 @@
 
                 <select id="chon" onchange="myFunction()" class="form-select"
                     style="margin-left: 1rem; margin-bottom: 1rem" aria-label="Default select example">
-                    <option>Order By</option>
+                    <option hidden >Order By</option>
                     <option value="">Tất cả</option>
                     <option value="pending">Đang Duyệt</option>
                     <option value="processing">Đang Xử Lý</option>

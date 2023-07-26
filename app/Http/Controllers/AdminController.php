@@ -59,7 +59,7 @@ class AdminController extends Controller
             ->select('product_details.prd_amount', 'products.prd_name', 'prd_img.prd_image', 'product_details.prd_size', 'product_details.prd_detail_id')
             ->where('product_details.prd_amount', '<', 3)
             ->groupBy('products.prd_id')
-            ->orderBy('prd_amount', 'desc')
+            ->orderBy('prd_amount', 'asc')
             ->get();
 
         $sells = DB::table('products')
@@ -191,7 +191,7 @@ class AdminController extends Controller
     //---cac trang---
     function account()
     {
-        $users = DB::table('users')->get();
+        $users = DB::table('users')->where('status','0')->orderBy('role','desc')->orderBy('id')->get();
         return view('Admin.modun.account', ['user1' => $users]);
     }
 
@@ -406,7 +406,28 @@ class AdminController extends Controller
                     ->where('products.prd_sale', '>', 0)
 
                     ->get();
-            } else {
+            }elseif ($request->sort == 'view') {
+                $products = DB::table('products')
+                    ->joinSub($temp, 'temp', function (JoinClause $join) {
+                        $join->on('products.prd_id', '=', 'temp.prd_id');
+                    })
+                    ->join('product_details', 'products.prd_id', '=', 'product_details.prd_id')
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->select(
+                        'products.*',
+                        'categories.name as category',
+                        'temp.prd_image',
+                        'product_details.prd_detail_id',
+
+                        DB::raw("GROUP_CONCAT(CONCAT(product_details.prd_size, ' (Số lượng: ', product_details.prd_amount, ', Đã bán: ', product_details.sold, ', <a href=\"http://127.0.0.1:8000/admin/product/modify/',product_details.prd_detail_id,'\" style=\"color:#007bff\">Chi Tiết</a>)') SEPARATOR '<br/>' ) AS new_prd_details")
+                    )
+                    ->groupBy('products.prd_id')
+                    ->orderBy("products.views","desc")
+
+                    ->get();
+            }
+            
+            else {
                 $products = DB::table('products')
                     ->joinSub($temp, 'temp', function (JoinClause $join) {
                         $join->on('products.prd_id', '=', 'temp.prd_id');
@@ -956,7 +977,7 @@ class AdminController extends Controller
             ->leftJoin('users', 'orders.updated_by', '=', 'users.id')
             ->select('users.name as editname', 'orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
             ->groupBy('orders.id')
-            ->orderByDesc('orders.updated_at')
+            ->orderByDesc('orders.created_at')
             ->get();
 
 
@@ -969,7 +990,8 @@ class AdminController extends Controller
     {
         $order_st = DB::table('orders')
             ->where('orders.id', $id)
-            ->select('orders.status as order_status')
+            ->join('coupons','orders.coupon','=','coupons.id')
+            ->select('orders.*','orders.status as order_status','coupons.*')
             ->first();
 
         $orders = DB::table('orders')
@@ -1060,6 +1082,8 @@ class AdminController extends Controller
         if ($id == 'pending') {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+                ->leftJoin('users','orders.updated_by','=' ,'users.id' )
+            ->select('users.name as editname','orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
                 ->groupBy('orders.id')
                 ->where('orders.status', $id)
                 ->orderByDesc('orders.id')
@@ -1067,6 +1091,8 @@ class AdminController extends Controller
         } else if ($id == 'completed') {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+                ->leftJoin('users','orders.updated_by','=' ,'users.id' )
+            ->select('users.name as editname','orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
                 ->groupBy('orders.id')
                 ->where('orders.status', $id)
                 ->orderByDesc('orders.id')
@@ -1074,6 +1100,8 @@ class AdminController extends Controller
         } else if ($id  == 'processing') {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+                ->leftJoin('users','orders.updated_by','=' ,'users.id' )
+            ->select('users.name as editname','orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
                 ->groupBy('orders.id')
                 ->where('orders.status', $id)
                 ->orderByDesc('orders.id')
@@ -1081,6 +1109,8 @@ class AdminController extends Controller
         } else if ($id == 'cancel') {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+                ->leftJoin('users','orders.updated_by','=' ,'users.id' )
+            ->select('users.name as editname','orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
                 ->groupBy('orders.id')
                 ->where('orders.status', $id)
                 ->orderByDesc('orders.id')
@@ -1088,6 +1118,8 @@ class AdminController extends Controller
         } else {
             $orders = DB::table('orders')
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+                ->leftJoin('users','orders.updated_by','=' ,'users.id' )
+            ->select('users.name as editname','orders.*',  DB::raw('SUM(order_items.quantity) as total_quantity'))
                 ->groupBy('orders.id')
                 ->orderByDesc('orders.id')
                 ->get();

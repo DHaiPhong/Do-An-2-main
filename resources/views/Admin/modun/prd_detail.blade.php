@@ -6,8 +6,8 @@
     <div class="card" style="float: right; width: 72%; margin-right: 7%">
         <div class="card-body">
             <div style="box-sizing: border-box;">
-            <a href="{{ route('admin.product') }}">Go Back</a>
-                <h4 class="card-title">Sửa Sản Phẩm</h4>
+            
+                <h4 class="card-title"> <a  href="{{ route('admin.product') }}"><img src="/anh/arrow.png" style="width:15px ;margin-right:15px;"></a>Sửa Sản Phẩm</h4>
 
                 <br>
             </div>
@@ -30,7 +30,7 @@
                             <input type="hidden" name="prd_detail_id" value="{{ $product->prd_detail_id }}">
                             <input type="text" name="prd_name" class="form-control" id="exampleInputUsername1"
                                 value="{{ $product->prd_name }}" placeholder="name">
-                            <label for="exampleInputPassword1">Size : {{ $product->prd_size }}</label><br>
+                            
 
                         </div>
                         <div id="cate" class="form-group">
@@ -48,22 +48,18 @@
                             <input type="number" name="prd_price" class="form-control" id="exampleInputEmail1"
                                 value="{{ $product->price }}"  placeholder="">
                         </div>
-                        <div class="form-group">
-
-                            <label for="exampleInputPassword1">Số Lượng</label>
-                            <input type="number" name="prd_amount" class="form-control" id="exampleInputPassword1"
-                                value="{{ $product->prd_amount }}" min="0" placeholder="">
-                        </div>
-                        <div class="form-group">
-
-
-                        </div>
+                        
                     </div>
                     <div class="col">
-                        <div class="form-group">
-                            <label for="">Mô Tả</label>
-                            <textarea type="text" name="prd_details" class="form-control" id="" value="" style="height: 10rem ;">{{ $product->prd_details }} </textarea>
+                        
+                            <input type="hidden" name="prd_details" class="form-control" id="" value="" style="height: 10rem ;">{{ $product->prd_details }} </input>
 
+                        
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Size : {{ $product->prd_size }}</label><br>
+                            <label for="exampleInputPassword1">Số Lượng (Theo size)</label>
+                            <input type="number" name="prd_amount" class="form-control" id="exampleInputPassword1"
+                                value="{{ $product->prd_amount }}" min="0" placeholder="">
                         </div>
 
                         <div class="form-group">
@@ -71,25 +67,6 @@
                             <input type="number" name="prd_sale" class="form-control" id=""
                                 value="{{ $product->prd_sale }}" placeholder="">
                         </div>
-
-
-
- <!-- tu2/7
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Price</label>
-                        <input type="number" name="prd_price" class="form-control" id="exampleInputEmail1"
-                            value="{{ $product-> price}}"  placeholder="" >
-                    </div>
-                    <div class="form-group">
-                    
-                        <label for="exampleInputPassword1">Amount</label>
-                        <input type="number" name="prd_amount" class="form-control" id="exampleInputPassword1"
-                            value="{{ $product-> prd_amount}}" placeholder="">
-                    </div>
-                    <div class="form-group">
-                       
-
--->
                         
 
                     </div>

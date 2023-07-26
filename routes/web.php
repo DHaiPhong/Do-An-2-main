@@ -167,8 +167,8 @@ Route::prefix('admin')->middleware('user-role:editor,admin')->group(function () 
 
     Route::get('update-status/{id}/{value}', [AdminController::class, 'updateStatus'])->name('admin.updatestatus');
 
-    Route::get('/productt/add', [AdminController::class, 'addprdform'])->name('admin.add_prd')->middleware('user-role:admin');
-    Route::post('/productt/add', [AdminController::class, 'prd_add'])->name('admin.prd_add')->middleware('user-role:admin');
+    Route::get('/productt/add', [AdminController::class, 'addprdform'])->name('admin.add_prd');
+    Route::post('/productt/add', [AdminController::class, 'prd_add'])->name('admin.prd_add');
 });
 
 Auth::routes();

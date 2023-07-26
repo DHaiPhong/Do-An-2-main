@@ -97,7 +97,8 @@ class CartController extends Controller
     public function deleteCoupon()
     {
         Session::forget(['id', 'amount', 'code', 'expires_at', 'type']);
-        return redirect()->route('users.cartshop');
+        $message = 'Xóa mã giảm giá thành công';
+        return redirect()->route('users.cartshop')->with(['message' => $message]);
     }
 
     public function applyCoupon(Request $request)
@@ -114,10 +115,11 @@ class CartController extends Controller
 
         if (!$coupon) {
             $message = 'Nhập sai mã';
+            return redirect()->route('users.cartshop')->with(['message' => $message]);
         } else {
             $expiresAt = Carbon::parse($coupon->expires_at);
             if ($expiresAt->isFuture()) {
-                $message = 'Áp Dụng Mã Giảm Giá Thành Công!';
+                $messag = 'Áp Dụng Mã Giảm Giá Thành Công!';
                 Session::put('id', $coupon->id);
                 Session::put('amount', $coupon->amount);
                 Session::put('expires_at', $coupon->expires_at);
@@ -126,10 +128,11 @@ class CartController extends Controller
             } else {
                 Session::forget(['id', 'amount', 'code', 'expires_at', 'type']);
                 $message = 'Mã giảm giá đã hết hạn';
+                return redirect()->route('users.cartshop')->with(['message' => $message]);
             }
         }
 
-        return redirect()->route('users.cartshop')->with(['message' => $message]);
+        return redirect()->route('users.cartshop')->with(['messag' => $messag]);
     }
 
 

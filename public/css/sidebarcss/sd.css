@@ -539,11 +539,13 @@ body {
   }
   .parent-list .child-list {
     display: none;
+    transition: 0.5s;
   }
   
   .parent-list .list-item:hover .child-list {
     display: block;
     border-left: 4px solid #e67e22;
+    transition-delay: 1s;
   }
   .list-item{
     animation: animate 1s ease;

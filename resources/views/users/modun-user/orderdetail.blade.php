@@ -49,9 +49,9 @@
             @endforeach
 
             <div class="d-flex justify-content-between pt-2">
-               <p class="fw-bold mb-0">Order Details</p>
+               <p class="fw-bold mb-0">Chi phí:</p>
               
-              <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> {{number_format($odnb->total)}} đ</p> 
+              <p class="text-muted mb-0"><span class="fw-bold me-4">Tổng tiền sản phẩm</span> {{number_format($odnb->total)}} đ</p> 
              
             </div>
 
@@ -80,8 +80,22 @@
             <div class="d-flex justify-content-between mb-5">
               <p class="text-muted mb-0">Trạng thái đơn hàng : {{ $odnb->status }}</p>
               @if($coupon != null)
-              <p class="text-muted mb-0"><span class="fw-bold me-4">Giảm giá</span> {{number_format($coupon->amount )}} đ
-              </p> 
+                @if($coupon->type == 'fixed')
+                <p class="text-muted mb-0"><span class="fw-bold me-4">Giảm giá</span> {{number_format($coupon->amount )}} đ
+                </p> 
+               @else
+               <div> 
+<p class="text-muted mb-0"><span class="fw-bold me-4">Giảm giá</span> {{$coupon->amount }} %
+                </p> 
+<p class="text-muted mb-0"><span class="fw-bold me-4">Thành tiền</span> {{number_format($odnb->total * $coupon->amount / 100)  }}đ
+                </p> 
+
+               </div>
+                
+                
+
+
+                @endif
               @endif
             </div>
           </div>
