@@ -16,7 +16,7 @@
                     <select id="chon" name="sort" class="form-select" style="float: right"
                         aria-label="Default select example">
                         <option hidden value="">Sắp xếp</option>
-                        <option value="">Id</option>
+                        <option value="">tất cả</option>
                         <option value="quantity-desc">Số lượng giảm dần</option>
                         <option value="quantity-asc">Số lượng tăng dần</option>
                         <option value="sold-desc">Số lượng đã bán giảm dần</option>
@@ -30,6 +30,7 @@
                     <select id="chon" name="filter" class="form-select" style="float: right"
                         aria-label="Default select example">
                         <option value="all" hidden>Danh Mục</option>
+                        <option value="all">tất cả</option>
                         @foreach($cats as $cat )
                         <option value="{{$cat->id}}">{{$cat->name}}</option>
                         @endforeach

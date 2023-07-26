@@ -21,6 +21,12 @@
                         {{ session('message') }}
                     </div>
                 @endif
+                @if (session('messag'))
+                    <div class="alert alert-success text-center m-0" style="font-size: 2rem; margin-bottom: 1rem"
+                        role="alert">
+                        {{ session('messag') }}
+                    </div>
+                @endif
                 @if (session('fail'))
                     <div class="alert alert-danger text-center m-0" style="font-size: 2rem; margin-bottom: 1rem"
                         role="alert">

@@ -20,8 +20,15 @@
                             <p class="statusbox" style="background-color: #f05454;width: 120px"> Đã Hủy </p>
                         @endif
                     </h5>
+                 
+                    
+                    
+                    
                 </div>
-
+                   
+                    <p>Người đặt: {{$order_st->name}}</p>
+                    <p>Số điện thoại: {{$order_st->phone_number}}</p>
+                    <p>Địa chỉ: {{$order_st->address}}</p>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -48,7 +55,26 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div style="
+    
+    
+    padding-left: 30px;
+">
+                <p>Tổng sản phẩm: {{number_format($order_st->total)}} đ</p>
+                <p>Phí vận chuyển: {{number_format($order_st->shipfee)}} đ</p>
+                
+                @if($order_st->type == 'fixed')
+                <p>Mã giảm giá: {{$order_st->code}}</p>
+                <p>Giảm giá: {{number_format($order_st->amount)}} đ</p>
+                @elseif($order_st->type == 'percent')
+                <p>Mã giảm giá: {{$order_st->code}}</p>
+                <p>Giảm giá: {{$order_st->amount}}%</p>
+                <p >Thành tiền: {{number_format($order_st->total * $order_st->amount / 100)  }} đ</p>
+                @else
 
+                @endif
+                <p>Tổng tiền: {{number_format($order_st->grand_total)}} đ</p>
+</div>
                 @if (Auth::user()->role == 'admin')
                     @if ($order->status == 'cancel')
                         <p class="btn btn-danger btn-fw check-permission" style="margin-top: 1rem;">Đã Hủy</p>

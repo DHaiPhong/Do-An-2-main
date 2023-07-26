@@ -12,6 +12,15 @@
                 <h4 class="card-title">Thêm Mã Giảm Giá</h4>
                 <br>
             </div>
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form method="post" action="{{ route('coupons.store') }}" class="forms-sample">
                 @csrf
                 <div class="row">
@@ -19,27 +28,27 @@
                         <div class="form-group">
                             <label for="slug-source">Code</label>
                             <input type="text" name="code" class="form-control" id="slug-source" value=""
-                                placeholder="Nhập code Mã Giảm Giá" onkeyup="generateSlug()">
+                                placeholder="Nhập code Mã Giảm Giá" required onkeyup="generateSlug()">
                             @error('name')
                                 <span class="text-danger"> {{ $message }}</span>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="slug-target">Slug</label>
-                            <input type="text" name="slug" class="form-control" id="slug-target">
+                            <input type="text" name="slug" class="form-control" required id="slug-target">
                         </div>
                         <div class="form-group">
                             <label for="">Số Lượng Giảm</label>
-                            <input type="text" name="amount" class="form-control">
+                            <input type="text" name="amount" required class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="">Ngày Hết Hạn</label>
-                            <input type="date" name="expires_at" class="form-control">
+                            <input type="date" name="expires_at" required class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Loại</label>
                             <select class="form-control" name="type" id="parent_id">
-                                <option style="display:none" value="">-- Chọn --</option>
+                                <option style="display:none" value="0">-- Chọn --</option>
                                 <option value="fixed">Số</option>
                                 <option value="percent">Phần Trăm</option>
                             </select>

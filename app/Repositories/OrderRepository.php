@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\OrderItem;
 use App\Contracts\OrderContract;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -21,6 +22,11 @@ class OrderRepository extends BaseRepository implements OrderContract
 
     public function storeOrderDetails($params)
     {
+        if(Auth::user()->role == 'user'){
+            
+        }else{
+            $params['status'] = "processing";
+        }
         $order = Order::create([
             'order_number'      =>  'ORD-' . strtoupper(uniqid()),
             'user_id'           =>  auth()->user()->id,

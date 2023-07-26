@@ -31,7 +31,7 @@
                             <th scope="col"> ID </th>
                             <th scope="col" style="width: 16%"> Code </th>
                             <th scope="col" style="width: 16%"> Slug </th>
-                            <th scope="col" style=""> Số Lượng </th>
+                            <th scope="col" style=""> Giảm </th>
                             <th scope="col"> Loại </th>
                             <th scope="col" style=""> Ngày Hết Hạn </th>
                             <th scope="col" style=""> Thời Gian Tạo </th>

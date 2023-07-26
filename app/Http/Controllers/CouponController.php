@@ -36,6 +36,28 @@ class CouponController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'code'      => 'required|max:255|unique:coupons,code',
+            'expires_at'   => 'required',
+            'type'   => 'not_in:0',
+            'amount'        => 'required|integer|min:1',
+            'slug'          => 'required|max:255',
+
+
+        ];
+
+        // Define custom error messages
+        $messages = [
+            'code.required' => 'Chưa nhập mã giảm giá',
+            'expires_at.required'    => 'Chưa nhập hạn cho mã',
+            'code.unique' => 'Mã giảm giá đã được sử dụng',
+            'amount.required'   => 'Chưa nhập số lượng giảm',
+            'slug.required'     => 'Chưa có slug',
+            'type.not_in'     => 'Chưa chọn loại giảm giá',
+        ];
+
+        // Validate the request data
+        $validatedData = $request->validate($rules, $messages);
         $coupon = Coupon::create($request->all());
 
         return redirect()->route('coupons.index')->with('success', "Tạo Mã Giảm Giá Thành Công Với Code {$coupon->code}");

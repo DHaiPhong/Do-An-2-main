@@ -80,10 +80,12 @@
                         <i class="fa-solid fa-ballot-check"></i>
                         <p>
                             Đơn Hàng
-                            <span class="badge badge-success right">
-                                <?php $count = DB::table('orders')->count();
+                            <span class="badge badge-warning right" style="">
+                                <?php $count = DB::table('orders')->where('status','!=','completed')->where('status','!=','cancel')->count();
                                 echo $count; ?>
                             </span>
+                            
+                            
                         </p>
                     </a>
                 </li>
