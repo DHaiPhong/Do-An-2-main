@@ -78,7 +78,17 @@
             </div>
 
             <div class="d-flex justify-content-between mb-5">
-              <p class="text-muted mb-0">Trạng thái đơn hàng : {{ $odnb->status }}</p>
+              @if($odnb->status == 'completed')
+              <p class="text-muted mb-0">Trạng thái : Đơn hàng đã hoàn thành</p>
+              @elseif($odnb->status == 'cancel')
+              <p class="text-muted mb-0">Trạng thái : Đơn hàng đã bị hủy</p>
+              @elseif($odnb->status == 'pending')
+              <p class="text-muted mb-0">Trạng thái : Đơn hàng đang chờ xử lý</p>
+              @elseif($odnb->status == 'processing')
+              <p class="text-muted mb-0">Trạng thái : Đơn hàng đang được xử lý</p>
+              @elseif($odnb->status == 'shipping')
+              <p class="text-muted mb-0">Trạng thái : Đơn hàng đang giao</p>
+              @endif
               @if($coupon != null)
                 @if($coupon->type == 'fixed')
                 <p class="text-muted mb-0"><span class="fw-bold me-4">Giảm giá</span> {{number_format($coupon->amount )}} đ
