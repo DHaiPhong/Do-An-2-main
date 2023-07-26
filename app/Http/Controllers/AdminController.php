@@ -991,10 +991,11 @@ class AdminController extends Controller
     {
         $order_st = DB::table('orders')
             ->where('orders.id', $id)
-            ->join('coupons','orders.coupon','=','coupons.id')
+            ->leftJoin('coupons', 'orders.coupon', '=', 'coupons.id')
             ->select('orders.*','orders.status as order_status','coupons.*')
             ->first();
-
+        
+        
         $orders = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->join('product_details', 'order_items.product_id', '=', 'product_details.prd_detail_id')

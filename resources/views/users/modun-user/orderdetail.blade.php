@@ -59,7 +59,32 @@
                                 <p class="text-muted mb-0"><span class="fw-bold me-4">Tổng tiền sản phẩm</span>
                                     {{ number_format($odnb->total) }} đ</p>
 
+
+            <div class="d-flex justify-content-between mb-5">
+              @if($odnb->status == 'completed')
+              <p class="text-muted mb-0">Trạng thái : Đơn hàng đã hoàn thành</p>
+              @elseif($odnb->status == 'cancel')
+              <p class="text-muted mb-0">Trạng thái : Đơn hàng đã bị hủy</p>
+              @elseif($odnb->status == 'pending')
+              <p class="text-muted mb-0">Trạng thái : Đơn hàng đang chờ xử lý</p>
+              @elseif($odnb->status == 'processing')
+              <p class="text-muted mb-0">Trạng thái : Đơn hàng đang được xử lý</p>
+              @elseif($odnb->status == 'shipping')
+              <p class="text-muted mb-0">Trạng thái : Đơn hàng đang giao</p>
+              @endif
+              @if($coupon != null)
+                @if($coupon->type == 'fixed')
+                <p class="text-muted mb-0"><span class="fw-bold me-4">Giảm giá</span> {{number_format($coupon->amount )}} đ
+                </p> 
+               @else
+               <div> 
+<p class="text-muted mb-0"><span class="fw-bold me-4">Giảm giá</span> {{$coupon->amount }} %
+                </p> 
+<p class="text-muted mb-0"><span class="fw-bold me-4">Thành tiền</span> {{number_format($odnb->total * $coupon->amount / 100)  }}đ
+                </p> 
+
                             </div>
+
 
                             <div class="d-flex justify-content-between pt-2">
                                 <p class="text-muted mb-0">Ngày đặt hàng : {{ $odnb->created_at }}</p>

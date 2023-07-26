@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -53,7 +54,11 @@ class LoginController extends Controller
         ], $messages);
 
         if (auth()->attempt($credentials)) {
-            if (auth()->user()->role == 'admin') {
+            if (auth()->user()->status == 1) {
+                Auth::logout();
+                
+                return redirect()->back()->with(['error' => 'Tài khoản của bạn đã bị khóa.']);
+            }else if (auth()->user()->role == 'admin') {
                 return redirect()->route('admin.dashboard');
             } else if (auth()->user()->role == 'editor') {
                 return redirect()->route('admin.dashboard');
