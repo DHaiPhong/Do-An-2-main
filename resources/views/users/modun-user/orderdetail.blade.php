@@ -1,5 +1,4 @@
 @extends('users.masterUser')
-
 @section('css')
 @stop
 @section('content')
@@ -15,7 +14,6 @@
                             <h5 class="text-muted mb-0" style="font-size:17px;">Cảm ơn đã đặt hàng bạn đã đặt hàng, <span
                                     style="color: #a8729a;">{{ Auth::user()->name }}</span>!</h5>
                         </div>
-
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <p class="lead fw-normal mb-0" style="color: #a8729a;font-size:17px;">Chi Tiết Đơn Hàng</p>
@@ -41,7 +39,6 @@
                                                 class="col-md-2 text-center d-flex justify-content-center align-items-center">
                                                 <p class="text-muted mb-0 small">Số lượng: {{ $item->quantity }}</p>
                                             </div>
-
                                             <div
                                                 class="col-md-2 text-center d-flex justify-content-center align-items-center">
                                                 <p class="text-muted mb-0 small">Giá: {{ number_format($item->price) }} đ
@@ -52,46 +49,16 @@
                                     </div>
                                 </div>
                             @endforeach
-
                             <div class="d-flex justify-content-between pt-2">
                                 <p class="fw-bold mb-0">Chi phí:</p>
-
                                 <p class="text-muted mb-0"><span class="fw-bold me-4">Tổng tiền sản phẩm</span>
                                     {{ number_format($odnb->total) }} đ</p>
-
-
-            <div class="d-flex justify-content-between mb-5">
-              @if($odnb->status == 'completed')
-              <p class="text-muted mb-0">Trạng thái : Đơn hàng đã hoàn thành</p>
-              @elseif($odnb->status == 'cancel')
-              <p class="text-muted mb-0">Trạng thái : Đơn hàng đã bị hủy</p>
-              @elseif($odnb->status == 'pending')
-              <p class="text-muted mb-0">Trạng thái : Đơn hàng đang chờ xử lý</p>
-              @elseif($odnb->status == 'processing')
-              <p class="text-muted mb-0">Trạng thái : Đơn hàng đang được xử lý</p>
-              @elseif($odnb->status == 'shipping')
-              <p class="text-muted mb-0">Trạng thái : Đơn hàng đang giao</p>
-              @endif
-              @if($coupon != null)
-                @if($coupon->type == 'fixed')
-                <p class="text-muted mb-0"><span class="fw-bold me-4">Giảm giá</span> {{number_format($coupon->amount )}} đ
-                </p> 
-               @else
-               <div> 
-<p class="text-muted mb-0"><span class="fw-bold me-4">Giảm giá</span> {{$coupon->amount }} %
-                </p> 
-<p class="text-muted mb-0"><span class="fw-bold me-4">Thành tiền</span> {{number_format($odnb->total * $coupon->amount / 100)  }}đ
-                </p> 
-
                             </div>
-
-
                             <div class="d-flex justify-content-between pt-2">
                                 <p class="text-muted mb-0">Ngày đặt hàng : {{ $odnb->created_at }}</p>
                                 <p class="text-muted mb-0"><span class="fw-bold me-4">Phí vận chuyển</span>
                                     {{ number_format($odnb->shipfee) }} đ</p>
                             </div>
-
                             <div class="d-flex justify-content-between">
                                 @if ($odnb->status == 'completed')
                                     <p class="text-muted mb-0">Ngày nhận hàng : {{ $odnb->updated_at }}</p>
@@ -109,7 +76,6 @@
                                     </p>
                                 @endif
                             </div>
-
                             <div class="d-flex justify-content-between mb-5">
                                 <p class="text-muted mb-0">Trạng thái đơn hàng :
                                     @if ($odnb->status == 'pending')
@@ -138,7 +104,6 @@
                                             <p class="text-muted mb-0"><span class="fw-bold me-4">Thành tiền</span>
                                                 {{ number_format(($odnb->total * $coupon->amount) / 100) }}đ
                                             </p>
-
                                         </div>
                                     @endif
                                 @endif
