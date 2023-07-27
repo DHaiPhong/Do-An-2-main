@@ -18,7 +18,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::orderBy('parent_id', 'asc')->latest()->paginate(9);
+        $categories = Category::orderBy('parent_id', 'asc')->latest()->paginate(99);
         
         return view('Admin.modun.categories.index', ['title' => 'Category'], compact('categories'));
     }
@@ -100,12 +100,40 @@ class CategoryController extends Controller
         $this->validate($request, [
             'name' => 'required|unique:categories,name,' . $id
         ]);
-
         $category = Category::find($id);
-        $category->name = $request->input('name');
-        $category->parent_id = $request->input('parent_id');
-        $category->save();
+        
 
+        if($category->parent_id == $request->parent_id){
+            $category->name = $request->input('name');
+            $category->save();
+        }elseif($request->parent_id == null){
+            $category->name = $request->input('name');
+            $category->parent_id = $request->input('parent_id'); 
+            $category->save();
+
+        }else{
+        
+            $catecha = Category::where('parent_id', $id)->get();
+            
+            if ($catecha->isEmpty()) {
+                $catecon = Category::where('id', $request->parent_id)->first();
+                // dd($catecon);
+                if($catecon->parent_id == null) {
+                $category->parent_id = $request->input('parent_id'); 
+                $category->name = $request->input('name');
+                $category->save(); 
+                }else{
+                  return redirect()->route('categories.index')->with('error', 'Thao tác không được thực hiện.');  
+                }
+              
+             
+            }else{
+                 return redirect()->route('categories.index')->with('error', 'Thao tac khong the thuc hien');
+                
+            }
+        
+        
+        }
         return redirect()->route('categories.index')->with('success', 'Cập nhật Danh Mục thành công');
     }
 

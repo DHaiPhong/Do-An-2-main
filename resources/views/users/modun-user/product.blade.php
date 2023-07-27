@@ -22,13 +22,13 @@
                                     <strong style="">Lượt xem </strong>
                                 </a>
                             </li>
-                            {{-- <li
+                             <li
                                 style="{{ Route::currentRouteName() == 'product.by.rating' ? 'background: orangered;' : '' }}">
                                 <a href="{{ route('product.by.rating') }}"
                                     style="{{ Route::currentRouteName() == 'product.by.rating' ? 'color: #fff;' : '' }}">
                                     <strong style="">Đánh Giá </strong>
                                 </a>
-                            </li> --}}
+                            </li> 
                             <li>
                                 <a href="{{ route('product.by.sale') }}" style="">
                                     <strong style="">Giảm Giá </strong>

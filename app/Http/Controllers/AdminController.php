@@ -136,9 +136,23 @@ class AdminController extends Controller
             return [$displayMonth => $revenue];
         })->toArray();
 
+        // table
+        $resulttable = [];
+        $currentYeartable = date("Y");
 
+        for($yearta = $currentYeartable; $yearta > $currentYeartable - 3; $yearta--) {
+            for($monthta = 1; $monthta <= 12; $monthta++) {
+                $monthlyRevenue = DB::table('orders')
+                                ->whereYear('updated_at', $yearta)
+                                ->whereMonth('updated_at', $monthta)
+                                ->where('status','completed')
+                                ->sum('grand_total');
 
-        return view('Admin/modun/dashboard', ['sold' => $sold, 'revenuesForEachDay' => $revenuesForEachDay, 'revenuesForEachMonth' => $revenuesForEachMonth, 'revenue' => $revenue, 'revenues' => $revenues, 'month' => $month, 'year_chart' => $year_chart, 'out_of_stocks' => $out_of_stocks, 'orders' => $orders, 'sells' => $sells]);
+                $resulttable[$yearta][$monthta] = $monthlyRevenue;
+            }
+        }
+
+        return view('Admin/modun/dashboard', ['sold' => $sold, 'revenuesForEachDay' => $revenuesForEachDay, 'revenuesForEachMonth' => $revenuesForEachMonth, 'revenue' => $revenue, 'revenues' => $revenues, 'month' => $month, 'year_chart' => $year_chart, 'out_of_stocks' => $out_of_stocks, 'orders' => $orders, 'sells' => $sells, 'revenuetable' => $resulttable]);
     }
 
     function totalChart(Request $request)
